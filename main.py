@@ -4,6 +4,7 @@ from ListRemovable import *
 from RecordSound import *
 from PlaySound import *
 from CameraCapture import *
+from WirelessCheck import *
 
 from queue import Queue
 
