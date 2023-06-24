@@ -5,6 +5,9 @@
 *.png
 *.jpg
 
+# Ignore all .txt files
+*.txt
+
 # Ignore all script-files
 *.sh
 

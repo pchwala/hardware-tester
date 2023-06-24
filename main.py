@@ -26,7 +26,6 @@ customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-bl
 #       - pewnie jakies operacje na frame z opencv tak robia
 # 5. dodac skalowanie okienka kamery i qrcode
 
-#test
 
 # Main App class
 # 1 - Controls an execution of all threads and data flow between them
