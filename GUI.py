@@ -39,6 +39,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<KeyPress>", self.key_callback)
         self.bind("<KeyRelease>", self.key_release_callback)
 
+        self.bind("<Shift-less>", self.button_prev_callback)
+        self.bind("<Shift-greater>", self.button_next_callback)
+
         # configure grid layout / LEFT SIDE frame
         self.output_frame = OutputFrame(self)
         self.output_frame.grid(row=0, column=0, rowspan=19, columnspan=2, padx=(10, 0), pady=10, sticky="ens")
@@ -89,11 +92,11 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.display_main_frame(self.tab_number)
 
     # Self-explanatory`
-    def button_next_callback(self):
+    def button_next_callback(self, event):
         self.tab_number += 1
         self.display_main_frame(self.tab_number-1)
 
-    def button_prev_callback(self):
+    def button_prev_callback(self, event):
         self.tab_number -= 1
         self.display_main_frame(self.tab_number+1)
 
@@ -111,23 +114,11 @@ class GUI(customtkinter.CTk, threading.Thread):
     def key_callback(self, event):
         print("pressed", event.keysym)
         if self.tab_number in [1, 2, 3, 4, 6, 7]:
-            if event.keysym in ['greater']:
-                self.button_next_callback()
-
-            elif event.keysym in ['less']:
-                self.button_prev_callback()
-
-            elif event.keysym in ['m', 'M']:
+            if event.keysym in ['m', 'M']:
                 self.button_reset_callback()
 
         elif self.tab_number == 5:
-            if event.keysym == 'greater':
-                self.button_next_callback()
-
-            elif event.keysym == 'less':
-                self.button_prev_callback()
-
-            elif event.keysym == 'M':
+            if event.keysym == 'M':
                 self.button_reset_callback()
 
             else:
