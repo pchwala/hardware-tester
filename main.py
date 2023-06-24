@@ -1,3 +1,5 @@
+import subprocess
+
 from GUI import *
 from frames import *
 
@@ -154,5 +156,7 @@ class App:
                 pass
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
 
+
+result = subprocess.run("./python-sudo.sh hwinfo.py", shell=True)
 
 App = App()
