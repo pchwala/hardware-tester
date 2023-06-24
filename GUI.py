@@ -1,4 +1,8 @@
 from frames import *
+from PortsTester import *
+from CameraTester import *
+from SoundTesters import *
+from KeyboardTester import *
 from DisplayTester import *
 from QRGenerator import *
 
@@ -36,11 +40,16 @@ class GUI(customtkinter.CTk, threading.Thread):
         # This is the row where main_frame is
         self.rowconfigure(1, weight=1)
 
-        self.bind("<KeyPress>", self.key_callback)
+        self.bind("<KeyPress>", self.key_press_callback)
         self.bind("<KeyRelease>", self.key_release_callback)
 
         self.bind("<Shift-less>", self.button_prev_callback)
         self.bind("<Shift-greater>", self.button_next_callback)
+        self.bind("<Shift-m>", self.button_reset_callback)
+        self.bind("<Shift-M>", self.button_reset_callback)
+        self.bind("<Shift-Return>", self.shortcut_return)
+
+        self.unbind_all("<<NextWindow>>")
 
         # configure grid layout / LEFT SIDE frame
         self.output_frame = OutputFrame(self)
@@ -92,16 +101,16 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.display_main_frame(self.tab_number)
 
     # Self-explanatory`
-    def button_next_callback(self, event):
+    def button_next_callback(self, event=None):
         self.tab_number += 1
         self.display_main_frame(self.tab_number-1)
 
-    def button_prev_callback(self, event):
+    def button_prev_callback(self, event=None):
         self.tab_number -= 1
         self.display_main_frame(self.tab_number+1)
 
     # Reset by calling the same frame again with itself as previous frame
-    def button_reset_callback(self):
+    def button_reset_callback(self, event=None):
         print("\n")
         self.display_main_frame(self.tab_number)
 
@@ -111,68 +120,59 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.tab_number = frame_number
         self.display_main_frame(temp)
 
-    def key_callback(self, event):
+    def key_press_callback(self, event):
         print("pressed", event.keysym)
-        if self.tab_number in [1, 2, 3, 4, 6, 7]:
-            if event.keysym in ['m', 'M']:
-                self.button_reset_callback()
+        if self.tab_number == 5:
+            self.keyboard_main_frame.key_event(event.keysym, 'keydown')
 
-        elif self.tab_number == 5:
-            if event.keysym == 'M':
-                self.button_reset_callback()
-
-            else:
-                self.keyboard_main_frame.key_event(event.keysym, 'keydown')
-
-        if self.tab_number in [1, 2, 3, 4, 5, 6, 7]:
-            if event.keysym == 'Escape':
-                # remove focus from widget
-                self.focus()
-
-        if event.keysym == 'Return':
-            match self.tab_number:
-                case 1:
-                    if self.frame_references[self.tab_number].check_box_state is True:
-                        self.frame_references[self.tab_number].check_box.deselect()
-                        self.frame_references[self.tab_number].check_box_callback()
-                        self.frame_references[self.tab_number].entry_ports_test.focus()
-
-                    else:
-                        self.frame_references[self.tab_number].check_box.select()
-                        self.frame_references[self.tab_number].check_box_callback()
-
-                case 2:
-                    if self.frame_references[self.tab_number].check_box_state is True:
-                        self.frame_references[self.tab_number].check_box.deselect()
-                        self.frame_references[self.tab_number].check_box_callback()
-                        self.frame_references[self.tab_number].entry_camera_test.focus()
-
-                    else:
-                        self.frame_references[self.tab_number].check_box.select()
-                        self.frame_references[self.tab_number].check_box_callback()
-
-                case 3:
-                    if self.frame_references[self.tab_number].check_box_state is True:
-                        self.frame_references[self.tab_number].check_box.deselect()
-                        self.frame_references[self.tab_number].check_box_callback()
-
-                    else:
-                        self.frame_references[self.tab_number].check_box.sele()
-                        self.frame_references[self.tab_number].check_box_callback()
-
-                case 4:
-                    if self.frame_references[self.tab_number].check_box_state is True:
-                        self.frame_references[self.tab_number].check_box.deselect()
-                        self.frame_references[self.tab_number].check_box_callback()
-                        self.frame_references[self.tab_number].entry_both.focus()
-
-                    else:
-                        self.frame_references[self.tab_number].check_box.select()
-                        self.frame_references[self.tab_number].check_box_callback()
+        if event.keysym == 'Escape':
+            # remove focus from widget
+            self.focus()
 
     def key_release_callback(self, event):
         if self.tab_number == 5:
             self.keyboard_main_frame.key_event(event.keysym, 'keyup')
+
+    def shortcut_return(self, event):
+        match self.tab_number:
+            case 1:
+                if self.frame_references[self.tab_number].check_box_state is True:
+                    self.frame_references[self.tab_number].check_box.deselect()
+                    self.frame_references[self.tab_number].check_box_callback()
+                    self.frame_references[self.tab_number].entry_ports_test.focus()
+
+                else:
+                    self.frame_references[self.tab_number].check_box.select()
+                    self.frame_references[self.tab_number].check_box_callback()
+
+            case 2:
+                if self.frame_references[self.tab_number].check_box_state is True:
+                    self.frame_references[self.tab_number].check_box.deselect()
+                    self.frame_references[self.tab_number].check_box_callback()
+                    self.frame_references[self.tab_number].entry_camera_test.focus()
+
+                else:
+                    self.frame_references[self.tab_number].check_box.select()
+                    self.frame_references[self.tab_number].check_box_callback()
+
+            case 3:
+                if self.frame_references[self.tab_number].check_box_state is True:
+                    self.frame_references[self.tab_number].check_box.deselect()
+                    self.frame_references[self.tab_number].check_box_callback()
+
+                else:
+                    self.frame_references[self.tab_number].check_box.sele()
+                    self.frame_references[self.tab_number].check_box_callback()
+
+            case 4:
+                if self.frame_references[self.tab_number].check_box_state is True:
+                    self.frame_references[self.tab_number].check_box.deselect()
+                    self.frame_references[self.tab_number].check_box_callback()
+                    self.frame_references[self.tab_number].entry_both.focus()
+
+                else:
+                    self.frame_references[self.tab_number].check_box.select()
+                    self.frame_references[self.tab_number].check_box_callback()
 
     # Process all commands and data from input queue
     # For now it only processes data incomming from checking ports
@@ -245,31 +245,32 @@ class GUI(customtkinter.CTk, threading.Thread):
                 # can't exceed tab number 7
                 self.tab_number = 7
 
-        self.fill_entries()
+        self.fill_all_entries()
 
         # hide previous frame and configure and show current frame
         self.frame_references[previous].grid_forget()
         self.frame_references[self.tab_number].grid(row=1, column=2, columnspan=5, padx=40, pady=40, sticky="ewns")
 
-    def fill_entries(self):
+    def fill_all_entries(self):
 
-        self.ports_test = self.ports_main_frame.entry_ports_test.get()
-        self.camera_test = self.camera_main_frame.entry_camera_test.get()
-        self.sound_test = self.sound_main_frame.entry_both.get()
-        self.display_test = self.monitor_main_frame.entry_display.get()
-        self.frame_test = self.monitor_main_frame.entry_frame.get()
+        self.fill_entry(self.ports_main_frame.entry_ports_test, self.output_frame.entry_ports)
+        self.fill_entry(self.camera_main_frame.entry_camera_test, self.output_frame.entry_camera)
+        self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound)
+        self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor)
+        self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes)
 
-        self.output_frame.entry_ports.delete(0, tkinter.END)
-        self.output_frame.entry_ports.insert(0, self.ports_test)
-        self.output_frame.entry_camera.delete(0, tkinter.END)
-        self.output_frame.entry_camera.insert(0, self.camera_test)
-        self.output_frame.entry_sound.delete(0, tkinter.END)
-        self.output_frame.entry_sound.insert(0, self.sound_test)
-        self.output_frame.entry_monitor.delete(0, tkinter.END)
-        self.output_frame.entry_monitor.insert(0, self.display_test)
-        self.output_frame.entry_notes.delete(0, tkinter.END)
-        self.output_frame.entry_notes.insert(0, self.frame_test)
+    @staticmethod
+    def fill_entry(tester_entry, output_entry):
+        tester_data = tester_entry.get()
+        output_data = output_entry.get()
 
+        if tester_data != output_data:
+            if output_data == "":
+                output_entry.delete(0, tkinter.END)
+                output_entry.insert(0, tester_data)
+            else:
+                tester_entry.delete(0, tkinter.END)
+                tester_entry.insert(0, output_data)
 
     def on_closing(self):
         self.output_queue.put('terminate_all')
