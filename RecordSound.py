@@ -64,6 +64,7 @@ class RecordSound(threading.Thread):
 
         if data == 'stop':
             print("stopped")
+            self.long_data.clear()
             self.stream.stop_stream()
 
         elif data == 'start':

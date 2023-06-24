@@ -47,6 +47,8 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-greater>", self.button_next_callback)
         self.bind("<Shift-m>", self.button_reset_callback)
         self.bind("<Shift-M>", self.button_reset_callback)
+        self.bind("<Shift-s>", self.shortcut_start_stop)
+        self.bind("<Shift-S>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
 
         self.unbind_all("<<NextWindow>>")
@@ -120,6 +122,27 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.tab_number = frame_number
         self.display_main_frame(temp)
 
+    def shortcut_start_stop(self, event=None):
+        match self.tab_number:
+            case 3:
+                reference = self.microphone_main_frame.button_stop
+                self.button_start_stop(reference, reference.cget("text"), "playback")
+
+            case 4:
+                reference = self.sound_main_frame.button_stop
+                self.button_start_stop(reference, reference.cget("text"), "play")
+
+    def button_start_stop(self, reference, state, tester):
+        if state == "Stop":
+            reference.configure(text="Start")
+            output_command = "stop_" + tester
+            self.output_queue.put(output_command)
+
+        elif state == "Start":
+            reference.configure(text="Stop")
+            output_command = "start_" + tester
+            self.output_queue.put(output_command)
+
     def key_press_callback(self, event):
         print("pressed", event.keysym)
         if self.tab_number == 5:
@@ -161,7 +184,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                     self.frame_references[self.tab_number].check_box_callback()
 
                 else:
-                    self.frame_references[self.tab_number].check_box.sele()
+                    self.frame_references[self.tab_number].check_box.select()
                     self.frame_references[self.tab_number].check_box_callback()
 
             case 4:

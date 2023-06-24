@@ -13,15 +13,6 @@ customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-bl
 
 
 # 1. Zle czyta karte graficzna jesli są dwie
-# 2. Duze zuzycie procesora na idle
-#       - dodanie time delaya typu 0.1s w odpowiedni sposob znaczaco poprawia wydajnosc - do implementacji
-# 3. Mikrofon nie dziala pod root'em. W celu naprawy wymagana gruntowna przebudowa struktury:
-#       - zmiana uruchamiania main z roota na usera( stream input modułu 'pyaudio' nie dziala pod rootem
-#         ( problem albo z urzedzaniami wirtualnymi, albo ze sterownikami albo z samym modulem,
-#           w sumie chuj wie)
-#       - wydzielenie podprogramu czytujacego hardware info
-#       - dodanie tego podporgramu do /etc/sudoers.d
-#       - integracja powyzszego podprogramu z glownym programem
 # 4. kamera jakos dziwnie znieksztalca ale tylko na niektorych modelach
 #       - pewnie jakies operacje na frame z opencv tak robia
 # 5. dodac skalowanie okienka kamery i qrcode
@@ -134,6 +125,12 @@ class App:
                     case 'start_camera':
                         self.sleeper = False
                         self.q_camera_input.put('start')
+
+                    case 'stop_play':
+                        self.q_play.put('stop')
+
+                    case 'stop_playback':
+                        self.q_playback.put('stop')
 
             except queue.Empty:
                 pass
