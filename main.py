@@ -1,5 +1,3 @@
-import subprocess
-
 from GUI import *
 from frames import *
 
@@ -46,6 +44,8 @@ class App:
 
         # Threads list
         self.threads = []
+
+        self.sleeper = True
 
         # All Queues for controlling data flow between threads
         # Input Queues for passing data for a thread
@@ -101,12 +101,15 @@ class App:
             # Basically the same as calling tk.mainloop(), but it allows to put additional lines in the loop
             self.threads[self.t_GUI].update_idletasks()
             self.threads[self.t_GUI].update()
+            if self.sleeper is True:
+                time.sleep(0.1)
 
             # Constantly get output from GUI thread and handle it accordingly
             try:
                 current = self.q_GUI_output.get_nowait()
                 match current:
                     case 'stop_all':
+                        self.sleeper = True
                         self.q_ports_input.put('stop')
                         self.q_play.put('stop')
                         self.q_playback.put('stop')
@@ -129,6 +132,7 @@ class App:
                         self.q_playback.put('start')
 
                     case 'start_camera':
+                        self.sleeper = False
                         self.q_camera_input.put('start')
 
             except queue.Empty:
