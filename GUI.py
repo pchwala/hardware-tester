@@ -238,6 +238,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                 if type(current) == str:
                     # display output from executing 'lsblk'
                     self.ports_main_frame.label1.configure(self, text=current, justify='left')
+                    self.ports_main_frame.label1.cget("font").configure(size=20)
 
                 else:
                     print("type exception")

@@ -15,7 +15,7 @@ class PlaySound(threading.Thread):
         self.daemon = True
         self.receive_data = args
 
-        self.FILENAME = './1.wav'
+        self.FILENAME = './speaker_test.wav'
         self.CHUNK = 1024
         # open sound file
         self.wf = wave.open(self.FILENAME, 'rb')

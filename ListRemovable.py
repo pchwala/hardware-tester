@@ -1,3 +1,4 @@
+import re
 import threading
 import subprocess
 import time
@@ -33,21 +34,19 @@ class ListRemovable(threading.Thread):
             if val == 'start':
                 print("started")
                 while True:
-                    """
-                    command = "sudo fdisk -l"
+                    command = "lsblk | grep disk"
                     all_info = self.exec_and_output(command)
-                    disks = re.findall(r'Disk /[a-z/: ]*\d+', all_info)
-                    for disk in disks:
-                        temp = int(re.search(r'\d+', disk).group(0))
-                        if temp < 100:
-                            print(disk + 'G')
-                            self.output_queue.put(disk)
-                    """
 
-                    command = "lsblk"
-                    all_info = self.exec_and_output(command)
-                    self.output_queue.put(all_info)
-                    time.sleep(1)
+                    disks = re.findall(r'\d+\.', all_info)
+                    output_info = "Devices:\n\n"
+                    x = 0
+                    for disk in disks:
+                        disks[x] = "-  " + re.sub(r'\.', " GB Volume", disk) + "\n"
+                        output_info += disks[x] + "\n"
+                        x += 1
+
+                    self.output_queue.put(output_info)
+                    time.sleep(0.5)
 
                     if self.input_queue.empty() is False:
                         break

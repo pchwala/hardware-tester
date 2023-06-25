@@ -1,9 +1,10 @@
 
 # Ignore all media files
-*.wav
-*.mp3
-*.png
-*.jpg
+#*.wav
+#*.mp3
+#*.png
+#*.jpg
+qrcode.png
 
 # Ignore all .txt and data files
 *.txt
