@@ -2,8 +2,8 @@ from frames import *
 from PortsTester import *
 from CameraTester import *
 from SoundTesters import *
-from KeyboardTester import *
-from DisplayTester import *
+from KeyboardTester import KeyboardMainFrame
+from DisplayTester import MonitorMainFrame
 from QRGenerator import *
 
 import threading
@@ -51,7 +51,11 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-S>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
 
+        self.bind("<Tab>", self.tab_callback)
+        self.bind("<ISO_Left_Tab>", self.left_tab_callback)
+
         self.unbind_all("<<NextWindow>>")
+        self.unbind_all("<<PrevWindow>>")
 
         # configure grid layout / LEFT SIDE frame
         self.output_frame = OutputFrame(self)
@@ -101,6 +105,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         # show ports tester at the start
         self.tab_number = 1
         self.display_main_frame(self.tab_number)
+
+        self.tab_state = -1
+        self.output_entry = [self.output_frame.entry_keyboard, self.output_frame.entry_ports,
+                             self.output_frame.entry_camera, self.output_frame.entry_sound,
+                             self.output_frame.entry_keyboard_notes, self.output_frame.entry_monitor,
+                             self.output_frame.entry_class, self.output_frame.entry_notes]
 
     # Self-explanatory`
     def button_next_callback(self, event=None):
@@ -154,48 +164,69 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def key_release_callback(self, event):
         if self.tab_number == 5:
+            print("released " + event.keysym)
             self.keyboard_main_frame.key_event(event.keysym, 'keyup')
 
-    def shortcut_return(self, event):
+    def tab_callback(self, event=None):
+        self.tab_state += 1
+        self.output_entry[self.tab_state].focus()
+        if self.tab_state > 6:
+            self.tab_state = -1
+
+    def left_tab_callback(self, event=None):
+        self.tab_state -= 1
+        self.output_entry[self.tab_state].focus()
+        if self.tab_state < 0:
+            self.tab_state = 7
+
+    def shortcut_return(self, event=None):
+        current_frame = self.frame_references[self.tab_number]
+
         match self.tab_number:
             case 1:
-                if self.frame_references[self.tab_number].check_box_state is True:
-                    self.frame_references[self.tab_number].check_box.deselect()
-                    self.frame_references[self.tab_number].check_box_callback()
-                    self.frame_references[self.tab_number].entry_ports_test.focus()
+                if current_frame.check_box_state is True:
+                    current_frame.check_box.deselect()
+                    current_frame.check_box_callback()
+                    current_frame.entry_ports_test.focus()
 
                 else:
-                    self.frame_references[self.tab_number].check_box.select()
-                    self.frame_references[self.tab_number].check_box_callback()
+                    current_frame.check_box.select()
+                    current_frame.check_box_callback()
 
             case 2:
-                if self.frame_references[self.tab_number].check_box_state is True:
-                    self.frame_references[self.tab_number].check_box.deselect()
-                    self.frame_references[self.tab_number].check_box_callback()
-                    self.frame_references[self.tab_number].entry_camera_test.focus()
+                if current_frame.check_box_state is True:
+                    current_frame.check_box.deselect()
+                    current_frame.check_box_callback()
+                    current_frame.entry_camera_test.focus()
 
                 else:
-                    self.frame_references[self.tab_number].check_box.select()
-                    self.frame_references[self.tab_number].check_box_callback()
+                    current_frame.check_box.select()
+                    current_frame.check_box_callback()
 
             case 3:
-                if self.frame_references[self.tab_number].check_box_state is True:
-                    self.frame_references[self.tab_number].check_box.deselect()
-                    self.frame_references[self.tab_number].check_box_callback()
+                if current_frame.check_box_state is True:
+                    current_frame.check_box.deselect()
+                    current_frame.check_box_callback()
 
                 else:
-                    self.frame_references[self.tab_number].check_box.select()
-                    self.frame_references[self.tab_number].check_box_callback()
+                    current_frame.check_box.select()
+                    current_frame.check_box_callback()
 
             case 4:
-                if self.frame_references[self.tab_number].check_box_state is True:
-                    self.frame_references[self.tab_number].check_box.deselect()
-                    self.frame_references[self.tab_number].check_box_callback()
-                    self.frame_references[self.tab_number].entry_both.focus()
+                if current_frame.check_box_state is True:
+                    current_frame.check_box.deselect()
+                    current_frame.check_box_callback()
+                    current_frame.entry_both.focus()
 
                 else:
-                    self.frame_references[self.tab_number].check_box.select()
-                    self.frame_references[self.tab_number].check_box_callback()
+                    current_frame.check_box.select()
+                    current_frame.check_box_callback()
+
+            case 5:
+                current_frame.entry_callback()
+
+            case 6:
+                current_frame.entry_callback()
 
     # Process all commands and data from input queue
     # For now it only processes data incomming from checking ports
@@ -236,6 +267,11 @@ class GUI(customtkinter.CTk, threading.Thread):
         # stop all testers
         self.output_queue.put('stop_all')
 
+        # I think its kind of wrong, but it works
+        # Better to do it, so it is executed only once after keyboardTester
+        self.bind("<Tab>", self.tab_callback)
+        self.bind("<ISO_Left_Tab>", self.left_tab_callback)
+
         # and start the next one
         match self.tab_number:
             case 0:
@@ -256,7 +292,8 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.output_queue.put('start_play')
 
             case 5:
-                pass
+                self.unbind("<Tab>")
+                self.unbind("<ISO_Left_Tab>")
 
             case 6:
                 self.monitor_main_frame.show_fullscreen()
@@ -281,6 +318,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound)
         self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor)
         self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes)
+        self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes)
 
     @staticmethod
     def fill_entry(tester_entry, output_entry):

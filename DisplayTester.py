@@ -13,7 +13,6 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=0)
 
-
         self.label1 = customtkinter.CTkLabel(self, text="Częste wady:")
         self.label1.cget("font").configure(size=20)
         self.label1.grid(row=2, column=1, pady=(0, 20))
@@ -42,14 +41,13 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.check_box3 = customtkinter.CTkCheckBox(self, text="Palmrest", onvalue=True, offvalue=False)
         self.check_box3.grid(row=8, column=2, pady=(0, 20))
 
-
+        self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
         self.entry_display.grid(row=9, column=1, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
         self.entry_frame.grid(row=10, column=1, pady=(0, 20), sticky='ns')
-
 
         self.fullscreen = None
 
@@ -58,6 +56,17 @@ class MonitorMainFrame(customtkinter.CTkFrame):
 
     def destroy_fullscreen(self):
         self.fullscreen.destroy()
+
+    def entry_callback(self):
+        self.entry_state += 1
+
+        if self.entry_state == 1:
+            self.entry_state = 2
+            self.entry_display.focus()
+
+        else:
+            self.entry_state = 0
+            self.entry_frame.focus()
 
 
 class Fullscreen(customtkinter.CTkToplevel):

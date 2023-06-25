@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 
-class KeyboardMainFrame(ctk.CTkFrame):
+class KeyboardPrimaryFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
@@ -194,6 +194,133 @@ class KeyboardMainFrame(ctk.CTkFrame):
                               'slash', 'Shift_R', 'Control_L', 'Super_L', 'Alt_L', 'space', 'ISO_Level3_Shift', 'Menu',
                               'Control_R']
 
+
+class KeyboardSecondaryFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(8, weight=1)
+
+        self.button_Print_screen = ctk.CTkButton(self, text="PrtSC", width=60, height=30, state="disabled")
+        self.button_Print_screen.grid(row=0, column=1, padx=(2, 2), pady=(5, 5))
+        self.button_Scroll_lock = ctk.CTkButton(self, text="ScrLk", width=60, height=30, state="disabled")
+        self.button_Scroll_lock.grid(row=0, column=2, padx=(2, 2), pady=(5, 5))
+        self.button_Pause = ctk.CTkButton(self, text="Pause", width=60, height=30, state="disabled")
+        self.button_Pause.grid(row=0, column=3, padx=(2, 2), pady=(5, 5))
+
+        self.button_Insert = ctk.CTkButton(self, text="Ins", width=60, height=30, state="disabled")
+        self.button_Insert.grid(row=1, column=1, padx=(2, 2), pady=(5, 5))
+        self.button_Home = ctk.CTkButton(self, text="Home", width=60, height=30, state="disabled")
+        self.button_Home.grid(row=1, column=2, padx=(2, 2), pady=(5, 5))
+        self.button_Pageup = ctk.CTkButton(self, text="PgUp", width=60, height=30, state="disabled")
+        self.button_Pageup.grid(row=1, column=3, padx=(2, 2), pady=(5, 5))
+        self.button_Delete = ctk.CTkButton(self, text="Del", width=60, height=30, state="disabled")
+        self.button_Delete.grid(row=2, column=1, padx=(2, 2), pady=(5, 5))
+        self.button_End = ctk.CTkButton(self, text="End", width=60, height=30, state="disabled")
+        self.button_End.grid(row=2, column=2, padx=(2, 2), pady=(5, 5))
+        self.button_Pagedown = ctk.CTkButton(self, text="PgDn", width=60, height=30, state="disabled")
+        self.button_Pagedown.grid(row=2, column=3, padx=(2, 2), pady=(5, 5))
+
+        self.button_Up = ctk.CTkButton(self, text="↑", width=60, height=30, state="disabled")
+        self.button_Up.grid(row=3, column=2, padx=(2, 2), pady=(5, 5))
+        self.button_Down = ctk.CTkButton(self, text="↓", width=60, height=30, state="disabled")
+        self.button_Down.grid(row=4, column=2, padx=(2, 2), pady=(5, 5))
+        self.button_Left = ctk.CTkButton(self, text="←", width=60, height=30, state="disabled")
+        self.button_Left.grid(row=4, column=1, padx=(2, 2), pady=(5, 5))
+        self.button_Right = ctk.CTkButton(self, text="→", width=60, height=30, state="disabled")
+        self.button_Right.grid(row=4, column=3, padx=(2, 2), pady=(5, 5))
+
+        self.button_Numlock = ctk.CTkButton(self, text="NumLk", width=60, height=30, state="disabled")
+        self.button_Numlock.grid(row=0, column=4, padx=(80, 2), pady=(5, 5))
+        self.button_KP_Divide = ctk.CTkButton(self, text="/", width=60, height=30, state="disabled")
+        self.button_KP_Divide.grid(row=0, column=5, padx=(2, 2), pady=(5, 5))
+        self.button_KP_Multiply = ctk.CTkButton(self, text="*", width=60, height=30, state="disabled")
+        self.button_KP_Multiply.grid(row=0, column=6, padx=(2, 2), pady=(5, 5))
+        self.button_KP_Subtract = ctk.CTkButton(self, text="-", width=60, height=30, state="disabled")
+        self.button_KP_Subtract.grid(row=0, column=7, padx=(2, 2), pady=(5, 5))
+
+        self.button_KP_Add = ctk.CTkButton(self, text="+", width=60, height=70, state="disabled")
+        self.button_KP_Add.grid(row=1, rowspan=2, column=7, padx=(2, 2), pady=(5, 5))
+        self.button_KP_Enter = ctk.CTkButton(self, text="Enter", width=60, height=70, state="disabled")
+        self.button_KP_Enter.grid(row=3, rowspan=2, column=7, padx=(2, 2), pady=(5, 5))
+        self.button_KP_Separator = ctk.CTkButton(self, text=".", width=60, height=30, state="disabled")
+        self.button_KP_Separator.grid(row=4, column=6, padx=(2, 2), pady=(5, 5))
+        self.button_KP_0 = ctk.CTkButton(self, text="0", width=120, height=30, state="disabled")
+        self.button_KP_0.grid(row=4, column=4, columnspan=2, padx=(80, 2), pady=(5, 5))
+
+        self.button_KP_7 = ctk.CTkButton(self, text="7", width=60, height=30, state="disabled")
+        self.button_KP_7.grid(row=1, column=4, padx=(80, 2), pady=(5, 5))
+        self.button_KP_8 = ctk.CTkButton(self, text="8", width=60, height=30, state="disabled")
+        self.button_KP_8.grid(row=1, column=5, padx=(2, 2), pady=(5, 5))
+        self.button_KP_9 = ctk.CTkButton(self, text="9", width=60, height=30, state="disabled")
+        self.button_KP_9.grid(row=1, column=6, padx=(2, 2), pady=(5, 5))
+        self.button_KP_4 = ctk.CTkButton(self, text="4", width=60, height=30, state="disabled")
+        self.button_KP_4.grid(row=2, column=4, padx=(80, 2), pady=(5, 5))
+        self.button_KP_5 = ctk.CTkButton(self, text="5", width=60, height=30, state="disabled")
+        self.button_KP_5.grid(row=2, column=5, padx=(2, 2), pady=(5, 5))
+        self.button_KP_6 = ctk.CTkButton(self, text="6", width=60, height=30, state="disabled")
+        self.button_KP_6.grid(row=2, column=6, padx=(2, 2), pady=(5, 5))
+        self.button_KP_1 = ctk.CTkButton(self, text="1", width=60, height=30, state="disabled")
+        self.button_KP_1.grid(row=3, column=4, padx=(80, 2), pady=(5, 5))
+        self.button_KP_2 = ctk.CTkButton(self, text="2", width=60, height=30, state="disabled")
+        self.button_KP_2.grid(row=3, column=5, padx=(2, 2), pady=(5, 5))
+        self.button_KP_3 = ctk.CTkButton(self, text="3", width=60, height=30, state="disabled")
+        self.button_KP_3.grid(row=3, column=6, padx=(2, 2), pady=(5, 5))
+
+        self.button_references = [self.button_Print_screen, self.button_Scroll_lock, self.button_Pause,
+                                  self.button_Insert, self.button_Home, self.button_Pageup, self.button_Delete,
+                                  self.button_End, self.button_Pagedown, self.button_Up, self.button_Down,
+                                  self.button_Left, self.button_Right, self.button_Numlock, self.button_KP_Divide,
+                                  self.button_KP_Multiply, self.button_KP_Subtract, self.button_KP_Add,
+                                  self.button_KP_Enter, self.button_KP_Separator, self.button_KP_0,
+                                  self.button_KP_7, self.button_KP_8, self.button_KP_9, self.button_KP_4,
+                                  self.button_KP_5, self.button_KP_6, self.button_KP_1, self.button_KP_2,
+                                  self.button_KP_3]
+
+        self.key_names = ['Print_Screen', 'Scroll_Lock', 'Pause', 'Insert', 'Home', 'Prior', 'Delete', 'End', 'Next',
+                          'Up', 'Down', 'Left', 'Right', 'Num_Lock', 'KP_Divide', 'KP_Multiply', 'KP_Subtract',
+                          'KP_Add', 'KP_Enter', 'KP_Separator', 'KP_0', 'KP_7', 'KP_8', 'KP_9', 'KP_4', 'KP_5', 'KP_6',
+                          'KP_1', 'KP_2', 'KP_3']
+
+        self.alt_key_names = ['Print_Screen', 'Scroll_Lock', 'Pause', 'Insert', 'Home', 'Prior', 'Delete', 'End',
+                              'Next', 'Up', 'Down', 'Left', 'Right', 'Num_Lock', 'KP_Divide', 'KP_Multiply',
+                              'KP_Subtract', 'KP_Add', 'KP_Enter', 'KP_Delete', 'KP_Insert', 'KP_Home', 'KP_Up',
+                              'KP_Prior', 'KP_Left', 'KP_Begin', 'KP_Right', 'KP_End', 'KP_Down', 'KP_Next']
+
+
+class KeyboardMainFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.grid_rowconfigure(2, weight=1)
+
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=0)
+
+        self.primary_frame = KeyboardPrimaryFrame(self)
+        self.secondary_frame = KeyboardSecondaryFrame(self)
+
+        self.primary_frame.configure(fg_color="transparent")
+        self.secondary_frame.configure(fg_color="transparent")
+
+        self.primary_frame.grid(row=0, column=1, sticky="ew")
+        self.secondary_frame.grid(row=1, column=1, pady=(80, 0), sticky="ew")
+
+        self.button_references = self.primary_frame.button_references + self.secondary_frame.button_references
+        self.key_names = self.primary_frame.key_names + self.secondary_frame.key_names
+        self.alt_key_names = self.primary_frame.alt_key_names + self.secondary_frame.alt_key_names
+
+        self.entry_state = 0
+
+        self.entry_layout = ctk.CTkEntry(self, width=200)
+        self.entry_layout.grid(row=3, column=1, pady=(0, 20), sticky='ns')
+        self.entry_layout.configure(self, state='normal', placeholder_text="układ klawiatury")
+        self.entry_keyboard = ctk.CTkEntry(self, width=200)
+        self.entry_keyboard.grid(row=4, column=1, pady=(0, 20), sticky='ns')
+        self.entry_keyboard.configure(self, state='normal', placeholder_text="wady klawiatury")
+
     def mark_key(self, index, key_state):
         match key_state:
             case 'keydown':
@@ -214,3 +341,14 @@ class KeyboardMainFrame(ctk.CTkFrame):
             self.mark_key(index, key_state)
         except ValueError:
             pass
+
+    def entry_callback(self):
+        self.entry_state += 1
+
+        if self.entry_state == 1:
+            self.entry_state = 2
+            self.entry_layout.focus()
+
+        else:
+            self.entry_state = 0
+            self.entry_keyboard.focus()
