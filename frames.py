@@ -55,7 +55,7 @@ class OutputFrame(ctk.CTkFrame):
         self.label_resolution = ctk.CTkLabel(self, text="Rozdzielczość: ")
         self.label_resolution.grid(row=10, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_keyboard = ctk.CTkLabel(self, text="Klawiatura: ")
+        self.label_keyboard = ctk.CTkLabel(self, text="Layout: ")
         self.label_keyboard.grid(row=11, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_license = ctk.CTkLabel(self, text="Licencja: ")

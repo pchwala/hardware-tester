@@ -22,31 +22,41 @@ class RecordSound(threading.Thread):
         self.p = pyaudio.PyAudio()
 
         self.long_data = []
-        self.TIME = 20
 
-        # init stream class
+        # init input stream
         try:
-            self.stream = self.p.open(format=self.FORMAT,
-                                      channels=self.CHANNELS,
-                                      rate=self.RATE,
-                                      output=True,
-                                      input=True,
-                                      stream_callback=self.callback,
-                                      frames_per_buffer=self.CHUNK)
+            self.input_stream = self.p.open(format=self.FORMAT,
+                                            channels=self.CHANNELS,
+                                            rate=self.RATE,
+                                            input=True,
+                                            stream_callback=self.input_callback,
+                                            frames_per_buffer=self.CHUNK)
         except Exception:
-            print("cos sie zjebalo xD")
+            print("Micro fucked up")
 
-    # define audio io callback
+        # init output stream
+        try:
+            self.output_stream = self.p.open(format=self.FORMAT,
+                                             channels=self.CHANNELS,
+                                             rate=self.RATE,
+                                             output=True,
+                                             stream_callback=self.output_callback,
+                                             frames_per_buffer=self.CHUNK)
+        except Exception:
+            print("Speakers fucked up")
+
+    # define audio input callback
     # This gets called with a block of incoming mic samples,
-    # and returns a block of outgoing speaker samples.
-    def callback(self, in_data, frame_count, time_info, status):
+    def input_callback(self, in_data, frame_count, time_info, status):
         self.long_data.insert(0, in_data)
-        if len(self.long_data) > self.TIME:
-            temp_data = self.long_data[self.TIME]
-            self.long_data.pop()
-            return temp_data, pyaudio.paContinue
-        else:
-            return in_data, pyaudio.paContinue
+        return (None, pyaudio.paContinue)
+
+    def output_callback(self, in_data, frame_count, time_info, status):
+        try:
+            data = self.long_data.pop()
+            return (data, pyaudio.paContinue)
+        except IndexError:
+            return (None, pyaudio.paContinue)
 
     # function called when starting thread
     def run(self):
@@ -64,15 +74,18 @@ class RecordSound(threading.Thread):
 
         if data == 'stop':
             print("stopped")
-            self.long_data.clear()
-            self.stream.stop_stream()
+            self.input_stream.stop_stream()
+            self.output_stream.start_stream()
 
         elif data == 'start':
             print("started")
-            self.stream.start_stream()
+            self.output_stream.stop_stream()
+            self.input_stream.start_stream()
 
         elif data == 'terminate':
             print("terminating")
-            self.stream.stop_stream()
-            self.stream.close()
+            self.input_stream.stop_stream()
+            self.output_stream.stop_stream()
+            self.input_stream.close()
+            self.output_stream.close()
             self.p.terminate()

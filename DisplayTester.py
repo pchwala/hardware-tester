@@ -17,37 +17,25 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.label1.cget("font").configure(size=20)
         self.label1.grid(row=2, column=1, pady=(0, 20))
 
-        self.label2 = customtkinter.CTkLabel(self, text="Hotspoty:")
-        self.label2.grid(row=3, column=1, pady=(0, 5))
-        self.hotspots_segmented = customtkinter.CTkSegmentedButton(
-                                  self, values=['Brak', 'Mikro', 'Małe', 'Średnie', 'Duże', 'B.Duże'])
-        self.hotspots_segmented.set('Brak')
-        self.hotspots_segmented.grid(row=4, column=1, pady=(0, 5), sticky='ns')
-        self.hotspots_segmented2 = customtkinter.CTkSegmentedButton(
-                                  self, values=['Brak', 'Jeden', 'Dwa', 'Trzy', 'Kilka', 'Sporo'])
-        self.hotspots_segmented2.set('Brak')
-        self.hotspots_segmented2.grid(row=5, column=1, pady=(0, 20), sticky='ns')
-
-        self.label3 = customtkinter.CTkLabel(self, text="Porysowane:")
-        self.label3.grid(row=6, column=1, pady=(0, 5))
-        self.scratch_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['Brak', 'Minimalnie', 'Lekko', 'Średnio', 'Mocno', 'B.Mocno'])
-        self.scratch_segmented.set('Brak')
-        self.scratch_segmented.grid(row=7, column=1, pady=(0, 5), sticky='ns')
-        self.check_box1 = customtkinter.CTkCheckBox(self, text="Klapa", onvalue=True, offvalue=False)
+        self.check_box1 = customtkinter.CTkCheckBox(self, text="Klapa porysowana", onvalue=True, offvalue=False)
         self.check_box1.grid(row=8, column=0, pady=(0, 20))
-        self.check_box2 = customtkinter.CTkCheckBox(self, text="Touchpad", onvalue=True, offvalue=False)
+        self.check_box2 = customtkinter.CTkCheckBox(self, text="Touchpad wytarty", onvalue=True, offvalue=False)
         self.check_box2.grid(row=8, column=1, pady=(0, 20))
-        self.check_box3 = customtkinter.CTkCheckBox(self, text="Palmrest", onvalue=True, offvalue=False)
+        self.check_box3 = customtkinter.CTkCheckBox(self, text="Palmrest wytarty", onvalue=True, offvalue=False)
         self.check_box3.grid(row=8, column=2, pady=(0, 20))
+
+        self.polska_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['Zagranica', 'Polska'])
+        self.polska_segmented.set('Zagranica')
+        self.polska_segmented.grid(row=9, column=1, pady=(20, 20))
 
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
-        self.entry_display.grid(row=9, column=1, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=10, column=1, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
-        self.entry_frame.grid(row=10, column=1, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=11, column=1, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 

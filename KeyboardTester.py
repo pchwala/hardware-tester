@@ -120,8 +120,10 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
         self.button_Return = ctk.CTkButton(self, text="Enter", width=80, height=30, state="disabled")
         self.button_Return.grid(row=3, column=14, columnspan=2, padx=(2, 2), pady=(5, 5))
 
-        self.button_Shift_L = ctk.CTkButton(self, text="Shift", width=80, height=30, state="disabled")
-        self.button_Shift_L.grid(row=4, column=1, columnspan=2, padx=(10, 2), pady=(5, 5))
+        self.button_Shift_L = ctk.CTkButton(self, text="Shift", width=40, height=30, state="disabled")
+        self.button_Shift_L.grid(row=4, column=1, padx=(10, 2), pady=(5, 5))
+        self.button_less = ctk.CTkButton(self, text="< >", width=40, height=30, state="disabled")
+        self.button_less.grid(row=4, column=2, padx=(2, 2), pady=(5, 5))
         self.button_z = ctk.CTkButton(self, text="Z", width=40, height=30, state="disabled")
         self.button_z.grid(row=4, column=3, padx=(2, 2), pady=(5, 5))
         self.button_x = ctk.CTkButton(self, text="X", width=40, height=30, state="disabled")
@@ -176,7 +178,7 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
                                   self.button_b, self.button_n, self.button_m, self.button_comma, self.button_period,
                                   self.button_slash, self.button_Shift_R, self.button_Control_L, self.button_Super_L,
                                   self.button_Alt_L, self.button_space, self.button_Alt_R, self.button_Menu,
-                                  self.button_Control_R]
+                                  self.button_Control_R, self.button_less]
 
         self.key_names = ['Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
                           'grave', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'minus', 'equal', 'BackSpace',
@@ -184,7 +186,7 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
                           'backslash', 'Caps_Lock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'semicolon',
                           'apostrophe', 'Return', 'Shift_L', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'comma', 'period',
                           'slash', 'Shift_R', 'Control_L', 'Super_L', 'Alt_L', 'space', 'ISO_Level3_Shift', 'Menu',
-                          'Control_R']
+                          'Control_R', 'less']
 
         self.alt_key_names = ['Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
                               'grave', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'minus', 'equal', 'BackSpace',
@@ -192,7 +194,7 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
                               'backslash', 'Caps_Lock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'semicolon',
                               'apostrophe', 'Return', 'Shift_L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'comma', 'period',
                               'slash', 'Shift_R', 'Control_L', 'Super_L', 'Alt_L', 'space', 'ISO_Level3_Shift', 'Menu',
-                              'Control_R']
+                              'Control_R', 'greater']
 
 
 class KeyboardSecondaryFrame(ctk.CTkFrame):
@@ -314,11 +316,15 @@ class KeyboardMainFrame(ctk.CTkFrame):
 
         self.entry_state = 0
 
+        self.check_box = ctk.CTkCheckBox(self, text="Podswietlenie?", onvalue=True, offvalue=False)
+        self.check_box.grid(row=3, column=1, pady=(0, 20))
+        self.check_box.select()
+
         self.entry_layout = ctk.CTkEntry(self, width=200)
-        self.entry_layout.grid(row=3, column=1, pady=(0, 20), sticky='ns')
+        self.entry_layout.grid(row=4, column=1, pady=(0, 20), sticky='ns')
         self.entry_layout.configure(self, state='normal', placeholder_text="układ klawiatury")
         self.entry_keyboard = ctk.CTkEntry(self, width=200)
-        self.entry_keyboard.grid(row=4, column=1, pady=(0, 20), sticky='ns')
+        self.entry_keyboard.grid(row=5, column=1, pady=(0, 20), sticky='ns')
         self.entry_keyboard.configure(self, state='normal', placeholder_text="wady klawiatury")
 
     def mark_key(self, index, key_state):

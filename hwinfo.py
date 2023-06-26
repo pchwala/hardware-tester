@@ -119,7 +119,11 @@ class HwInfo:
                 # FORMATTING ERRORS CHECK FOR AMD GPUs
                 temp = re.sub(r".*\[", "", temp, 1)
                 temp = re.sub(r"]", "", temp, 1)
-                self.GPU_model = temp
+
+                if self.GPU_model == "":
+                    self.GPU_model += temp
+                else:
+                    self.GPU_model += " || " + temp
 
         all_info = exec_and_output("xdpyinfo | grep dimensions")
         self.resolution = re.search(r"\d+x\d+", all_info).group(0)
@@ -174,6 +178,7 @@ class HwInfo:
             file.write(self.battery_health + '\n')
             file.write(self.resolution + '\n')
             file.write(self.monitor_size + '\n')
+            file.write(self.license + '\n')
 
         result = subprocess.run("chmod 666 hwinfo.dat", shell=True)
 

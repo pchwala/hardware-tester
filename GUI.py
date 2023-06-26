@@ -47,8 +47,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-greater>", self.button_next_callback)
         self.bind("<Shift-m>", self.button_reset_callback)
         self.bind("<Shift-M>", self.button_reset_callback)
+        self.bind("<Control-r>", self.button_reset_callback)
+        self.bind("<Control-R>", self.button_reset_callback)
         self.bind("<Shift-s>", self.shortcut_start_stop)
         self.bind("<Shift-S>", self.shortcut_start_stop)
+        self.bind("<Control-c>", self.shortcut_start_stop)
+        self.bind("<Control-C>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
 
         self.bind("<Tab>", self.tab_callback)
@@ -112,7 +116,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                              self.output_frame.entry_keyboard_notes, self.output_frame.entry_monitor,
                              self.output_frame.entry_class, self.output_frame.entry_notes]
 
-    # Self-explanatory`
+
     def button_next_callback(self, event=None):
         self.tab_number += 1
         self.display_main_frame(self.tab_number-1)
@@ -131,6 +135,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         temp = self.tab_number
         self.tab_number = frame_number
         self.display_main_frame(temp)
+
+    def reset_start_stop(self):
+        reference3 = self.microphone_main_frame.button_stop
+        reference4 = self.sound_main_frame.button_stop
+        self.button_start_stop(reference3, "Start", "playback")
+        self.button_start_stop(reference4, "Start", "play")
 
     def shortcut_start_stop(self, event=None):
         match self.tab_number:
@@ -265,6 +275,8 @@ class GUI(customtkinter.CTk, threading.Thread):
     def display_main_frame(self, previous):
         print("\nTab number: " + str(self.tab_number))
 
+        self.fill_all_entries()
+
         # stop all testers
         self.output_queue.put('stop_all')
 
@@ -300,13 +312,19 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.monitor_main_frame.show_fullscreen()
 
             case 7:
-                self.qr_main_frame.make_qr()
+                # it needs to be executed a second time in this section by the flaw in design
+                # of checkboxes and entries in DisplayTester
+                self.fill_all_entries()
+                camera = self.camera_main_frame.check_box_state
+                sound = self.sound_main_frame.check_box_state
+                keyboard = self.keyboard_main_frame.check_box.get()
+                display = self.monitor_main_frame.polska_segmented.get()
+
+                self.qr_main_frame.make_qr(camera, sound, keyboard, display)
 
             case 8:
                 # can't exceed tab number 7
                 self.tab_number = 7
-
-        self.fill_all_entries()
 
         # hide previous frame and configure and show current frame
         self.frame_references[previous].grid_forget()
@@ -314,17 +332,32 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def fill_all_entries(self):
 
+        additional_notes = ""
+
         self.fill_entry(self.ports_main_frame.entry_ports_test, self.output_frame.entry_ports)
         self.fill_entry(self.camera_main_frame.entry_camera_test, self.output_frame.entry_camera)
         self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound)
         self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor)
         self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes)
         self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes)
+        self.fill_entry(self.keyboard_main_frame.entry_layout, self.output_frame.entry_keyboard)
+
+        if self.monitor_main_frame.check_box1.get() is True:
+            additional_notes += " | klapa porysowana"
+
+        if self.monitor_main_frame.check_box2.get() is True:
+            additional_notes += " | touchpad wytarty"
+
+        if self.monitor_main_frame.check_box3.get() is True:
+            additional_notes += " | palmrest wytarty"
+
+        self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes, additional_notes)
+
 
     @staticmethod
-    def fill_entry(tester_entry, output_entry):
+    def fill_entry(tester_entry, output_entry, additional=""):
         tester_data = tester_entry.get()
-        output_data = output_entry.get()
+        output_data = output_entry.get() + additional
 
         if tester_data != output_data:
             if output_data == "":

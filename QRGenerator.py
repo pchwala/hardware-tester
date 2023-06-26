@@ -1,6 +1,6 @@
 import customtkinter
 import qrcode
-
+import re
 
 class QRMainFrame(customtkinter.CTkFrame):
     def __init__(self, master, output):
@@ -20,7 +20,16 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.label1 = customtkinter.CTkLabel(self, text='')
 
-    def make_qr(self):
+        self.ant_switch = ""
+        self.pods_switch = "brak"
+        self.m2_switch = ""
+        self.sata25_switch = ""
+        self.wwan_switch = ""
+        self.oryg_switch = "tak"
+
+        self.polska_switch = ""
+
+    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, polska_checkbox):
 
         keyboard = self.output.entry_keyboard.get()
         laptop_class = self.output.entry_class.get()
@@ -29,6 +38,30 @@ class QRMainFrame(customtkinter.CTkFrame):
         sound = self.output.entry_sound.get()
         monitor = self.output.entry_monitor.get()
         notes = self.output.entry_notes.get()
+
+        LAN_switch = "ok"
+        WLAN_switch = ""
+        camera_switch = "Cam"
+        sound_switch = "ok"
+
+        if re.search(r'2\.5', self.output.HDD1_value) is not None:
+            self.sata25_switch = "tak"
+
+        # TUTAJ CHYBA JESZCZE DODAC M.2!!!!!
+        if re.search(r'NVMe', self.output.HDD1_value) is not None:
+            self.m2_switch = "tak"
+
+        if camera_checkbox is False:
+            camera_switch = "uszk"
+
+        if sound_checkbox is False:
+            sound_switch = "uszk"
+
+        if keyboard_checkbox is True:
+            self.pods_switch = "tak"
+
+        if polska_checkbox == "Polska":
+            self.polska_switch = "2"
 
         compiled_notes = ""
 
@@ -58,15 +91,21 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + self.output.battery_health + "\t"\
                         + self.output.monitor_size + "\t"\
                         + self.output.resolution + "\t"\
-                        + "ok\t"\
-                        + "ok\t"\
-                        + "Cam\t"\
-                        + "ok\t" \
+                        + LAN_switch + "\t"\
+                        + WLAN_switch + "\t"\
+                        + camera_switch + "\t"\
+                        + sound_switch + "\t" \
                         + keyboard + "\t"\
-                        + "\t"\
+                        + self.pods_switch + "\t"\
                         + self.output.license + "\t"\
                         + laptop_class + "\t"\
-                        + compiled_notes
+                        + compiled_notes + "\t\t\t\t\t\t\t\t\t"\
+                        + self.ant_switch + "\t"\
+                        + self.pods_switch + "\t"\
+                        + self.m2_switch + "\t"\
+                        + self.sata25_switch + "\t"\
+                        + self.wwan_switch + "\t"\
+                        + self.oryg_switch + "\t"\
 
         qr = qrcode.QRCode(
                 version=1,
