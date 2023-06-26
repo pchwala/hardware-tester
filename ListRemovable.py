@@ -37,11 +37,11 @@ class ListRemovable(threading.Thread):
                     command = "lsblk | grep disk"
                     all_info = self.exec_and_output(command)
 
-                    disks = re.findall(r'\d+\.', all_info)
+                    disks = re.findall(r'\d+,', all_info)
                     output_info = "Devices:\n\n"
                     x = 0
                     for disk in disks:
-                        disks[x] = "-  " + re.sub(r'\.', " GB Volume", disk) + "\n"
+                        disks[x] = "-  " + re.sub(r',', " GB Volume", disk) + "\n"
                         output_info += disks[x] + "\n"
                         x += 1
 
