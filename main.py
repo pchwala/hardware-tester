@@ -11,7 +11,6 @@ customtkinter.set_appearance_mode("Dark")  # Modes: system (default), light, dar
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
-# 1. Zle czyta karte graficzna jesli są dwie
 # 4. kamera jakos dziwnie znieksztalca ale tylko na niektorych modelach
 #       - pewnie jakies operacje na frame z opencv tak robia
 # 5. dodac skalowanie okienka kamery i qrcode

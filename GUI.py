@@ -33,6 +33,18 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.display_test = ""
         self.frame_test = ""
 
+        self.testers_previous = ["", "", "", "", "", "", ""]
+        self.output_previous = ["", "", "", "", "", "", ""]
+
+        # Pointers for each entry frame
+        self.e_ports = 0
+        self.e_camera = 1
+        self.e_sound = 2
+        self.e_display = 3
+        self.e_frame = 4
+        self.e_keyboard = 5
+        self.e_layout = 6
+
         self.title("Vedion Notebook Tester ver. beta-3.0")
         self.geometry('1280x1000+1500+0')
 
@@ -79,7 +91,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.microphone_main_frame = MicrophoneMainFrame(self)
         self.keyboard_main_frame = KeyboardMainFrame(self)
         self.monitor_main_frame = MonitorMainFrame(self)
-        self.qr_main_frame = QRMainFrame(self, self.output_frame)
+        self.qr_main_frame = QRMainFrame(self, self.output_frame, self.monitor_main_frame)
 
         # array with references to all the testers frames
         # for making it easier to hide and show consecutive frames with NEXT and PREV buttons
@@ -318,9 +330,8 @@ class GUI(customtkinter.CTk, threading.Thread):
                 camera = self.camera_main_frame.check_box_state
                 sound = self.sound_main_frame.check_box_state
                 keyboard = self.keyboard_main_frame.check_box.get()
-                display = self.monitor_main_frame.polska_segmented.get()
 
-                self.qr_main_frame.make_qr(camera, sound, keyboard, display)
+                self.qr_main_frame.make_qr(camera, sound, keyboard)
 
             case 8:
                 # can't exceed tab number 7
@@ -332,40 +343,39 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def fill_all_entries(self):
 
-        additional_notes = ""
+        self.fill_entry(self.ports_main_frame.entry_ports_test, self.output_frame.entry_ports, self.e_ports)
+        self.fill_entry(self.camera_main_frame.entry_camera_test, self.output_frame.entry_camera, self.e_camera)
+        self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound, self.e_sound)
+        self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor, self.e_display)
+        self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes, self.e_frame)
+        self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes, self.e_keyboard)
+        self.fill_entry(self.keyboard_main_frame.entry_layout, self.output_frame.entry_keyboard, self.e_layout)
 
-        self.fill_entry(self.ports_main_frame.entry_ports_test, self.output_frame.entry_ports)
-        self.fill_entry(self.camera_main_frame.entry_camera_test, self.output_frame.entry_camera)
-        self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound)
-        self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor)
-        self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes)
-        self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes)
-        self.fill_entry(self.keyboard_main_frame.entry_layout, self.output_frame.entry_keyboard)
+        class_str = self.monitor_main_frame.class_segmented.get() + " " + self.monitor_main_frame.polska_segmented.get()
+        self.output_frame.entry_class.delete(0, tkinter.END)
+        self.output_frame.entry_class.insert(0, class_str)
 
-        if self.monitor_main_frame.check_box1.get() is True:
-            additional_notes += " | klapa porysowana"
-
-        if self.monitor_main_frame.check_box2.get() is True:
-            additional_notes += " | touchpad wytarty"
-
-        if self.monitor_main_frame.check_box3.get() is True:
-            additional_notes += " | palmrest wytarty"
-
-        self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes, additional_notes)
-
-
-    @staticmethod
-    def fill_entry(tester_entry, output_entry, additional=""):
+    def fill_entry(self, tester_entry, output_entry, entry_number):
         tester_data = tester_entry.get()
-        output_data = output_entry.get() + additional
+        output_data = output_entry.get()
 
-        if tester_data != output_data:
-            if output_data == "":
-                output_entry.delete(0, tkinter.END)
-                output_entry.insert(0, tester_data)
-            else:
-                tester_entry.delete(0, tkinter.END)
-                tester_entry.insert(0, output_data)
+        if tester_data != self.testers_previous[entry_number]:
+            output_entry.delete(0, tkinter.END)
+            output_entry.insert(0, tester_data)
+
+        elif output_data != self.output_previous[entry_number]:
+            tester_entry.delete(0, tkinter.END)
+            tester_entry.insert(0, output_data)
+
+        else:
+            output_entry.delete(0, tkinter.END)
+            output_entry.insert(0, output_data)
+            tester_entry.delete(0, tkinter.END)
+            tester_entry.insert(0, tester_data)
+
+        self.testers_previous[entry_number] = tester_data
+        self.output_previous[entry_number] = output_data
+
 
     def on_closing(self):
         self.output_queue.put('terminate_all')

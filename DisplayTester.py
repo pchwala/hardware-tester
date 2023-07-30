@@ -19,23 +19,47 @@ class MonitorMainFrame(customtkinter.CTkFrame):
 
         self.check_box1 = customtkinter.CTkCheckBox(self, text="Klapa porysowana", onvalue=True, offvalue=False)
         self.check_box1.grid(row=8, column=0, pady=(0, 20))
-        self.check_box2 = customtkinter.CTkCheckBox(self, text="Touchpad wytarty", onvalue=True, offvalue=False)
+        self.check_box2 = customtkinter.CTkCheckBox(self, text="Klapa wytarta", onvalue=True, offvalue=False)
         self.check_box2.grid(row=8, column=1, pady=(0, 20))
-        self.check_box3 = customtkinter.CTkCheckBox(self, text="Palmrest wytarty", onvalue=True, offvalue=False)
+        self.check_box3 = customtkinter.CTkCheckBox(self, text="Lakier odchodzi", onvalue=True, offvalue=False)
         self.check_box3.grid(row=8, column=2, pady=(0, 20))
+
+        self.check_box4 = customtkinter.CTkCheckBox(self, text="Klawiatura wytarta", onvalue=True, offvalue=False)
+        self.check_box4.grid(row=9, column=0, pady=(0, 20))
+        self.check_box5 = customtkinter.CTkCheckBox(self, text="Touchpad wytarty", onvalue=True, offvalue=False)
+        self.check_box5.grid(row=9, column=1, pady=(0, 20))
+        self.check_box6 = customtkinter.CTkCheckBox(self, text="Palmrest wytarty", onvalue=True, offvalue=False)
+        self.check_box6.grid(row=9, column=2, pady=(0, 20))
+
+        self.check_box7 = customtkinter.CTkCheckBox(self, text="Wyraźny Hotspot", onvalue=True, offvalue=False)
+        self.check_box7.grid(row=10, column=0, pady=(0, 20))
+        self.check_box8 = customtkinter.CTkCheckBox(self, text="Wyraźna Rysa", onvalue=True, offvalue=False)
+        self.check_box8.grid(row=10, column=1, pady=(0, 20))
+        self.check_box9 = customtkinter.CTkCheckBox(self, text="Badpixele", onvalue=True, offvalue=False)
+        self.check_box9.grid(row=10, column=2, pady=(0, 20))
+
+        self.touchscreen_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['Dotyk', 'Brak dotyku'])
+        self.touchscreen_segmented.set('Brak dotyku')
+        self.touchscreen_segmented.grid(row=11, column=1, pady=(0, 60))
+
+        self.class_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['A', 'A-', 'B', 'C'])
+        self.class_segmented.set('A')
+        self.class_segmented.grid(row=12, column=1, pady=(0, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Zagranica', 'Polska'])
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=9, column=1, pady=(20, 20))
+        self.polska_segmented.grid(row=13, column=1, pady=(0, 20))
 
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
-        self.entry_display.grid(row=10, column=1, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=14, column=1, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
-        self.entry_frame.grid(row=11, column=1, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=15, column=1, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 

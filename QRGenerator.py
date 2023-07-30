@@ -3,12 +3,15 @@ import qrcode
 import re
 
 class QRMainFrame(customtkinter.CTkFrame):
-    def __init__(self, master, output):
+    def __init__(self, master, output, monitor):
         super().__init__(master)
 
         self.output = output
+        self.monitor = monitor
 
         self.input_data = "VOID"
+
+        self.compiled_notes = ""
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -20,64 +23,110 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.label1 = customtkinter.CTkLabel(self, text='')
 
-        self.ant_switch = ""
-        self.pods_switch = "brak"
-        self.m2_switch = ""
-        self.sata25_switch = ""
-        self.wwan_switch = ""
-        self.oryg_switch = "tak"
+    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox):
 
-        self.polska_switch = ""
-
-    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, polska_checkbox):
-
-        keyboard = self.output.entry_keyboard.get()
-        laptop_class = self.output.entry_class.get()
+        keyboard_notes = self.output.entry_keyboard_notes.get()
+        keyboard_layout = self.output.entry_keyboard.get()
         ports = self.output.entry_ports.get()
         camera = self.output.entry_camera.get()
         sound = self.output.entry_sound.get()
         monitor = self.output.entry_monitor.get()
         notes = self.output.entry_notes.get()
 
+        touchscreen_segmented = self.monitor.touchscreen_segmented.get()
+        laptop_class = self.monitor.class_segmented.get()
+        polska_segmented = self.monitor.polska_segmented.get()
+
         LAN_switch = "ok"
         WLAN_switch = ""
-        camera_switch = "Cam"
-        sound_switch = "ok"
+
+        ant_switch = ""
+        m2_switch = ""
+        sata25_switch = ""
+        wwan_switch = ""
+        oryg_switch = "tak"
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
-            self.sata25_switch = "tak"
+            sata25_switch = "tak"
 
-        # TUTAJ CHYBA JESZCZE DODAC M.2!!!!!
         if re.search(r'NVMe', self.output.HDD1_value) is not None:
-            self.m2_switch = "tak"
+            m2_switch = "tak"
+
+        if re.search(r'SSD', self.output.HDD1_value) is not None:
+            if sata25_switch == "":
+                m2_switch = "tak"
+
+        if touchscreen_segmented == "Brak dotyku":
+            touchscreen = ""
+        else:
+            touchscreen = " Dotyk"
 
         if camera_checkbox is False:
-            camera_switch = "uszk"
+            camera_switch = "uszk C"
+        else:
+            camera_switch = "Cam"
 
         if sound_checkbox is False:
-            sound_switch = "uszk"
+            sound_switch = "uszk S"
+        else:
+            sound_switch = "ok"
 
         if keyboard_checkbox is True:
-            self.pods_switch = "tak"
+            pods_switch = "pods"
+        else:
+            pods_switch = "brak"
 
-        if polska_checkbox == "Polska":
-            self.polska_switch = "2"
+        if polska_segmented == "Polska":
+            polska_switch = "2"
+        else:
+            polska_switch = ""
 
-        compiled_notes = ""
+        self.compiled_notes = ""
 
         if ports != '':
-            compiled_notes += ports + ", "
+            self.compiled_notes += ports + ", "
 
         if camera != '':
-            compiled_notes += camera + ", "
+            self.compiled_notes += camera + ", "
 
         if sound != '':
-            compiled_notes += sound + ", "
+            self.compiled_notes += sound + ", "
+
+        if keyboard_notes != '':
+            self.compiled_notes += keyboard_notes + ", "
 
         if monitor != '':
-            compiled_notes += monitor + ", "
+            self.compiled_notes += monitor + ", "
 
-        compiled_notes += notes
+        self.compiled_notes += notes
+
+        if self.monitor.check_box1.get() == 1:
+            self.compiled_notes += " | klapa porysowana"
+
+        if self.monitor.check_box2.get() == 1:
+            self.compiled_notes += " | klapa wytarta"
+
+        if self.monitor.check_box3.get() == 1:
+            self.compiled_notes += " | lakier odchodzi"
+
+        if self.monitor.check_box4.get() == 1:
+            self.compiled_notes += " | klawiatura wytarta"
+
+        if self.monitor.check_box5.get() == 1:
+            self.compiled_notes += " | touchpad wytarty"
+
+        if self.monitor.check_box6.get() == 1:
+            self.compiled_notes += " | palmrest wytarty"
+
+        if self.monitor.check_box7.get() == 1:
+            self.compiled_notes += " | wyrazny hotspot"
+
+        if self.monitor.check_box8.get() == 1:
+            self.compiled_notes += " | wyrazna rysa"
+
+        if self.monitor.check_box9.get() == 1:
+            self.compiled_notes += " | badpixele"
+
 
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\
@@ -90,22 +139,22 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + self.output.GPU_model + "\t"\
                         + self.output.battery_health + "\t"\
                         + self.output.monitor_size + "\t"\
-                        + self.output.resolution + "\t"\
+                        + self.output.resolution + touchscreen + "\t"\
                         + LAN_switch + "\t"\
                         + WLAN_switch + "\t"\
                         + camera_switch + "\t"\
                         + sound_switch + "\t" \
-                        + keyboard + "\t"\
-                        + self.pods_switch + "\t"\
+                        + keyboard_layout + "\t"\
+                        + polska_switch + "\t"\
                         + self.output.license + "\t"\
                         + laptop_class + "\t"\
-                        + compiled_notes + "\t\t\t\t\t\t\t\t\t"\
-                        + self.ant_switch + "\t"\
-                        + self.pods_switch + "\t"\
-                        + self.m2_switch + "\t"\
-                        + self.sata25_switch + "\t"\
-                        + self.wwan_switch + "\t"\
-                        + self.oryg_switch + "\t"\
+                        + self.compiled_notes + "\t\t\t\t\t\t\t\t\t"\
+                        + ant_switch + "\t"\
+                        + pods_switch + "\t"\
+                        + m2_switch + "\t"\
+                        + sata25_switch + "\t"\
+                        + wwan_switch + "\t"\
+                        + oryg_switch + "\t"\
 
         qr = qrcode.QRCode(
                 version=1,
