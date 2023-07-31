@@ -138,8 +138,8 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + self.output.HDD2_value + "\t"\
                         + self.output.GPU_model + "\t"\
                         + self.output.battery_health + "\t"\
-                        + self.output.monitor_size + "\t"\
-                        + self.output.resolution + touchscreen + "\t"\
+                        + self.output.monitor_size + touchscreen + "\t"\
+                        + self.output.resolution + "\t"\
                         + LAN_switch + "\t"\
                         + WLAN_switch + "\t"\
                         + camera_switch + "\t"\

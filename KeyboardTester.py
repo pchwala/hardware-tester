@@ -335,6 +335,12 @@ class KeyboardMainFrame(ctk.CTkFrame):
             case 'keyup':
                 self.button_references[index].configure(fg_color="green")
 
+    def reset_all(self):
+        for x in self.button_references:
+            # default color
+            x.configure(fg_color="#1F6AA5")
+
+
     def key_event(self, key, key_state):
         try:
             index = self.key_names.index(key)

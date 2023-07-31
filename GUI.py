@@ -140,6 +140,10 @@ class GUI(customtkinter.CTk, threading.Thread):
     # Reset by calling the same frame again with itself as previous frame
     def button_reset_callback(self, event=None):
         print("\n")
+
+        # reset all keyboard buttons to default color
+        if self.tab_number == 5:
+            self.keyboard_main_frame.reset_all()
         self.display_main_frame(self.tab_number)
 
     # Display specific frame

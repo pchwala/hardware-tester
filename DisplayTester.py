@@ -91,7 +91,7 @@ class Fullscreen(customtkinter.CTkToplevel):
         self.bind("<Key>", self.key_callback)
         self.bind("<Button>", self.button_callback)
 
-        self.colors = ['black', 'white', 'red', 'green', 'blue']
+        self.colors = ['#000', '#fff', '#f00', '#0f0', '#00f']
         self.current_color = 1
 
     def change_color(self, color):

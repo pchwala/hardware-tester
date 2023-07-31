@@ -49,6 +49,8 @@ class RecordSound(threading.Thread):
     # This gets called with a block of incoming mic samples,
     def input_callback(self, in_data, frame_count, time_info, status):
         self.long_data.insert(0, in_data)
+        if len(self.long_data) > 100:
+            self.queue.put('stop')
         return (None, pyaudio.paContinue)
 
     def output_callback(self, in_data, frame_count, time_info, status):

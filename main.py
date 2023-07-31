@@ -150,7 +150,6 @@ class App:
                 print(current)
                 self.q_GUI_input.put(current)
                 self.threads[self.t_GUI].process_queue('camera')
-
             except queue.Empty:
                 pass
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
