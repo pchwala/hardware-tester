@@ -14,14 +14,19 @@ class ListRemovable(threading.Thread):
 
         self.removables = []
 
-    def exec_and_output(self, command):
+    @staticmethod
+    def exec_and_output(command):
         return subprocess.check_output(command, shell=True).decode().strip()
 
-    # function called when starting thread
     def run(self):
-        # print name and received arguments
+        """
+        Function called when starting thread
+
+        :return: None
+        """
+        # Print name and received arguments
         print(threading.current_thread().name, self.receive_data)
-        # receive arguments in a loop until None is received
+        # Receive arguments in a loop until None is received
         while True:
             val = self.input_queue.get()
             print("Ports checking")

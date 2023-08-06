@@ -2,6 +2,7 @@ import customtkinter
 import qrcode
 import re
 
+
 class QRMainFrame(customtkinter.CTkFrame):
     def __init__(self, master, output, monitor):
         super().__init__(master)
@@ -126,7 +127,6 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         if self.monitor.check_box9.get() == 1:
             self.compiled_notes += " | badpixele"
-
 
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\

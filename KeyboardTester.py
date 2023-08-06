@@ -2,6 +2,10 @@ import customtkinter as ctk
 
 
 class KeyboardPrimaryFrame(ctk.CTkFrame):
+    """
+    Primary frame containing all keyboard buttons except NUM-PAD, ARROWS and CONTROL-PAD(PgUP, PgDown and so on)
+    Basically a lot of buttons that change colors when pressed and released
+    """
     def __init__(self, master):
         super().__init__(master)
 
@@ -198,6 +202,11 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
 
 
 class KeyboardSecondaryFrame(ctk.CTkFrame):
+    """
+        Secondary frame containing only NUM-PAD, ARROWS and CONTROL-PAD(PgUP, PgDown and so on)
+        Basically a lot of buttons that change colors when pressed and released
+        This frame is displayed below PrimaryFrame
+        """
     def __init__(self, master):
         super().__init__(master)
 
@@ -292,6 +301,9 @@ class KeyboardSecondaryFrame(ctk.CTkFrame):
 
 
 class KeyboardMainFrame(ctk.CTkFrame):
+    """
+    Keyboard Main Frame that manages displaying of Primary and Secondary Frames
+    """
     def __init__(self, master):
         super().__init__(master)
 
@@ -336,10 +348,10 @@ class KeyboardMainFrame(ctk.CTkFrame):
                 self.button_references[index].configure(fg_color="green")
 
     def reset_all(self):
+        # Reset color of all buttons back to default
         for x in self.button_references:
             # default color
             x.configure(fg_color="#1F6AA5")
-
 
     def key_event(self, key, key_state):
         try:

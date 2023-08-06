@@ -2,8 +2,19 @@ import customtkinter as ctk
 
 
 class CameraMainFrame(ctk.CTkFrame):
+    """
+
+    """
     def __init__(self, master):
         super().__init__(master)
+
+        # Configure grid like this:
+        #    0 1 2
+        # 0 |_|_|_|
+        # 1 |_|_|_|
+        # 2 |_|_|_|
+        #    .....
+        # where 1-1 square has the highest weight
 
         self.grid_columnconfigure(1, weight=1)
 

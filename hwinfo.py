@@ -1,6 +1,10 @@
 import subprocess
 import re
 
+# I didn't have time to properly comment out the code for these functions
+# but basically what all of these do is they take output of certain linux commands that return hardware info,
+# and format it in a way that is user-friendly and easy to work with and manipulate
+
 
 def exec_and_output(command):
     return subprocess.check_output(command, shell=True).decode().strip()

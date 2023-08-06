@@ -11,29 +11,27 @@ customtkinter.set_appearance_mode("Dark")  # Modes: system (default), light, dar
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
-# 4. kamera jakos dziwnie znieksztalca ale tylko na niektorych modelach
-#       - pewnie jakies operacje na frame z opencv tak robia
-# 5. dodac skalowanie okienka kamery i qrcode
-
-
-# Main App class
-# 1 - Controls an execution of all threads and data flow between them
-# 2 - Controls the execution of GUI class methods and transition between testers
-# 3 - DATA FLOW between threads:
-#     - App ---> GUI        - Start GUI execution
-#     - GUI ---> App        - What to ask from Threads
-#     - App ---> Threads    - Ask Threads
-#     - App <--- Threads    - Get answer
-#     - App ---> GUI        - Pass that answer
-
-
 class App:
+    """
+     Main App class
+     1 - Controls an execution of all threads and data flow between them
+     2 - Controls the execution of GUI class methods and transition between testers
+     3 - Does not display and change any GUI objects
+     4 - DATA FLOW between threads:
+         - App ---> GUI        - Start GUI execution
+         - GUI ---> App        - What to ask from Threads
+         - App ---> Threads    - Ask Threads
+         - App <--- Threads    - Get answer
+         - App ---> GUI        - Pass that answer
+
+    """
     def __init__(self):
         super().__init__()
 
         # Threads list
         self.threads = []
 
+        # Whether delay main loop or not
         self.sleeper = True
 
         # All Queues for controlling data flow between threads
@@ -87,7 +85,7 @@ class App:
 
 # # # MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP
         while True:
-            # Basically the same as calling tk.mainloop(), but it allows to put additional lines in the loop
+            # Basically the same as calling tk.mainloop(), but it allows to put additional code in the loop
             self.threads[self.t_GUI].update_idletasks()
             self.threads[self.t_GUI].update()
             if self.sleeper is True:
@@ -133,7 +131,7 @@ class App:
             except queue.Empty:
                 pass
 
-            # pass info from ListRemovable instance to GUI instance
+            # Pass info from ListRemovable instance to GUI instance
             try:
                 current = self.q_ports_output.get_nowait()
                 print("ports INTERVAL")
@@ -143,7 +141,7 @@ class App:
             except queue.Empty:
                 pass
 
-            # pass info from CameraCapture instance to GUI instance
+            # Pass info from CameraCapture instance to GUI instance
             try:
                 current = self.q_camera_output.get_nowait()
                 print("camera INTERVAL")
@@ -155,6 +153,7 @@ class App:
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
 
 
+# Subprocess reading all the hardware info
 result = subprocess.run("./python-sudo.sh hwinfo.py", shell=True)
 
 App = App()

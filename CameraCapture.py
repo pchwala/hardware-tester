@@ -2,12 +2,17 @@ import threading
 
 import customtkinter
 import cv2 as cv
-import numpy as np
 
 from PIL import Image
 
 
 class CameraCapture(threading.Thread):
+    """
+    Thread for capturing video from camera using openCV
+
+    'input_queue' for controlling thread behavior
+    output from camera is converted to 'Image' gets put into 'output_queue'
+    """
     def __init__(self, input_queue, output_queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.input_queue = input_queue
@@ -15,16 +20,18 @@ class CameraCapture(threading.Thread):
         self.daemon = True
         self.receive_data = args
 
+        # Initialize camera capture
         self.capture = cv.VideoCapture(0)
         if self.capture.isOpened() is False:
             print("Cannot open camera")
             self.output_queue.put('missing_camera')
 
-        # function called when starting thread
+    # Function called when starting thread
     def run(self):
-        # print name and received arguments
+        # Print name and received arguments
         print(threading.current_thread().name, self.receive_data)
-        # receive arguments in a loop until None is received
+
+        # Receive arguments in a loop until None is received
         while True:
             val = self.input_queue.get()
             print("Camera checking")
@@ -37,6 +44,7 @@ class CameraCapture(threading.Thread):
 
             if val == 'start':
                 print("started")
+                # Initialize capture
                 self.capture = cv.VideoCapture(0)
                 if self.capture.isOpened() is False:
                     print("Cannot open camera")
@@ -45,18 +53,22 @@ class CameraCapture(threading.Thread):
                 while True:
                     # Capture frame-by-frame
                     returned, frame = self.capture.read()
+
                     # if frame is read correctly returned is True
                     if returned is False:
                         print("Can't receive frame (stream end?).")
                         self.output_queue.put('failed_capture')
                         break
 
-                    # Get the latest frame and convert into Image and put into output queue
+                    # Get the latest frame and convert Image
+                    # Also convert to RGB, so the color scheme is correct
                     returned, frame = self.capture.read()
                     frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     image_frame = Image.fromarray(frame)
 
-                    image_ctk = customtkinter.CTkImage(None, dark_image=image_frame, size=(512, 512))
+                    # Convert to CTkImage so it can be displayed later and put into 'output_queue'
+                    w, h = image_frame.size
+                    image_ctk = customtkinter.CTkImage(None, dark_image=image_frame, size=(w, h))
                     self.output_queue.put(image_ctk)
 
                     if self.input_queue.empty() is False:

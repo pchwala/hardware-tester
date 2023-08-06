@@ -12,11 +12,16 @@ from tkinter import *
 import queue
 
 
-# GUI class, using customtkinter
-# 1 - GUI based on tkinter frames and grid
-# 2 - Handle user input and output
-# 3 - All data flows through this class at some point
 class GUI(customtkinter.CTk, threading.Thread):
+    """
+    GUI class, using customtkinter.
+    1 - GUI based on tkinter frames and grid
+    2 - Manages displaying all main elements of the GUI
+    3 - Handle user input and output
+    4 - All data that is displayed for the user must flows through this class at some point
+
+    'input_queue' and 'output_queue' for communicating with App class through commands
+    """
     def __init__(self, input_queue, output_queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         super().__init__()
@@ -26,6 +31,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.daemon = True
         self.receive_data = args
 
+        # Entry inputs from the user
         self.ports_test = ""
         self.camera_test = ""
         self.sound_test = ""
@@ -33,10 +39,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.display_test = ""
         self.frame_test = ""
 
+        # Previous strings stored in corresponding tester_frame or output_frame
+        # Enables interchangeable editing data in those entries on the fly
         self.testers_previous = ["", "", "", "", "", "", ""]
         self.output_previous = ["", "", "", "", "", "", ""]
 
-        # Pointers for each entry frame
+        # Simple "pointers" for each entry frame
         self.e_ports = 0
         self.e_camera = 1
         self.e_sound = 2
@@ -52,6 +60,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         # This is the row where main_frame is
         self.rowconfigure(1, weight=1)
 
+        # Bind all global shortcuts for the App
         self.bind("<KeyPress>", self.key_press_callback)
         self.bind("<KeyRelease>", self.key_release_callback)
 
@@ -67,13 +76,14 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Control-C>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
 
+        # Overwrite default behaviour of TAB button
         self.bind("<Tab>", self.tab_callback)
         self.bind("<ISO_Left_Tab>", self.left_tab_callback)
 
         self.unbind_all("<<NextWindow>>")
         self.unbind_all("<<PrevWindow>>")
 
-        # configure grid layout / LEFT SIDE frame
+        # Configure grid layout / LEFT SIDE frame
         self.output_frame = OutputFrame(self)
         self.output_frame.grid(row=0, column=0, rowspan=19, columnspan=2, padx=(10, 0), pady=10, sticky="ens")
 
@@ -82,7 +92,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.testers_frame.grid(row=0, column=2, columnspan=6, padx=10, pady=(10, 0), sticky="ew")
         self.testers_frame.configure(self, fg_color="transparent")
 
-        # create all the testers frames, show only first - ports tester frame
+        # Create all the testers frames, show only first - ports tester frame
         self.ports_main_frame = PortsMainFrame(self)
         self.ports_main_frame.grid(row=1, column=2, columnspan=6, padx=40, pady=40, sticky="ewns")
 
@@ -93,9 +103,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.monitor_main_frame = MonitorMainFrame(self)
         self.qr_main_frame = QRMainFrame(self, self.output_frame, self.monitor_main_frame)
 
-        # array with references to all the testers frames
-        # for making it easier to hide and show consecutive frames with NEXT and PREV buttons
-        # first element is None so testers numbering starts with 1!
+        # Array with references to all the testers frames
+        # For making it easier to hide and show consecutive frames with NEXT and PREV buttons
+        # First element is None so testers numbering starts with 1!
         self.frame_references = [None, self.ports_main_frame, self.camera_main_frame, self.microphone_main_frame,
                                  self.sound_main_frame, self. keyboard_main_frame, self.monitor_main_frame,
                                  self.qr_main_frame]
@@ -128,7 +138,6 @@ class GUI(customtkinter.CTk, threading.Thread):
                              self.output_frame.entry_keyboard_notes, self.output_frame.entry_monitor,
                              self.output_frame.entry_class, self.output_frame.entry_notes]
 
-
     def button_next_callback(self, event=None):
         self.tab_number += 1
         self.display_main_frame(self.tab_number-1)
@@ -137,28 +146,52 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.tab_number -= 1
         self.display_main_frame(self.tab_number+1)
 
-    # Reset by calling the same frame again with itself as previous frame
     def button_reset_callback(self, event=None):
+        """
+        Reset by calling the same frame again with itself as previous frame
+
+        :param event:
+        :return: None
+        """
         print("\n")
 
-        # reset all keyboard buttons to default color
+        # Reset all keyboard buttons to default color
+        #  but only when keyboard tester is displayed
         if self.tab_number == 5:
             self.keyboard_main_frame.reset_all()
+
         self.display_main_frame(self.tab_number)
 
-    # Display specific frame
     def button_menu_callback(self, frame_number):
+        """
+        Display specific frame
+
+        :param frame_number:
+        :return: None
+        """
         temp = self.tab_number
         self.tab_number = frame_number
         self.display_main_frame(temp)
 
     def reset_start_stop(self):
+        """
+        For testing purposes. Currently unused
+
+        :return: None
+        """
         reference3 = self.microphone_main_frame.button_stop
         reference4 = self.sound_main_frame.button_stop
         self.button_start_stop(reference3, "Start", "playback")
         self.button_start_stop(reference4, "Start", "play")
 
     def shortcut_start_stop(self, event=None):
+        """
+        Starts or stops testing microphone or speakers
+        Also changes text on according buttons
+
+        :param event:
+        :return: None
+        """
         match self.tab_number:
             case 3:
                 reference = self.microphone_main_frame.button_stop
@@ -185,7 +218,7 @@ class GUI(customtkinter.CTk, threading.Thread):
             self.keyboard_main_frame.key_event(event.keysym, 'keydown')
 
         if event.keysym == 'Escape':
-            # remove focus from widget
+            # remove focus from widget by focusing main Window
             self.focus()
 
     def key_release_callback(self, event):
@@ -254,9 +287,13 @@ class GUI(customtkinter.CTk, threading.Thread):
             case 6:
                 current_frame.entry_callback()
 
-    # Process all commands and data from input queue
-    # For now it only processes data incomming from checking ports
     def process_queue(self, data_type):
+        """
+        Process all commands and data from input queue
+
+        :param data_type:
+        :return: None
+        """
         if data_type == 'ports':
             try:
                 current = self.input_queue.get_nowait()
@@ -276,6 +313,7 @@ class GUI(customtkinter.CTk, threading.Thread):
             try:
                 current = self.input_queue.get_nowait()
 
+                # Display frame from Camera
                 if type(current) != str:
                     self.camera_main_frame.label1.configure(self, image=current, text="")
 
@@ -287,21 +325,27 @@ class GUI(customtkinter.CTk, threading.Thread):
             except TclError:
                 pass
 
-    # Main method that handles all testers mainframes and transitions between them
     def display_main_frame(self, previous):
+        """
+        Main method that handles all testers mainframes and transitions between them
+
+        :param previous: number of the frame that was on display when this function was called
+        :return:
+        """
         print("\nTab number: " + str(self.tab_number))
 
         self.fill_all_entries()
 
-        # stop all testers
+        # Stop all testers
         self.output_queue.put('stop_all')
 
+        # Unbind TAB
         # I think its kind of wrong, but it works
-        # Better to do it, so it is executed only once after keyboardTester
+        # Better way to do it will be so it is only executed once after keyboardTester
         self.bind("<Tab>", self.tab_callback)
         self.bind("<ISO_Left_Tab>", self.left_tab_callback)
 
-        # and start the next one
+        # And start the next one
         match self.tab_number:
             case 0:
                 # can't go tab number below 1
@@ -328,7 +372,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.monitor_main_frame.show_fullscreen()
 
             case 7:
-                # it needs to be executed a second time in this section by the flaw in design
+                # It needs to be executed a second time in this section by the flaw in design
                 # of checkboxes and entries in DisplayTester
                 self.fill_all_entries()
                 camera = self.camera_main_frame.check_box_state
@@ -338,7 +382,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.qr_main_frame.make_qr(camera, sound, keyboard)
 
             case 8:
-                # can't exceed tab number 7
+                # Can't exceed tab number 7
                 self.tab_number = 7
 
         # hide previous frame and configure and show current frame
@@ -379,7 +423,6 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         self.testers_previous[entry_number] = tester_data
         self.output_previous[entry_number] = output_data
-
 
     def on_closing(self):
         self.output_queue.put('terminate_all')

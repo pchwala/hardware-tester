@@ -5,6 +5,14 @@ class MonitorMainFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        # Configure grid like this:
+        #    0 1 2
+        # 0 |_|_|_|
+        # 1 |_|_|_|
+        # 2 |_|_|_|
+        #    .....
+        # where all columns have equal weights and row 1 have highest row-weight
+
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -82,6 +90,10 @@ class MonitorMainFrame(customtkinter.CTkFrame):
 
 
 class Fullscreen(customtkinter.CTkToplevel):
+    """
+    Creates new CTk Toplevel fullscreen Window
+    that can change colors to Black, White, Red, Green and Blue with button and key presses
+    """
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -100,6 +112,7 @@ class Fullscreen(customtkinter.CTkToplevel):
     def key_callback(self, event):
         print("FULLSCREEN key pressed: ", event.keysym)
 
+        # Define keys that change screen color
         if event.keysym in ['space', 'Up', 'Right', 'w', 'W', 'd', 'D']:
             self.increment_color()
             self.change_color(self.colors[self.current_color])
@@ -114,6 +127,8 @@ class Fullscreen(customtkinter.CTkToplevel):
     def button_callback(self, event):
         print("FULLSCREEN button pressed: ", event.num)
 
+        # Increment color for Left and Middle mouse buttons
+        # Decrement for Right mouse button
         if event.num == 1:
             self.increment_color()
             self.change_color(self.colors[self.current_color])
