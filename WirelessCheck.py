@@ -12,6 +12,10 @@ class WirelessCheck(threading.Thread):
         self.daemon = True
         self.receive_data = args
 
+    @staticmethod
+    def exec_and_output(command):
+        return subprocess.check_output(command, shell=True).decode().strip()
+
     def run(self):
         """
         Function called when starting thread
@@ -27,15 +31,24 @@ class WirelessCheck(threading.Thread):
             if val is None:
                 return
 
-            if val == 'stop':
-                print("stopped")
-
             if val == 'start':
                 print("started")
                 while True:
-                    command = "ping 8.8.8.8"
+                    # Ping 8.8.8.8 4 times
+                    command = "ping 8.8.8.8 -c 4"
 
-                    all_info = self.exec_and_output(command)
+                    try:
+                        # if ping doesn't return error then wifi works OK, this process completed its job
+                        all_info = self.exec_and_output(command)
+                        self.output_queue.put("wlan_ok")
+                        self.input_queue.put("terminate")
+
+                        # if it returns error the try again after 5 seconds
+                    except subprocess.CalledProcessError:
+                        time.sleep(5)
 
                     if self.input_queue.empty() is False:
                         break
+
+            elif val == 'terminate':
+                print("terminating")

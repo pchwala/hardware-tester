@@ -39,6 +39,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.display_test = ""
         self.frame_test = ""
 
+        # Result of automatic wifi-check
+        self.wlan_status = False
+
         # Previous strings stored in corresponding tester_frame or output_frame
         # Enables interchangeable editing data in those entries on the fly
         self.testers_previous = ["", "", "", "", "", "", ""]
@@ -325,6 +328,9 @@ class GUI(customtkinter.CTk, threading.Thread):
             except TclError:
                 pass
 
+    def wlan_status_update(self, status):
+        self.wlan_status = status
+
     def display_main_frame(self, previous):
         """
         Main method that handles all testers mainframes and transitions between them
@@ -379,7 +385,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                 sound = self.sound_main_frame.check_box_state
                 keyboard = self.keyboard_main_frame.check_box.get()
 
-                self.qr_main_frame.make_qr(camera, sound, keyboard)
+                self.qr_main_frame.make_qr(camera, sound, keyboard, self.wlan_status)
 
             case 8:
                 # Can't exceed tab number 7

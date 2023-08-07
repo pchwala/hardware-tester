@@ -24,7 +24,7 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.label1 = customtkinter.CTkLabel(self, text='')
 
-    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox):
+    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status):
 
         keyboard_notes = self.output.entry_keyboard_notes.get()
         keyboard_layout = self.output.entry_keyboard.get()
@@ -39,7 +39,10 @@ class QRMainFrame(customtkinter.CTkFrame):
         polska_segmented = self.monitor.polska_segmented.get()
 
         LAN_switch = "ok"
-        WLAN_switch = ""
+        if wlan_status == True:
+            WLAN_switch = "wifi-ok"
+        else:
+            WLAN_switch = "wifi-brak"
 
         ant_switch = ""
         m2_switch = ""

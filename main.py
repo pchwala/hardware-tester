@@ -47,6 +47,9 @@ class App:
         self.q_camera_input = Queue()
         self.q_camera_output = Queue()
 
+        self.q_wireless_input = Queue()
+        self.q_wireless_output = Queue()
+
         # these threads have only input queue
         # they don't return any data
         self.q_play = Queue()
@@ -58,6 +61,7 @@ class App:
         self.t_playback = 2
         self.t_ports = 3
         self.t_camera = 4
+        self.t_wireless = 5
 
         # Create and start a thread and pass 'stop' into an input queue
         # So that every thread is initiated and loaded into memory
@@ -80,6 +84,10 @@ class App:
         self.threads.append(CameraCapture(self.q_camera_input, self.q_camera_output, args='stop'))
         self.threads[self.t_camera].start()
         self.threads[self.t_camera].input_queue.put('stop')
+
+        self.threads.append(WirelessCheck(self.q_wireless_input, self.q_wireless_output, args=''))
+        self.threads[self.t_wireless].start()
+        self.threads[self.t_wireless].input_queue.put('start')
 
         # Callback for GUI thread, calls method inside GUI thad handle window closing and cleans after that
         self.threads[self.t_GUI].protocol("WM_DELETE_WINDOW", self.threads[self.t_GUI].on_closing)
@@ -108,6 +116,7 @@ class App:
                         self.q_play.put('terminate')
                         self.q_playback.put('terminate')
                         self.q_camera_input.put('terminate')
+                        self.q_wireless_input.put('terminate')
                         return
 
                     case 'start_ports':
@@ -149,6 +158,14 @@ class App:
                 print(current)
                 self.q_GUI_input.put(current)
                 self.threads[self.t_GUI].process_queue('camera')
+            except queue.Empty:
+                pass
+
+            # Pass info from WirelessCheck instance to GUI instance
+            try:
+                current = self.q_wireless_output.get_nowait()
+                if "wlan_ok" in current:
+                    self.threads[self.t_GUI].wlan_status_update(True)
             except queue.Empty:
                 pass
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
