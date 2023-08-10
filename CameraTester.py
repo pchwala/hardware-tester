@@ -22,7 +22,7 @@ class CameraMainFrame(ctk.CTkFrame):
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=0)
 
-        self.label1 = ctk.CTkLabel(self, text="TESTUJEMY KAMERĘ")
+        self.label1 = ctk.CTkLabel(self, text="WAITING FOR CAMERA")
         self.label1.grid(row=0, column=1, pady=20)
 
         self.check_box_state = True

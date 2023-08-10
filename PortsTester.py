@@ -14,7 +14,7 @@ class PortsMainFrame(ctk.CTkFrame):
         self.grid_rowconfigure(2, weight=0)
         self.grid_rowconfigure(3, weight=0)
 
-        self.label1 = ctk.CTkLabel(self, text="TESTUJEMY PORTY")
+        self.label1 = ctk.CTkLabel(self, text="Waiting for devices")
         self.label1.grid(row=0, column=1)
 
         self.check_box_state = True

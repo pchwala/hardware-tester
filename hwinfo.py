@@ -150,11 +150,13 @@ class HwInfo:
             if "Battery 0" in line:
                 if "capacity" in line:
                     self.battery0 = re.search(r'\d*%', line).group(0)
+                    self.battery0 = re.search(r'\d*', self.battery0).group(0)
 
             if "Battery 1" in line:
                 if "capacity" in line:
                     try:
                         self.battery1 = re.search(r'\d*%', line).group(0)
+                        self.battery1 = re.search(r'\d*', self.battery1).group(0)
                     except Exception:
                         self.battery1 = "XD"
 

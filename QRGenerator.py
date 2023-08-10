@@ -48,7 +48,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         m2_switch = ""
         sata25_switch = ""
         wwan_switch = ""
-        oryg_switch = "tak"
+        oryg_switch = "?"
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
             sata25_switch = "tak"
