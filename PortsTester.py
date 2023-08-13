@@ -23,13 +23,8 @@ class PortsMainFrame(ctk.CTkFrame):
         self.check_box.select()
         self.check_box.grid(row=2, column=1, pady=(0, 20))
 
-        self.entry_ports_test = ctk.CTkEntry(self, state='disabled', width=200)
-        self.entry_ports_test.grid(row=3, column=1, pady=(0, 20))
+        self.entry_ports_test = ctk.CTkEntry(self, state='normal', placeholder_text="Wady portów", width=200)
+        self.entry_ports_test.grid(row=3, column=1, pady=(0, 20), sticky="ns")
 
     def check_box_callback(self):
         self.check_box_state = not self.check_box_state
-
-        if self.check_box_state is True:
-            self.entry_ports_test.configure(self, state='disabled', placeholder_text="")
-        else:
-            self.entry_ports_test.configure(self, state='normal', placeholder_text="wady portów")

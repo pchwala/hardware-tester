@@ -405,13 +405,21 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes, self.e_keyboard)
         self.fill_entry(self.keyboard_main_frame.entry_layout, self.output_frame.entry_keyboard, self.e_layout)
 
-        class_str = self.monitor_main_frame.class_segmented.get() + " " + self.monitor_main_frame.polska_segmented.get()
+        class_str = self.monitor_main_frame.class_segmented.get()
+        class_substr = self.monitor_main_frame.polska_segmented.get()
+
+        if class_substr == "Polska":
+            class_str = class_str + " 2"
+
         self.output_frame.entry_class.delete(0, tkinter.END)
         self.output_frame.entry_class.insert(0, class_str)
 
     def fill_entry(self, tester_entry, output_entry, entry_number):
         tester_data = tester_entry.get()
         output_data = output_entry.get()
+
+        if tester_data == "" and output_data == "":
+            return -1
 
         if tester_data != self.testers_previous[entry_number]:
             output_entry.delete(0, tkinter.END)

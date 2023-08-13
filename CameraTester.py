@@ -16,7 +16,7 @@ class CameraMainFrame(ctk.CTkFrame):
         #    .....
         # where 1-1 square has the highest weight
 
-        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(1, weight=3)
 
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
@@ -31,13 +31,9 @@ class CameraMainFrame(ctk.CTkFrame):
         self.check_box.select()
         self.check_box.grid(row=2, column=1, pady=(0, 20))
 
-        self.entry_camera_test = ctk.CTkEntry(self, state='disabled', width=200)
-        self.entry_camera_test.grid(row=3, column=1, pady=(0, 20))
+        self.entry_camera_test = ctk.CTkEntry(self, state='normal', placeholder_text="Wady kamery", width=200)
+        self.entry_camera_test.grid(row=3, column=1, pady=(0, 20), sticky="ns")
 
     def check_box_callback(self):
         self.check_box_state = not self.check_box_state
 
-        if self.check_box_state is True:
-            self.entry_camera_test.configure(self, state='disabled', placeholder_text="")
-        else:
-            self.entry_camera_test.configure(self, state='normal', placeholder_text="wady kamery")

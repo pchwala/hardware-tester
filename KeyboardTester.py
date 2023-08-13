@@ -334,10 +334,10 @@ class KeyboardMainFrame(ctk.CTkFrame):
 
         self.entry_layout = ctk.CTkEntry(self, width=200)
         self.entry_layout.grid(row=4, column=1, pady=(0, 20), sticky='ns')
-        self.entry_layout.configure(self, state='normal', placeholder_text="układ klawiatury")
+        self.entry_layout.configure(self, state='normal', placeholder_text="Układ klawiatury")
         self.entry_keyboard = ctk.CTkEntry(self, width=200)
         self.entry_keyboard.grid(row=5, column=1, pady=(0, 20), sticky='ns')
-        self.entry_keyboard.configure(self, state='normal', placeholder_text="wady klawiatury")
+        self.entry_keyboard.configure(self, state='normal', placeholder_text="Wady klawiatury")
 
     def mark_key(self, index, key_state):
         match key_state:
