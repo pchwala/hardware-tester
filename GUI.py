@@ -5,6 +5,7 @@ from SoundTesters import *
 from KeyboardTester import KeyboardMainFrame
 from DisplayTester import MonitorMainFrame
 from QRGenerator import *
+from Credits import *
 
 import threading
 import tkinter
@@ -56,7 +57,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.title("Vedion Notebook Tester ver. beta-3.0")
+        self.VERSION = "v3.1.208"
+
+        self.title("Vedion Notebook Tester 3.1")
         self.geometry('1280x1000+1500+0')
 
         # Configure middle row as the one taking all available space
@@ -89,6 +92,15 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Configure grid layout / LEFT SIDE frame
         self.output_frame = OutputFrame(self)
         self.output_frame.grid(row=0, column=0, rowspan=19, columnspan=2, padx=(10, 0), pady=10, sticky="ens")
+
+        self.credits_window = None
+        self.credits_label = customtkinter.CTkLabel(self, text=self.VERSION, fg_color="transparent",)
+        self.credits_label.configure(text_color="#565b5e")
+        self.credits_label.cget("font").configure(size=15)
+        self.credits_label.bind("<Button-1>", lambda e: self.open_credits())
+        self.credits_label.bind("<Enter>", self.credits_entered)
+        self.credits_label.bind("<Leave>", self.credits_left)
+        self.credits_label.grid(row=19, column=0, padx=40, sticky="w")
 
         # UPPER frame
         self.testers_frame = TestersFrame(self)
@@ -140,6 +152,21 @@ class GUI(customtkinter.CTk, threading.Thread):
                              self.output_frame.entry_camera, self.output_frame.entry_sound,
                              self.output_frame.entry_keyboard_notes, self.output_frame.entry_monitor,
                              self.output_frame.entry_class, self.output_frame.entry_notes]
+
+    def open_credits(self):
+        if self.credits_window is None or not self.credits_window.winfo_exists():
+            self.credits_window = CreditsWindow(self)  # create window if its None or destroyed
+            self.credits_window.resizable(False, False)
+        else:
+            self.credits_window.focus()  # if window exists focus it
+
+    def credits_entered(self, event):
+        self.credits_label.configure(text_color="brown2")
+        return
+
+    def credits_left(self, event):
+        self.credits_label.configure(text_color="#565b5e")
+        return
 
     def button_next_callback(self, event=None):
         self.tab_number += 1

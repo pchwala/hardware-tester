@@ -65,19 +65,19 @@ class OutputFrame(ctk.CTkFrame):
         self.label_license = ctk.CTkLabel(self, text="Licencja: ")
         self.label_license.grid(row=12, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_ports = ctk.CTkLabel(self, text="Porty: ")
+        self.label_ports = ctk.CTkLabel(self, text="Wady portów: ")
         self.label_ports.grid(row=13, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_camera = ctk.CTkLabel(self, text="Kamera: ")
+        self.label_camera = ctk.CTkLabel(self, text="Wady kamery: ")
         self.label_camera.grid(row=14, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_sound = ctk.CTkLabel(self, text="Dźwięk: ")
+        self.label_sound = ctk.CTkLabel(self, text="Wady dźwięku: ")
         self.label_sound.grid(row=15, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_keyboard_notes = ctk.CTkLabel(self, text="Klawiatura: ")
+        self.label_keyboard_notes = ctk.CTkLabel(self, text="Wady klawiatury: ")
         self.label_keyboard_notes.grid(row=16, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_monitor = ctk.CTkLabel(self, text="Matryca: ")
+        self.label_monitor = ctk.CTkLabel(self, text="Wady matrycy: ")
         self.label_monitor.grid(row=17, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_class = ctk.CTkLabel(self, text="Klasa: ")

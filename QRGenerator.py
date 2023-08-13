@@ -40,9 +40,9 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         LAN_switch = "ok"
         if wlan_status == True:
-            WLAN_switch = "wifi-ok"
+            WLAN_switch = "ok"
         else:
-            WLAN_switch = "wifi-brak"
+            WLAN_switch = "brak"
 
         ant_switch = ""
         m2_switch = ""

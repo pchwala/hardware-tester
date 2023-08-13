@@ -104,7 +104,9 @@ class Fullscreen(customtkinter.CTkToplevel):
         self.bind("<Button>", self.button_callback)
 
         self.colors = ['#fff', '#000', '#f00', '#0f0', '#00f']
-        self.current_color = 1
+        self.current_color = 0
+
+        self.change_color(self.colors[self.current_color])
 
     def change_color(self, color):
         self.configure(fg_color=color)
@@ -121,7 +123,7 @@ class Fullscreen(customtkinter.CTkToplevel):
             self.decrement_color()
             self.change_color(self.colors[self.current_color])
 
-        elif event.keysym in ['Return', 'greater', 'less']:
+        elif event.keysym in ['Return', 'Escape', 'greater', 'less']:
             self.destroy()
 
     def button_callback(self, event):
