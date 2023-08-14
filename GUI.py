@@ -60,7 +60,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.VERSION = "v3.1.208"
 
         self.title("Vedion Notebook Tester 3.1")
-        self.geometry('1280x1000+1500+0')
+        self.geometry('1280x950+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
