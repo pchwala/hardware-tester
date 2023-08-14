@@ -18,7 +18,7 @@ def get_disk_info(device):
 
     if "nvm" in device:
         for line in all_info.split("\n"):
-            if "Total" in line:
+            if "Size/Capacity" in line or "Total" in line:
                 temp = re.sub(r".*\[", "", line, 1)
                 disk += re.search(r"\d+ \w+", temp).group(0)
                 disk += " | NVMe"
