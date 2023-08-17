@@ -66,12 +66,12 @@ class QRMainFrame(customtkinter.CTkFrame):
             touchscreen = " Dotyk"
 
         if camera_checkbox is False:
-            camera_switch = "uszk C"
+            camera_switch = "uszk"
         else:
             camera_switch = "Cam"
 
         if sound_checkbox is False:
-            sound_switch = "uszk S"
+            sound_switch = "uszk"
         else:
             sound_switch = "ok"
 
@@ -105,31 +105,49 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.compiled_notes += notes
 
         if self.monitor.check_box1.get() == 1:
-            self.compiled_notes += " | klapa porysowana"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klapa porysowana"
 
         if self.monitor.check_box2.get() == 1:
-            self.compiled_notes += " | klapa wytarta"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klapa wytarta"
 
         if self.monitor.check_box3.get() == 1:
-            self.compiled_notes += " | lakier odchodzi"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "lakier odchodzi"
 
         if self.monitor.check_box4.get() == 1:
-            self.compiled_notes += " | klawiatura wytarta"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klawiatura wytarta"
 
         if self.monitor.check_box5.get() == 1:
-            self.compiled_notes += " | touchpad wytarty"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "touchpad wytarty"
 
         if self.monitor.check_box6.get() == 1:
-            self.compiled_notes += " | palmrest wytarty"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "palmrest wytarty"
 
         if self.monitor.check_box7.get() == 1:
-            self.compiled_notes += " | wyrazny hotspot"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "wyrazny hotspot"
 
         if self.monitor.check_box8.get() == 1:
-            self.compiled_notes += " | wyrazna rysa"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "wyrazna rysa"
 
         if self.monitor.check_box9.get() == 1:
-            self.compiled_notes += " | badpixele"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "badpixele"
 
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\

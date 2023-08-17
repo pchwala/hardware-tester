@@ -52,8 +52,8 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.touchscreen_segmented.grid(row=11, column=1, pady=(0, 60))
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['A', 'A-', 'B', 'C'])
-        self.class_segmented.set('A')
+            self, values=[' ', 'A', 'A-', 'B', 'C'])
+        self.class_segmented.set(' ')
         self.class_segmented.grid(row=12, column=1, pady=(0, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
