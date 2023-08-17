@@ -4,15 +4,13 @@ import subprocess
 import time
 
 
-class ListRemovable(threading.Thread):
+class WirelessCheck(threading.Thread):
     def __init__(self, input_queue, output_queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.input_queue = input_queue
         self.output_queue = output_queue
         self.daemon = True
         self.receive_data = args
-
-        self.removables = []
 
     @staticmethod
     def exec_and_output(command):
@@ -29,29 +27,28 @@ class ListRemovable(threading.Thread):
         # Receive arguments in a loop until None is received
         while True:
             val = self.input_queue.get()
-            print("Ports checking")
+            print("Wireless checking")
             if val is None:
                 return
-
-            if val == 'stop':
-                print("stopped")
 
             if val == 'start':
                 print("started")
                 while True:
-                    command = "lsblk | grep disk"
-                    all_info = self.exec_and_output(command)
+                    # Ping 8.8.8.8 4 times
+                    command = "ping 8.8.8.8 -c 4"
 
-                    disks = re.findall(r'\d+,', all_info)
-                    output_info = "Devices:\n\n"
-                    x = 0
-                    for disk in disks:
-                        disks[x] = "-  " + re.sub(r',', " GB Volume", disk) + "\n"
-                        output_info += disks[x] + "\n"
-                        x += 1
+                    try:
+                        # if ping doesn't return error then wifi works OK, this process completed its job
+                        all_info = self.exec_and_output(command)
+                        self.output_queue.put("wlan_ok")
+                        self.input_queue.put("terminate")
 
-                    self.output_queue.put(output_info)
-                    time.sleep(0.5)
+                        # if it returns error the try again after 5 seconds
+                    except subprocess.CalledProcessError:
+                        time.sleep(5)
 
                     if self.input_queue.empty() is False:
                         break
+
+            elif val == 'terminate':
+                print("terminating")

@@ -2,12 +2,14 @@ import threading
 import pyaudio
 
 
-# RecordAndPlayback class works in separate thread
-# Passing arguments through queue, args using queue.put('data')
-# passing: 0 - stop playback, still recording
-#          1 - start record and playback
-#          2 - clean up and terminate thread
 class RecordSound(threading.Thread):
+    """
+    RecordAndPlayback class works in separate thread
+    Passing arguments through queue, args using queue.put('data')
+    passing: 0 - stop playback, still recording
+             1 - start record and playback
+             2 - clean up and terminate thread
+    """
     def __init__(self, queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = queue
@@ -23,7 +25,7 @@ class RecordSound(threading.Thread):
 
         self.long_data = []
 
-        # init input stream
+        # Init input stream
         try:
             self.input_stream = self.p.open(format=self.FORMAT,
                                             channels=self.CHANNELS,
@@ -34,7 +36,7 @@ class RecordSound(threading.Thread):
         except Exception:
             print("Micro fucked up")
 
-        # init output stream
+        # Init output stream
         try:
             self.output_stream = self.p.open(format=self.FORMAT,
                                              channels=self.CHANNELS,
@@ -45,10 +47,12 @@ class RecordSound(threading.Thread):
         except Exception:
             print("Speakers fucked up")
 
-    # define audio input callback
+    # Define audio input callback
     # This gets called with a block of incoming mic samples,
     def input_callback(self, in_data, frame_count, time_info, status):
         self.long_data.insert(0, in_data)
+        if len(self.long_data) > 100:
+            self.queue.put('stop')
         return (None, pyaudio.paContinue)
 
     def output_callback(self, in_data, frame_count, time_info, status):
@@ -58,11 +62,11 @@ class RecordSound(threading.Thread):
         except IndexError:
             return (None, pyaudio.paContinue)
 
-    # function called when starting thread
+    # Function called when starting thread
     def run(self):
         # print name and received arguments
         print(threading.current_thread().name, self.receive_data)
-        # receive arguments in a loop until None is received
+        # Receive arguments in a loop until None is received
         while True:
             val = self.queue.get()
             if val is None:

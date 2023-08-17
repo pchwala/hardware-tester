@@ -3,6 +3,10 @@ import customtkinter as ctk
 
 #   LEFT SIDE frame containing all the data gathered during tests
 class OutputFrame(ctk.CTkFrame):
+    """
+    Frame farthest to the left containing all the hardware info,
+    detected hardware faults and user input
+    """
     def __init__(self, master):
         super().__init__(master)
 
@@ -61,19 +65,19 @@ class OutputFrame(ctk.CTkFrame):
         self.label_license = ctk.CTkLabel(self, text="Licencja: ")
         self.label_license.grid(row=12, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_ports = ctk.CTkLabel(self, text="Porty: ")
+        self.label_ports = ctk.CTkLabel(self, text="Wady portów: ")
         self.label_ports.grid(row=13, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_camera = ctk.CTkLabel(self, text="Kamera: ")
+        self.label_camera = ctk.CTkLabel(self, text="Wady kamery: ")
         self.label_camera.grid(row=14, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_sound = ctk.CTkLabel(self, text="Dźwięk: ")
+        self.label_sound = ctk.CTkLabel(self, text="Wady dźwięku: ")
         self.label_sound.grid(row=15, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_keyboard_notes = ctk.CTkLabel(self, text="Klawiatura: ")
+        self.label_keyboard_notes = ctk.CTkLabel(self, text="Wady klawiatury: ")
         self.label_keyboard_notes.grid(row=16, column=0, padx=10, pady=2, sticky="ns")
 
-        self.label_monitor = ctk.CTkLabel(self, text="Matryca: ")
+        self.label_monitor = ctk.CTkLabel(self, text="Wady matrycy: ")
         self.label_monitor.grid(row=17, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_class = ctk.CTkLabel(self, text="Klasa: ")
@@ -144,7 +148,11 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_notes.grid(row=19, column=1, padx=(0, 10))
 
     def read_hardware_info(self):
+        """
+        Reads hardware info previously written into 'hwinfo.dat' file by 'hwinfo.py' subprocess
 
+        :return: None
+        """
         with open("hwinfo.dat", 'r') as file:
 
             lines = file.read()
@@ -173,6 +181,7 @@ class OutputFrame(ctk.CTkFrame):
         open("hwinfo.dat", 'w').close()
 
     def fill_hardware_info(self):
+
         self.entry_sn.insert(0, self.serial)
         self.entry_manufacturer.insert(0, self.manufacturer)
         self.entry_model.insert(0, self.model)
@@ -200,11 +209,14 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_license.configure(state="disabled")
 
 
-#   UPPER frame, containing menu buttons
 class TestersFrame(ctk.CTkFrame):
+    """
+    Upper frame containing menu buttons
+    """
     def __init__(self, master):
         super().__init__(master)
 
+        # All buttons calls function that switches tester frame with another frame corresponding to the button
         self.notebook1 = ctk.CTkButton(self, text='Porty', width=70,
                                        command=lambda: master.button_menu_callback(1))
         self.notebook1.grid(row=0, column=1, padx=(30, 2), sticky="e")

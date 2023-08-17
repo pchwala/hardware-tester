@@ -2,6 +2,10 @@ import customtkinter as ctk
 
 
 class KeyboardPrimaryFrame(ctk.CTkFrame):
+    """
+    Primary frame containing all keyboard buttons except NUM-PAD, ARROWS and CONTROL-PAD(PgUP, PgDown and so on)
+    Basically a lot of buttons that change colors when pressed and released
+    """
     def __init__(self, master):
         super().__init__(master)
 
@@ -198,6 +202,11 @@ class KeyboardPrimaryFrame(ctk.CTkFrame):
 
 
 class KeyboardSecondaryFrame(ctk.CTkFrame):
+    """
+        Secondary frame containing only NUM-PAD, ARROWS and CONTROL-PAD(PgUP, PgDown and so on)
+        Basically a lot of buttons that change colors when pressed and released
+        This frame is displayed below PrimaryFrame
+        """
     def __init__(self, master):
         super().__init__(master)
 
@@ -292,6 +301,9 @@ class KeyboardSecondaryFrame(ctk.CTkFrame):
 
 
 class KeyboardMainFrame(ctk.CTkFrame):
+    """
+    Keyboard Main Frame that manages displaying of Primary and Secondary Frames
+    """
     def __init__(self, master):
         super().__init__(master)
 
@@ -322,10 +334,10 @@ class KeyboardMainFrame(ctk.CTkFrame):
 
         self.entry_layout = ctk.CTkEntry(self, width=200)
         self.entry_layout.grid(row=4, column=1, pady=(0, 20), sticky='ns')
-        self.entry_layout.configure(self, state='normal', placeholder_text="układ klawiatury")
+        self.entry_layout.configure(self, state='normal', placeholder_text="Układ klawiatury")
         self.entry_keyboard = ctk.CTkEntry(self, width=200)
         self.entry_keyboard.grid(row=5, column=1, pady=(0, 20), sticky='ns')
-        self.entry_keyboard.configure(self, state='normal', placeholder_text="wady klawiatury")
+        self.entry_keyboard.configure(self, state='normal', placeholder_text="Wady klawiatury")
 
     def mark_key(self, index, key_state):
         match key_state:
@@ -334,6 +346,12 @@ class KeyboardMainFrame(ctk.CTkFrame):
 
             case 'keyup':
                 self.button_references[index].configure(fg_color="green")
+
+    def reset_all(self):
+        # Reset color of all buttons back to default
+        for x in self.button_references:
+            # default color
+            x.configure(fg_color="#1F6AA5")
 
     def key_event(self, key, key_state):
         try:

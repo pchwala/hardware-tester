@@ -4,6 +4,7 @@ from ListRemovable import *
 from RecordSound import *
 from PlaySound import *
 from CameraCapture import *
+from WirelessCheck import *
 
 from queue import Queue
 
@@ -11,29 +12,27 @@ customtkinter.set_appearance_mode("Dark")  # Modes: system (default), light, dar
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
-# 4. kamera jakos dziwnie znieksztalca ale tylko na niektorych modelach
-#       - pewnie jakies operacje na frame z opencv tak robia
-# 5. dodac skalowanie okienka kamery i qrcode
-
-
-# Main App class
-# 1 - Controls an execution of all threads and data flow between them
-# 2 - Controls the execution of GUI class methods and transition between testers
-# 3 - DATA FLOW between threads:
-#     - App ---> GUI        - Start GUI execution
-#     - GUI ---> App        - What to ask from Threads
-#     - App ---> Threads    - Ask Threads
-#     - App <--- Threads    - Get answer
-#     - App ---> GUI        - Pass that answer
-
-
 class App:
+    """
+     Main App class
+     1 - Controls an execution of all threads and data flow between them
+     2 - Controls the execution of GUI class methods and transition between testers
+     3 - Does not display and change any GUI objects
+     4 - DATA FLOW between threads:
+         - App ---> GUI        - Start GUI execution
+         - GUI ---> App        - What to ask from Threads
+         - App ---> Threads    - Ask Threads
+         - App <--- Threads    - Get answer
+         - App ---> GUI        - Pass that answer
+
+    """
     def __init__(self):
         super().__init__()
 
         # Threads list
         self.threads = []
 
+        # Whether delay main loop or not
         self.sleeper = True
 
         # All Queues for controlling data flow between threads
@@ -48,6 +47,9 @@ class App:
         self.q_camera_input = Queue()
         self.q_camera_output = Queue()
 
+        self.q_wireless_input = Queue()
+        self.q_wireless_output = Queue()
+
         # these threads have only input queue
         # they don't return any data
         self.q_play = Queue()
@@ -59,6 +61,7 @@ class App:
         self.t_playback = 2
         self.t_ports = 3
         self.t_camera = 4
+        self.t_wireless = 5
 
         # Create and start a thread and pass 'stop' into an input queue
         # So that every thread is initiated and loaded into memory
@@ -82,12 +85,16 @@ class App:
         self.threads[self.t_camera].start()
         self.threads[self.t_camera].input_queue.put('stop')
 
+        self.threads.append(WirelessCheck(self.q_wireless_input, self.q_wireless_output, args=''))
+        self.threads[self.t_wireless].start()
+        self.threads[self.t_wireless].input_queue.put('start')
+
         # Callback for GUI thread, calls method inside GUI thad handle window closing and cleans after that
         self.threads[self.t_GUI].protocol("WM_DELETE_WINDOW", self.threads[self.t_GUI].on_closing)
 
 # # # MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP   MAIN LOOP
         while True:
-            # Basically the same as calling tk.mainloop(), but it allows to put additional lines in the loop
+            # Basically the same as calling tk.mainloop(), but it allows to put additional code in the loop
             self.threads[self.t_GUI].update_idletasks()
             self.threads[self.t_GUI].update()
             if self.sleeper is True:
@@ -109,6 +116,7 @@ class App:
                         self.q_play.put('terminate')
                         self.q_playback.put('terminate')
                         self.q_camera_input.put('terminate')
+                        self.q_wireless_input.put('terminate')
                         return
 
                     case 'start_ports':
@@ -133,7 +141,7 @@ class App:
             except queue.Empty:
                 pass
 
-            # pass info from ListRemovable instance to GUI instance
+            # Pass info from ListRemovable instance to GUI instance
             try:
                 current = self.q_ports_output.get_nowait()
                 print("ports INTERVAL")
@@ -143,19 +151,27 @@ class App:
             except queue.Empty:
                 pass
 
-            # pass info from CameraCapture instance to GUI instance
+            # Pass info from CameraCapture instance to GUI instance
             try:
                 current = self.q_camera_output.get_nowait()
                 print("camera INTERVAL")
                 print(current)
                 self.q_GUI_input.put(current)
                 self.threads[self.t_GUI].process_queue('camera')
+            except queue.Empty:
+                pass
 
+            # Pass info from WirelessCheck instance to GUI instance
+            try:
+                current = self.q_wireless_output.get_nowait()
+                if "wlan_ok" in current:
+                    self.threads[self.t_GUI].wlan_status_update(True)
             except queue.Empty:
                 pass
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
 
 
+# Subprocess reading all the hardware info
 result = subprocess.run("./python-sudo.sh hwinfo.py", shell=True)
 
 App = App()

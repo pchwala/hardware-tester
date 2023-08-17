@@ -1,6 +1,10 @@
 import subprocess
 import re
 
+# I didn't have time to properly comment out the code for these functions
+# but basically what all of these do is they take output of certain linux commands that return hardware info,
+# and format it in a way that is user-friendly and easy to work with and manipulate
+
 
 def exec_and_output(command):
     return subprocess.check_output(command, shell=True).decode().strip()
@@ -14,7 +18,7 @@ def get_disk_info(device):
 
     if "nvm" in device:
         for line in all_info.split("\n"):
-            if "Total" in line:
+            if "Size/Capacity" in line or "Total" in line:
                 temp = re.sub(r".*\[", "", line, 1)
                 disk += re.search(r"\d+ \w+", temp).group(0)
                 disk += " | NVMe"
@@ -146,11 +150,13 @@ class HwInfo:
             if "Battery 0" in line:
                 if "capacity" in line:
                     self.battery0 = re.search(r'\d*%', line).group(0)
+                    self.battery0 = re.search(r'\d*', self.battery0).group(0)
 
             if "Battery 1" in line:
                 if "capacity" in line:
                     try:
                         self.battery1 = re.search(r'\d*%', line).group(0)
+                        self.battery1 = re.search(r'\d*', self.battery1).group(0)
                     except Exception:
                         self.battery1 = "XD"
 

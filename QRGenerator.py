@@ -2,6 +2,7 @@ import customtkinter
 import qrcode
 import re
 
+
 class QRMainFrame(customtkinter.CTkFrame):
     def __init__(self, master, output, monitor):
         super().__init__(master)
@@ -23,7 +24,7 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.label1 = customtkinter.CTkLabel(self, text='')
 
-    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox):
+    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status):
 
         keyboard_notes = self.output.entry_keyboard_notes.get()
         keyboard_layout = self.output.entry_keyboard.get()
@@ -38,13 +39,16 @@ class QRMainFrame(customtkinter.CTkFrame):
         polska_segmented = self.monitor.polska_segmented.get()
 
         LAN_switch = "ok"
-        WLAN_switch = ""
+        if wlan_status == True:
+            WLAN_switch = "ok"
+        else:
+            WLAN_switch = "brak"
 
         ant_switch = ""
         m2_switch = ""
         sata25_switch = ""
         wwan_switch = ""
-        oryg_switch = "tak"
+        oryg_switch = "?"
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
             sata25_switch = "tak"
@@ -62,12 +66,12 @@ class QRMainFrame(customtkinter.CTkFrame):
             touchscreen = " Dotyk"
 
         if camera_checkbox is False:
-            camera_switch = "uszk C"
+            camera_switch = "uszk"
         else:
             camera_switch = "Cam"
 
         if sound_checkbox is False:
-            sound_switch = "uszk S"
+            sound_switch = "uszk"
         else:
             sound_switch = "ok"
 
@@ -101,32 +105,49 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.compiled_notes += notes
 
         if self.monitor.check_box1.get() == 1:
-            self.compiled_notes += " | klapa porysowana"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klapa porysowana"
 
         if self.monitor.check_box2.get() == 1:
-            self.compiled_notes += " | klapa wytarta"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klapa wytarta"
 
         if self.monitor.check_box3.get() == 1:
-            self.compiled_notes += " | lakier odchodzi"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "lakier odchodzi"
 
         if self.monitor.check_box4.get() == 1:
-            self.compiled_notes += " | klawiatura wytarta"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "klawiatura wytarta"
 
         if self.monitor.check_box5.get() == 1:
-            self.compiled_notes += " | touchpad wytarty"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "touchpad wytarty"
 
         if self.monitor.check_box6.get() == 1:
-            self.compiled_notes += " | palmrest wytarty"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "palmrest wytarty"
 
         if self.monitor.check_box7.get() == 1:
-            self.compiled_notes += " | wyrazny hotspot"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "wyrazny hotspot"
 
         if self.monitor.check_box8.get() == 1:
-            self.compiled_notes += " | wyrazna rysa"
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "wyrazna rysa"
 
         if self.monitor.check_box9.get() == 1:
-            self.compiled_notes += " | badpixele"
-
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += "badpixele"
 
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\
@@ -138,8 +159,8 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + self.output.HDD2_value + "\t"\
                         + self.output.GPU_model + "\t"\
                         + self.output.battery_health + "\t"\
-                        + self.output.monitor_size + "\t"\
-                        + self.output.resolution + touchscreen + "\t"\
+                        + self.output.monitor_size + touchscreen + "\t"\
+                        + self.output.resolution + "\t"\
                         + LAN_switch + "\t"\
                         + WLAN_switch + "\t"\
                         + camera_switch + "\t"\
