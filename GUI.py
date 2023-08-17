@@ -57,10 +57,10 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.208"
+        self.VERSION = "v3.1.31708"
 
         self.title("Vedion Notebook Tester 3.1")
-        self.geometry('1280x1000+1500+0')
+        self.geometry('1300x1000+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
@@ -153,6 +153,9 @@ class GUI(customtkinter.CTk, threading.Thread):
                              self.output_frame.entry_keyboard_notes, self.output_frame.entry_monitor,
                              self.output_frame.entry_class, self.output_frame.entry_notes]
 
+        # display tester Fullscreen toplevel window is only displayed when this is true
+        self.display_tester_state = True
+
     def open_credits(self):
         if self.credits_window is None or not self.credits_window.winfo_exists():
             self.credits_window = CreditsWindow(self)  # create window if its None or destroyed
@@ -189,6 +192,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         #  but only when keyboard tester is displayed
         if self.tab_number == 5:
             self.keyboard_main_frame.reset_all()
+
+        if self.tab_number == 6:
+            self.display_tester_state = True
 
         self.display_main_frame(self.tab_number)
 
@@ -371,10 +377,10 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         # Stop all testers
         self.output_queue.put('stop_all')
+        # remove focus from widget by focusing main Window
+        self.focus()
 
-        # Unbind TAB
-        # I think its kind of wrong, but it works
-        # Better way to do it will be so it is only executed once after keyboardTester
+        # Rebind standard TAB bind
         self.bind("<Tab>", self.tab_callback)
         self.bind("<ISO_Left_Tab>", self.left_tab_callback)
 
@@ -383,7 +389,7 @@ class GUI(customtkinter.CTk, threading.Thread):
             case 0:
                 # can't go tab number below 1
                 self.tab_number = 1
-                return
+                self.output_queue.put('start_ports')
 
             case 1:
                 self.output_queue.put('start_ports')
@@ -402,7 +408,11 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.unbind("<ISO_Left_Tab>")
 
             case 6:
-                self.monitor_main_frame.show_fullscreen()
+                if self.display_tester_state is True:
+                    self.monitor_main_frame.show_fullscreen()
+                    self.display_tester_state = False
+                else:
+                    pass
 
             case 7:
                 # It needs to be executed a second time in this section by the flaw in design
