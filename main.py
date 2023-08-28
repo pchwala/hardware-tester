@@ -65,23 +65,23 @@ class App:
 
         # Create and start a thread and pass 'stop' into an input queue
         # So that every thread is initiated and loaded into memory
-        self.threads.append(GUI(self.q_GUI_input, self.q_GUI_output, args='stop'))
+        self.threads.append(GUI(self.q_GUI_input, self.q_GUI_output, args=''))
         self.threads[self.t_GUI].start()
         self.threads[self.t_GUI].input_queue.put('stop')
 
-        self.threads.append(PlaySound(self.q_play, args='stop'))
+        self.threads.append(PlaySound(self.q_play, args=''))
         self.threads[self.t_play].start()
         self.threads[self.t_play].queue.put('stop')
 
-        self.threads.append(RecordSound(self.q_playback, args='stop'))
+        self.threads.append(RecordSound(self.q_playback, args=''))
         self.threads[self.t_playback].start()
         self.threads[self.t_playback].queue.put('stop')
 
-        self.threads.append(ListRemovable(self.q_ports_input, self.q_ports_output, args='stop'))
+        self.threads.append(ListRemovable(self.q_ports_input, self.q_ports_output, args=''))
         self.threads[self.t_ports].start()
         self.threads[self.t_ports].input_queue.put('stop')
 
-        self.threads.append(CameraCapture(self.q_camera_input, self.q_camera_output, args='stop'))
+        self.threads.append(CameraCapture(self.q_camera_input, self.q_camera_output, args=''))
         self.threads[self.t_camera].start()
         self.threads[self.t_camera].input_queue.put('stop')
 
@@ -138,13 +138,17 @@ class App:
                     case 'stop_playback':
                         self.q_playback.put('stop')
 
+                    case 'change_camera':
+                        current = self.q_GUI_output.get_nowait()
+                        self.q_camera_input.put('restart_' + str(current))
+
             except queue.Empty:
                 pass
 
             # Pass info from ListRemovable instance to GUI instance
             try:
                 current = self.q_ports_output.get_nowait()
-                print("ports INTERVAL")
+                # print("ports INTERVAL")
                 self.q_GUI_input.put(current)
                 self.threads[self.t_GUI].process_queue('ports')
 
@@ -154,8 +158,8 @@ class App:
             # Pass info from CameraCapture instance to GUI instance
             try:
                 current = self.q_camera_output.get_nowait()
-                print("camera INTERVAL")
-                print(current)
+                # print("camera INTERVAL")
+                # print(current)
                 self.q_GUI_input.put(current)
                 self.threads[self.t_GUI].process_queue('camera')
             except queue.Empty:

@@ -43,6 +43,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Result of automatic wifi-check
         self.wlan_status = False
 
+        # Which camera to capture video from
+        self.camera_number = 0
+
         # Previous strings stored in corresponding tester_frame or output_frame
         # Enables interchangeable editing data in those entries on the fly
         self.testers_previous = ["", "", "", "", "", "", ""]
@@ -57,10 +60,10 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.31708"
+        self.VERSION = "v3.1.42708"
 
         self.title("Vedion Notebook Tester 3.1")
-        self.geometry('1300x1000+1500+0')
+        self.geometry('1300x970+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
@@ -354,6 +357,7 @@ class GUI(customtkinter.CTk, threading.Thread):
                     self.camera_main_frame.label1.configure(self, image=current, text="")
 
                 else:
+                    self.camera_main_frame.label1.configure(self, image='', text=current)
                     print("type exception")
 
             except queue.Empty:
@@ -363,6 +367,13 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def wlan_status_update(self, status):
         self.wlan_status = status
+
+    def camera_number_update(self, number):
+        self.camera_number = number
+        self.output_queue.put("change_camera")
+        self.output_queue.put(self.camera_number)
+
+
 
     def display_main_frame(self, previous):
         """

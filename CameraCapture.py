@@ -1,4 +1,5 @@
 import threading
+import re
 
 import customtkinter
 import cv2 as cv
@@ -20,8 +21,10 @@ class CameraCapture(threading.Thread):
         self.daemon = True
         self.receive_data = args
 
+        self.camera_number = 0
+
         # Initialize camera capture
-        self.capture = cv.VideoCapture(0)
+        self.capture = cv.VideoCapture(self.camera_number)
         if self.capture.isOpened() is False:
             print("Cannot open camera")
             self.output_queue.put('missing_camera')
@@ -45,7 +48,7 @@ class CameraCapture(threading.Thread):
             if val == 'start':
                 print("started")
                 # Initialize capture
-                self.capture = cv.VideoCapture(0)
+                self.capture = cv.VideoCapture(self.camera_number)
                 if self.capture.isOpened() is False:
                     print("Cannot open camera")
                     self.output_queue.put('missing_camera')
@@ -74,5 +77,11 @@ class CameraCapture(threading.Thread):
                     if self.input_queue.empty() is False:
                         break
 
-            if val == 'terminate':
+            if 'restart' in val:
+                self.capture = None
                 print("terminating")
+                temp = re.sub(r"restart_", "", val, 1)
+                self.camera_number = int(temp)
+                print("changed camera to nr: " + str(self.camera_number))
+                self.input_queue.put('start')
+
