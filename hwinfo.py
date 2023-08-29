@@ -12,7 +12,11 @@ def exec_and_output(command):
 
 def get_disk_info(device):
     command = "sudo smartctl -i " + device
-    all_info = subprocess.check_output(command, shell=True).decode().strip()
+    try:
+        all_info = subprocess.check_output(command, shell=True).decode().strip()
+    except:
+        pass
+
     disk = ""
     model = ""
 
