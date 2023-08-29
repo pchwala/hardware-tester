@@ -46,6 +46,14 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Which camera to capture video from
         self.camera_number = 0
 
+        # Scaling for low resolution
+        self.resx = 1920
+        self.resy = 1080
+        self.font_scale = 20
+        self.entry_width_scale = 1
+        self.entry_height_scale = 1
+        self.camera_scale = 1
+
         # Previous strings stored in corresponding tester_frame or output_frame
         # Enables interchangeable editing data in those entries on the fly
         self.testers_previous = ["", "", "", "", "", "", ""]
@@ -60,10 +68,11 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.42708"
+        self.VERSION = "v3.1.42908"
 
         self.title("Vedion Notebook Tester 3.1")
         self.geometry('1300x970+1500+0')
+        #self.geometry('800x600+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
@@ -144,6 +153,11 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Read all hardware info and then put it in the output frame for display
         self.output_frame.read_hardware_info()
         self.output_frame.fill_hardware_info()
+
+        # Extract X and Y resolution from 'NUMBERxNUMBER' format
+        (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
+        (self.resx, self.resy) = (int(self.resx), int(self.resy))
+        self.set_scaling()
 
         # which tester to show at any given time
         # show ports tester at the start
@@ -372,6 +386,20 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.camera_number = number
         self.output_queue.put("change_camera")
         self.output_queue.put(self.camera_number)
+
+    def set_scaling(self):
+        if self.resx < 1920 or self.resy < 1080:
+            geometry = str(self.resx) + "x" + str(self.resy)
+            self.geometry(geometry)
+            self.font_scale = 10
+            self.entry_width_scale = 0.5
+            self.entry_height_scale = 0.5
+            self.camera_scale = 0.5
+
+            self.output_frame.rescale(self.font_scale, self.entry_width_scale, self.entry_height_scale)
+
+            self.output_queue.put("set_scale")
+            self.output_queue.put(str(self.camera_scale) + '-' + str(self.camera_scale))
 
 
 

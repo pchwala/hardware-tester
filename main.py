@@ -84,7 +84,6 @@ class App:
         self.threads.append(CameraCapture(self.q_camera_input, self.q_camera_output, args=''))
         self.threads[self.t_camera].start()
         self.threads[self.t_camera].input_queue.put('stop')
-
         self.threads.append(WirelessCheck(self.q_wireless_input, self.q_wireless_output, args=''))
         self.threads[self.t_wireless].start()
         self.threads[self.t_wireless].input_queue.put('start')
@@ -141,6 +140,10 @@ class App:
                     case 'change_camera':
                         current = self.q_GUI_output.get_nowait()
                         self.q_camera_input.put('restart_' + str(current))
+
+                    case 'set_scale':
+                        current = self.q_GUI_output.get_nowait()
+                        self.q_camera_input.put('set_scale-' + current)
 
             except queue.Empty:
                 pass

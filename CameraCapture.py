@@ -23,6 +23,9 @@ class CameraCapture(threading.Thread):
 
         self.camera_number = 0
 
+        self.camera_width_scale = 1
+        self.camera_height_scale = 1
+
         # Initialize camera capture
         self.capture = cv.VideoCapture(self.camera_number)
         if self.capture.isOpened() is False:
@@ -71,6 +74,8 @@ class CameraCapture(threading.Thread):
 
                     # Convert to CTkImage so it can be displayed later and put into 'output_queue'
                     w, h = image_frame.size
+                    w = int(w*self.camera_width_scale)
+                    h = int(h*self.camera_height_scale)
                     image_ctk = customtkinter.CTkImage(None, dark_image=image_frame, size=(w, h))
                     self.output_queue.put(image_ctk)
 
@@ -84,4 +89,10 @@ class CameraCapture(threading.Thread):
                 self.camera_number = int(temp)
                 print("changed camera to nr: " + str(self.camera_number))
                 self.input_queue.put('start')
+
+            if 'set_scale' in val:
+                temp = re.findall(r'\d.\d', val)
+                self.camera_width_scale = float(temp[0])
+                self.camera_height_scale = float(temp[1])
+
 

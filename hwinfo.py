@@ -11,11 +11,14 @@ def exec_and_output(command):
 
 
 def get_disk_info(device):
+
+    # Fix for Mac, nonexistent disk is sometimes listed by 'smartctl' and running 'smartctl -i'
+    # by 'get_disk_info' returns non-zero exit status 2: "Cant read hardware info"
     command = "sudo smartctl -i " + device
     try:
         all_info = subprocess.check_output(command, shell=True).decode().strip()
-    except:
-        pass
+    except subprocess.CalledProcessError:
+        return ""
 
     disk = ""
     model = ""

@@ -132,7 +132,6 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_camera.grid(row=14, column=1, padx=(0, 10))
 
         self.entry_sound = ctk.CTkEntry(self, width=400)
-        # self.entry_sound.insert(0, "ok")
         self.entry_sound.grid(row=15, column=1, padx=(0, 10))
 
         self.entry_keyboard_notes = ctk.CTkEntry(self, width=400)
@@ -146,6 +145,128 @@ class OutputFrame(ctk.CTkFrame):
 
         self.entry_notes = ctk.CTkEntry(self, width=400)
         self.entry_notes.grid(row=19, column=1, padx=(0, 10))
+
+    def rescale(self, font_scale, width, height):
+
+        self.label_sn.configure(height=int(30*height))
+        self.label_sn.cget("font").configure(size=font_scale)
+
+        self.label_manufacturer.configure(height=int(30*height))
+        self.label_manufacturer.cget("font").configure(size=font_scale)
+
+        self.label_model.configure(height=int(30*height))
+        self.label_model.cget("font").configure(size=font_scale)
+
+        self.label_cpu.configure(height=int(30*height))
+        self.label_cpu.cget("font").configure(size=font_scale)
+
+        self.label_ram.configure(height=int(30*height))
+        self.label_ram.cget("font").configure(size=font_scale)
+
+        self.label_hdd1.configure(height=int(30*height))
+        self.label_hdd1.cget("font").configure(size=font_scale)
+
+        self.label_hdd2.configure(height=int(30*height))
+        self.label_hdd2.cget("font").configure(size=font_scale)
+
+        self.label_gpu.configure(height=int(30*height))
+        self.label_gpu.cget("font").configure(size=font_scale)
+
+        self.label_battery.configure(height=int(30*height))
+        self.label_battery.cget("font").configure(size=font_scale)
+
+        self.label_display.configure(height=int(30*height))
+        self.label_display.cget("font").configure(size=font_scale)
+
+        self.label_resolution.configure(height=int(30*height))
+        self.label_resolution.cget("font").configure(size=font_scale)
+
+        self.label_keyboard.configure(height=int(30*height))
+        self.label_keyboard.cget("font").configure(size=font_scale)
+
+        self.label_license.configure(height=int(30*height))
+        self.label_license.cget("font").configure(size=font_scale)
+
+        self.label_ports.configure(height=int(30*height))
+        self.label_ports.cget("font").configure(size=font_scale)
+
+        self.label_camera.configure(height=int(30*height))
+        self.label_camera.cget("font").configure(size=font_scale)
+
+        self.label_sound.configure(height=int(30*height))
+        self.label_sound.cget("font").configure(size=font_scale)
+
+        self.label_keyboard_notes.configure(height=int(30*height))
+        self.label_keyboard_notes.cget("font").configure(size=font_scale)
+
+        self.label_monitor.configure(height=int(30*height))
+        self.label_monitor.cget("font").configure(size=font_scale)
+
+        self.label_class.configure(height=int(30*height))
+        self.label_class.cget("font").configure(size=font_scale)
+
+        self.label_notes.configure(height=int(30*height))
+        self.label_notes.cget("font").configure(size=font_scale)
+
+        self.entry_sn.configure(height=int(30*height), width=int(400*width))
+        self.entry_sn.cget("font").configure(size=font_scale)
+
+        self.entry_manufacturer.configure(height=int(30*height), width=int(400*width))
+        self.entry_manufacturer.cget("font").configure(size=font_scale)
+
+        self.entry_model.configure(height=int(30*height), width=int(400*width))
+        self.entry_model.cget("font").configure(size=font_scale)
+
+        self.entry_cpu.configure(height=int(30*height), width=int(400*width))
+        self.entry_cpu.cget("font").configure(size=font_scale)
+
+        self.entry_ram.configure(height=int(30*height), width=int(400*width))
+        self.entry_ram.cget("font").configure(size=font_scale)
+
+        self.entry_hdd1.configure(height=int(30*height), width=int(400*width))
+        self.entry_hdd1.cget("font").configure(size=font_scale)
+
+        self.entry_hdd2.configure(height=int(30*height), width=int(400*width))
+        self.entry_hdd2.cget("font").configure(size=font_scale)
+
+        self.entry_gpu.configure(height=int(30*height), width=int(400*width))
+        self.entry_gpu.cget("font").configure(size=font_scale)
+
+        self.entry_battery.configure(height=int(30*height), width=int(400*width))
+        self.entry_battery.cget("font").configure(size=font_scale)
+
+        self.entry_display.configure(height=int(30*height), width=int(400*width))
+        self.entry_display.cget("font").configure(size=font_scale)
+
+        self.entry_resolution.configure(height=int(30*height), width=int(400*width))
+        self.entry_resolution.cget("font").configure(size=font_scale)
+
+        self.entry_keyboard.configure(height=int(30*height), width=int(400*width))
+        self.entry_keyboard.cget("font").configure(size=font_scale)
+
+        self.entry_license.configure(height=int(30*height), width=int(400*width))
+        self.entry_license.cget("font").configure(size=font_scale)
+
+        self.entry_ports.configure(height=int(30*height), width=int(400*width))
+        self.entry_ports.cget("font").configure(size=font_scale)
+
+        self.entry_camera.configure(height=int(30*height), width=int(400*width))
+        self.entry_camera.cget("font").configure(size=font_scale)
+
+        self.entry_sound.configure(height=int(30*height), width=int(400*width))
+        self.entry_sound.cget("font").configure(size=font_scale)
+
+        self.entry_keyboard_notes.configure(height=int(30*height), width=int(400*width))
+        self.entry_keyboard_notes.cget("font").configure(size=font_scale)
+
+        self.entry_monitor.configure(height=int(30*height), width=int(400*width))
+        self.entry_monitor.cget("font").configure(size=font_scale)
+
+        self.entry_class.configure(height=int(30*height), width=int(400*width))
+        self.entry_class.cget("font").configure(size=font_scale)
+
+        self.entry_notes.configure(height=int(30*height), width=int(400*width))
+        self.entry_notes.cget("font").configure(size=font_scale)
 
     def read_hardware_info(self):
         """
