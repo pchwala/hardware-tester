@@ -68,7 +68,8 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.42908"
+        #self.VERSION = "v3.1.42908"
+        self.VERSION = "23w35a-experimental"
 
         self.title("Vedion Notebook Tester 3.1")
         self.geometry('1300x970+1500+0')
