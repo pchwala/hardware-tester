@@ -88,6 +88,8 @@ class App:
         self.threads[self.t_wireless].start()
         self.threads[self.t_wireless].input_queue.put('start')
 
+        self.threads[self.t_playback].queue.put('start')
+
         # Callback for GUI thread, calls method inside GUI thad handle window closing and cleans after that
         self.threads[self.t_GUI].protocol("WM_DELETE_WINDOW", self.threads[self.t_GUI].on_closing)
 
@@ -107,7 +109,7 @@ class App:
                         self.sleeper = True
                         self.q_ports_input.put('stop')
                         self.q_play.put('stop')
-                        self.q_playback.put('stop')
+                        #self.q_playback.put('stop')
                         self.q_camera_input.put('stop')
 
                     case 'terminate_all':
