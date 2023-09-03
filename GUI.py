@@ -74,7 +74,6 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         self.title("Vedion Notebook Tester 3.1")
         # self.geometry('1300x970+1500+0')
-        self.geometry('800x600+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
@@ -132,12 +131,22 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.monitor_main_frame = MonitorMainFrame(self)
         self.qr_main_frame = QRMainFrame(self, self.output_frame, self.monitor_main_frame)
 
+        # Bind all mouse buttons to main frames so that focus is removed from currently focused entry
+        # Feature added specially for Martin :p
+        self.ports_main_frame.bind("<Button>", self.button_press_callback)
+        self.camera_main_frame.bind("<Button>", self.button_press_callback)
+        self.sound_main_frame.bind("<Button>", self.button_press_callback)
+        self.microphone_main_frame.bind("<Button>", self.button_press_callback)
+        self.keyboard_main_frame.bind("<Button>", self.button_press_callback)
+        self.monitor_main_frame.bind("<Button>", self.button_press_callback)
+        self.qr_main_frame.bind("<Button>", self.button_press_callback)
+
         # Array with references to all the testers frames
         # For making it easier to hide and show consecutive frames with NEXT and PREV buttons
         # First element is None so testers numbering starts with 1!
         self.frame_references = [None, self.ports_main_frame, self.camera_main_frame, self.microphone_main_frame,
                                  self.sound_main_frame, self.keyboard_main_frame, self.monitor_main_frame,
-                                 self.qr_main_frame]
+                                 self.monitor_main_frame, self.qr_main_frame]
 
         # BOTTOM SIDE frame
         self.grid_columnconfigure(2, weight=0)
@@ -212,9 +221,6 @@ class GUI(customtkinter.CTk, threading.Thread):
         if self.tab_number == 5:
             self.keyboard_main_frame.reset_all()
 
-        if self.tab_number == 6:
-            self.display_tester_state = True
-
         self.display_main_frame(self.tab_number)
 
     def button_menu_callback(self, frame_number):
@@ -280,6 +286,10 @@ class GUI(customtkinter.CTk, threading.Thread):
         if self.tab_number == 5:
             print("released " + event.keysym)
             self.keyboard_main_frame.key_event(event.keysym, 'keyup')
+
+    def button_press_callback(self, event):
+        print("pressed mouse button: ", event)
+        self.focus()
 
     def tab_callback(self, event=None):
         self.tab_state += 1
@@ -391,8 +401,9 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def set_scaling(self):
 
-        self.resx = 1366
-        self.resy = 768
+        # For testing purposes
+        #self.resx = 1920
+        #self.resy = 1080
 
         scale = (self.resx * self.resy) / (1920 * 1080)
         self.camera_scale = 1.0
@@ -462,13 +473,12 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.unbind("<ISO_Left_Tab>")
 
             case 6:
-                if self.display_tester_state is True:
-                    self.monitor_main_frame.show_fullscreen()
-                    self.display_tester_state = False
-                else:
-                    pass
+                self.monitor_main_frame.show_fullscreen()
 
             case 7:
+                pass
+
+            case 8:
                 # It needs to be executed a second time in this section by the flaw in design
                 # of checkboxes and entries in DisplayTester
                 self.fill_all_entries()
@@ -478,9 +488,12 @@ class GUI(customtkinter.CTk, threading.Thread):
 
                 self.qr_main_frame.make_qr(camera, sound, keyboard, self.wlan_status)
 
-            case 8:
-                # Can't exceed tab number 7
-                self.tab_number = 7
+                self.display_tester_state = False
+
+            case 9:
+                # Can't exceed tab number 8
+                self.tab_number = 8
+                self.display_tester_state = False
 
         # hide previous frame and configure and show current frame
         self.frame_references[previous].grid_forget()

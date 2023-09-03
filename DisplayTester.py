@@ -1,4 +1,5 @@
 import customtkinter
+import tkinter
 
 
 class MonitorMainFrame(customtkinter.CTkFrame):
@@ -77,6 +78,12 @@ class MonitorMainFrame(customtkinter.CTkFrame):
     def destroy_fullscreen(self):
         self.fullscreen.destroy()
 
+    def prev_callback(self):
+        self.master.button_prev_callback()
+
+    def next_callback(self):
+        self.master.button_next_callback()
+
     def entry_callback(self):
         self.entry_state += 1
 
@@ -94,11 +101,16 @@ class Fullscreen(customtkinter.CTkToplevel):
     Creates new CTk Toplevel fullscreen Window
     that can change colors to Black, White, Red, Green and Blue with button and key presses
     """
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, master):
+        super().__init__(master)
 
         self.title('Toplevel Window')
         self.attributes('-fullscreen', True)
+
+        # Specially for Martin
+        self.label = customtkinter.CTkLabel(self, text="Pamiętaj o przyciskach touchpada xD")
+        self.label.cget("font").configure(size=10)
+        self.label.pack(expand=True)
 
         self.bind("<Key>", self.key_callback)
         self.bind("<Button>", self.button_callback)
@@ -107,6 +119,7 @@ class Fullscreen(customtkinter.CTkToplevel):
         self.current_color = 0
 
         self.change_color(self.colors[self.current_color])
+
 
     def change_color(self, color):
         self.configure(fg_color=color)
@@ -123,8 +136,14 @@ class Fullscreen(customtkinter.CTkToplevel):
             self.decrement_color()
             self.change_color(self.colors[self.current_color])
 
-        elif event.keysym in ['Return', 'Escape', 'greater', 'less']:
+        elif event.keysym in ['Return', 'Escape', 'greater']:
+            self.master.next_callback()
             self.destroy()
+
+        elif event.keysym in ['less']:
+            self.master.prev_callback()
+            self.destroy()
+
 
     def button_callback(self, event):
         print("FULLSCREEN button pressed: ", event.num)

@@ -5,6 +5,7 @@
 #*.png
 #*.jpg
 qrcode.png
+test-mic.wav
 
 # Ignore all .txt and data files
 *.txt
@@ -12,6 +13,7 @@ qrcode.png
 
 # Ignore all script-files
 # *.sh
+git_push.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

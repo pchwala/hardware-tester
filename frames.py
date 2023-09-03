@@ -363,7 +363,7 @@ class TestersFrame(ctk.CTkFrame):
         self.notebook6.grid(row=0, column=6, padx=2, sticky="e")
 
         self.notebook7 = ctk.CTkButton(self, text='Generuj QR', width=70,
-                                       command=lambda: master.button_menu_callback(7))
+                                       command=lambda: master.button_menu_callback(8))
         self.notebook7.grid(row=0, column=7, padx=2, sticky="e")
 
     def rescale(self, font_scale, width, height):

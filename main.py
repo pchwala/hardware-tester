@@ -8,7 +8,7 @@ from WirelessCheck import *
 
 from queue import Queue
 
-customtkinter.set_appearance_mode("Dark")  # Modes: system (default), light, dark
+customtkinter.set_appearance_mode("Light")  # Modes: system (default), light, dark
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
