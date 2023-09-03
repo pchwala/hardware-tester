@@ -365,3 +365,26 @@ class TestersFrame(ctk.CTkFrame):
         self.notebook7 = ctk.CTkButton(self, text='Generuj QR', width=70,
                                        command=lambda: master.button_menu_callback(7))
         self.notebook7.grid(row=0, column=7, padx=2, sticky="e")
+
+    def rescale(self, font_scale, width, height):
+
+        self.notebook1.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook1.cget("font").configure(size=font_scale)
+
+        self.notebook2.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook2.cget("font").configure(size=font_scale)
+
+        self.notebook3.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook3.cget("font").configure(size=font_scale)
+
+        self.notebook4.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook4.cget("font").configure(size=font_scale)
+
+        self.notebook5.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook5.cget("font").configure(size=font_scale)
+
+        self.notebook6.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook6.cget("font").configure(size=font_scale)
+
+        self.notebook7.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook7.cget("font").configure(size=font_scale)

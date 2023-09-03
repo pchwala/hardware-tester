@@ -24,6 +24,15 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.label1 = customtkinter.CTkLabel(self, text='')
 
+        self.size_x = 512
+        self.size_y = 512
+        self.size = (self.size_x, self.size_y)
+
+    def rescale(self, width, height):
+        self.size_x = int(self.size_x * width * 1.25)
+        self.size_y = int(self.size_y * height * 1.25)
+        self.size = (self.size_x, self.size_y)
+
     def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status):
 
         keyboard_notes = self.output.entry_keyboard_notes.get()
@@ -39,7 +48,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         polska_segmented = self.monitor.polska_segmented.get()
 
         LAN_switch = "ok"
-        if wlan_status == True:
+        if wlan_status is True:
             WLAN_switch = "ok"
         else:
             WLAN_switch = "brak"
@@ -187,6 +196,6 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         img = qr.make_image(fill='black', back_color='white')
         img.save('qrcode.png')
-        output_image = customtkinter.CTkImage(None, dark_image=img.get_image(), size=(512, 512))
+        output_image = customtkinter.CTkImage(None, dark_image=img.get_image(), size=self.size)
         self.label1 = customtkinter.CTkLabel(self, image=output_image, text='')
         self.label1.grid(row=1, column=1)

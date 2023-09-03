@@ -313,22 +313,24 @@ class KeyboardMainFrame(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=0)
 
-        self.primary_frame = KeyboardPrimaryFrame(self)
-        self.secondary_frame = KeyboardSecondaryFrame(self)
+        self.pf = KeyboardPrimaryFrame(self)
+        self.sf = KeyboardSecondaryFrame(self)
 
-        self.primary_frame.configure(fg_color="transparent")
-        self.secondary_frame.configure(fg_color="transparent")
+        self.pf.configure(fg_color="transparent")
+        self.sf.configure(fg_color="transparent")
 
-        self.primary_frame.grid(row=0, column=1, sticky="ew")
-        self.secondary_frame.grid(row=1, column=1, pady=(80, 0), sticky="ew")
+        self.current_pady = (80, 0)
 
-        self.button_references = self.primary_frame.button_references + self.secondary_frame.button_references
-        self.key_names = self.primary_frame.key_names + self.secondary_frame.key_names
-        self.alt_key_names = self.primary_frame.alt_key_names + self.secondary_frame.alt_key_names
+        self.pf.grid(row=0, column=1, sticky="ew")
+        self.sf.grid(row=1, column=1, pady=self.current_pady, sticky="ew")
+
+        self.button_references = self.pf.button_references + self.sf.button_references
+        self.key_names = self.pf.key_names + self.sf.key_names
+        self.alt_key_names = self.pf.alt_key_names + self.sf.alt_key_names
 
         self.entry_state = 0
 
-        self.check_box = ctk.CTkCheckBox(self, text="Podswietlenie?", onvalue=True, offvalue=False)
+        self.check_box = ctk.CTkCheckBox(self, text="Podświetlenie?", onvalue=True, offvalue=False)
         self.check_box.grid(row=3, column=1, pady=(0, 20))
         self.check_box.select()
 
@@ -338,6 +340,15 @@ class KeyboardMainFrame(ctk.CTkFrame):
         self.entry_keyboard = ctk.CTkEntry(self, width=200)
         self.entry_keyboard.grid(row=5, column=1, pady=(0, 20), sticky='ns')
         self.entry_keyboard.configure(self, state='normal', placeholder_text="Wady klawiatury")
+
+    def rescale(self, width, height):
+        for button in self.pf.button_references + self.sf.button_references:
+            current_width = button.cget("width")
+            current_height = button.cget("height")
+            button.configure(width=current_width * width, height=current_height * height)
+
+        self.current_pady = self.current_pady[0] * width, self.current_pady[1] * width
+        self.sf.grid_configure(pady=self.current_pady)
 
     def mark_key(self, index, key_state):
         match key_state:

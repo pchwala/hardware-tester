@@ -73,9 +73,12 @@ class CameraCapture(threading.Thread):
                     image_frame = Image.fromarray(frame)
 
                     # Convert to CTkImage so it can be displayed later and put into 'output_queue'
+                    # Also resize before that
                     w, h = image_frame.size
                     w = int(w*self.camera_width_scale)
                     h = int(h*self.camera_height_scale)
+                    size = (w, h)
+                    image_frame.resize(size)
                     image_ctk = customtkinter.CTkImage(None, dark_image=image_frame, size=(w, h))
                     self.output_queue.put(image_ctk)
 
@@ -91,8 +94,6 @@ class CameraCapture(threading.Thread):
                 self.input_queue.put('start')
 
             if 'set_scale' in val:
-                temp = re.findall(r'\d.\d', val)
+                temp = re.findall(r'\d+.\d+', val)
                 self.camera_width_scale = float(temp[0])
                 self.camera_height_scale = float(temp[1])
-
-

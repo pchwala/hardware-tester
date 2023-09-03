@@ -23,6 +23,7 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     'input_queue' and 'output_queue' for communicating with App class through commands
     """
+
     def __init__(self, input_queue, output_queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         super().__init__()
@@ -50,8 +51,8 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.resx = 1920
         self.resy = 1080
         self.font_scale = 20
-        self.entry_width_scale = 1
-        self.entry_height_scale = 1
+        self.width_scale = 1
+        self.height_scale = 1
         self.camera_scale = 1
 
         # Previous strings stored in corresponding tester_frame or output_frame
@@ -68,12 +69,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.43008"
-        #self.VERSION = "23w35a-experimental"
+        # self.VERSION = "v3.1.43008"
+        self.VERSION = "23w35b-experimental"
 
         self.title("Vedion Notebook Tester 3.1")
-        self.geometry('1300x970+1500+0')
-        #self.geometry('800x600+1500+0')
+        # self.geometry('1300x970+1500+0')
+        self.geometry('800x600+1500+0')
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
@@ -107,7 +108,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.output_frame.grid(row=0, column=0, rowspan=19, columnspan=2, padx=(10, 0), pady=10, sticky="ens")
 
         self.credits_window = None
-        self.credits_label = customtkinter.CTkLabel(self, text=self.VERSION, fg_color="transparent",)
+        self.credits_label = customtkinter.CTkLabel(self, text=self.VERSION, fg_color="transparent", )
         self.credits_label.configure(text_color="#565b5e")
         self.credits_label.cget("font").configure(size=15)
         self.credits_label.bind("<Button-1>", lambda e: self.open_credits())
@@ -135,7 +136,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         # For making it easier to hide and show consecutive frames with NEXT and PREV buttons
         # First element is None so testers numbering starts with 1!
         self.frame_references = [None, self.ports_main_frame, self.camera_main_frame, self.microphone_main_frame,
-                                 self.sound_main_frame, self. keyboard_main_frame, self.monitor_main_frame,
+                                 self.sound_main_frame, self.keyboard_main_frame, self.monitor_main_frame,
                                  self.qr_main_frame]
 
         # BOTTOM SIDE frame
@@ -191,11 +192,11 @@ class GUI(customtkinter.CTk, threading.Thread):
 
     def button_next_callback(self, event=None):
         self.tab_number += 1
-        self.display_main_frame(self.tab_number-1)
+        self.display_main_frame(self.tab_number - 1)
 
     def button_prev_callback(self, event=None):
         self.tab_number -= 1
-        self.display_main_frame(self.tab_number+1)
+        self.display_main_frame(self.tab_number + 1)
 
     def button_reset_callback(self, event=None):
         """
@@ -389,20 +390,33 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.output_queue.put(self.camera_number)
 
     def set_scaling(self):
-        if self.resx < 1920 or self.resy < 1080:
-            geometry = str(self.resx) + "x" + str(self.resy)
-            self.geometry(geometry)
-            self.font_scale = 10
-            self.entry_width_scale = 0.5
-            self.entry_height_scale = 0.5
-            self.camera_scale = 0.5
 
-            self.output_frame.rescale(self.font_scale, self.entry_width_scale, self.entry_height_scale)
+        self.resx = 1366
+        self.resy = 768
 
-            self.output_queue.put("set_scale")
-            self.output_queue.put(str(self.camera_scale) + '-' + str(self.camera_scale))
+        scale = (self.resx * self.resy) / (1920 * 1080)
+        self.camera_scale = 1.0
 
+        if scale < 1:
+            scale = scale * 1.5
+        elif scale > 1:
+            scale = scale / 2
 
+        geometry = str(self.resx) + "x" + str(self.resy)
+        self.geometry(geometry)
+
+        self.font_scale = 10 + int(4 * scale / 2)
+        self.width_scale = 1 * scale
+        self.height_scale = 1 * scale
+        self.camera_scale = 1 * scale
+
+        self.output_frame.rescale(self.font_scale, self.width_scale, self.height_scale)
+        self.testers_frame.rescale(self.font_scale, self.width_scale, self.height_scale)
+        self.qr_main_frame.rescale(self.width_scale, self.height_scale)
+        self.keyboard_main_frame.rescale(self.width_scale, self.height_scale)
+
+        self.output_queue.put("set_scale")
+        self.output_queue.put(str(self.camera_scale) + '-' + str(self.camera_scale))
 
     def display_main_frame(self, previous):
         """
@@ -479,7 +493,8 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.fill_entry(self.sound_main_frame.entry_both, self.output_frame.entry_sound, self.e_sound)
         self.fill_entry(self.monitor_main_frame.entry_display, self.output_frame.entry_monitor, self.e_display)
         self.fill_entry(self.monitor_main_frame.entry_frame, self.output_frame.entry_notes, self.e_frame)
-        self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes, self.e_keyboard)
+        self.fill_entry(self.keyboard_main_frame.entry_keyboard, self.output_frame.entry_keyboard_notes,
+                        self.e_keyboard)
         self.fill_entry(self.keyboard_main_frame.entry_layout, self.output_frame.entry_keyboard, self.e_layout)
 
         class_str = self.monitor_main_frame.class_segmented.get()
