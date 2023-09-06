@@ -4,7 +4,7 @@ import customtkinter
 class CreditsWindow(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.geometry("520x300")
+        self.geometry("520x340")
         self.title("")
 
         self.columnconfigure(0, weight=1)
@@ -40,7 +40,7 @@ class CreditsWindow(customtkinter.CTkToplevel):
         self.label62 = customtkinter.CTkLabel(self, text="Reset")
         self.label62.grid(row=5, column=2, padx=(0, 20), sticky="w")
 
-        self.label7 = customtkinter.CTkLabel(self, text="Design and programming:\nPrzemysław Chwała, 08.2023")
+        self.label7 = customtkinter.CTkLabel(self, text="Design and programming:\nVedion Hardware Tester\nPrzemysław Chwała, 08.2023")
         self.label7.configure(justify="left", text_color="RoyalBlue1")
         self.label7.cget("font").configure(size=20)
         self.label7.grid(row=6, column=0, columnspan=3, pady=(20, 20), padx=(20, 0), sticky="w")

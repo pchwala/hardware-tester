@@ -72,7 +72,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         # self.VERSION = "v3.1.43008"
         self.VERSION = "23w35b-experimental"
 
-        self.title("Vedion Notebook Tester 3.1")
+        self.title("Vedion Hardware Tester 3.1")
         # self.geometry('1300x970+1500+0')
 
         # Configure middle row as the one taking all available space
