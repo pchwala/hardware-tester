@@ -70,7 +70,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_layout = 6
 
         # self.VERSION = "v3.1.43008"
-        self.VERSION = "23w35b-experimental"
+        self.VERSION = "23w38a"
 
         self.title("Vedion Hardware Tester 3.1")
         # self.geometry('1300x970+1500+0')
@@ -85,12 +85,8 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         self.bind("<Shift-less>", self.button_prev_callback)
         self.bind("<Shift-greater>", self.button_next_callback)
-        self.bind("<Shift-m>", self.button_reset_callback)
-        self.bind("<Shift-M>", self.button_reset_callback)
         self.bind("<Control-r>", self.button_reset_callback)
         self.bind("<Control-R>", self.button_reset_callback)
-        self.bind("<Shift-s>", self.shortcut_start_stop)
-        self.bind("<Shift-S>", self.shortcut_start_stop)
         self.bind("<Control-c>", self.shortcut_start_stop)
         self.bind("<Control-C>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
