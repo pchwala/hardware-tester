@@ -27,8 +27,10 @@ def get_disk_info(device):
         for line in all_info.split("\n"):
             if "Size/Capacity" in line or "Total" in line:
                 temp = re.sub(r".*\[", "", line, 1)
-                disk += re.search(r"\d+ \w+", temp).group(0)
+                # search for number in format 'DIGIT,DIGIT GB'
+                disk += re.search(r"\d+[^\]]*", temp).group(0)
                 disk += " | NVMe"
+                break
 
             if "Model" in line:
                 model += re.sub(r"Model Number:\s*", "", line, 1)
@@ -41,7 +43,7 @@ def get_disk_info(device):
         for line in all_info.split("\n"):
             if "Capacity" in line:
                 temp = re.sub(r".*\[", "", line, 1)
-                disk += re.search(r"\d* \w*", temp).group(0)
+                disk += re.search(r"\d+[^\]]*", temp).group(0)
                 disk += " | "
 
             if "Rotation Rate" in line:
