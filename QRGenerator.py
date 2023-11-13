@@ -58,6 +58,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         sata25_switch = ""
         wwan_switch = ""
         oryg_switch = "?"
+        polska_switch = ""
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
             sata25_switch = "tak"
@@ -92,7 +93,8 @@ class QRMainFrame(customtkinter.CTkFrame):
         if polska_segmented == "Polska":
             polska_switch = "2"
         else:
-            polska_switch = "ZAGRANICA"
+            if laptop_class == "A":
+                polska_switch = "ZAGRANICA"
 
         self.compiled_notes = ""
 
