@@ -108,9 +108,9 @@ class Fullscreen(customtkinter.CTkToplevel):
         self.attributes('-fullscreen', True)
 
         # Specially for Martin
-        self.label = customtkinter.CTkLabel(self, text="Pamiętaj o przyciskach touchpada xD")
-        self.label.cget("font").configure(size=10)
-        self.label.pack(expand=True)
+        # self.label = customtkinter.CTkLabel(self, text="Pamiętaj o przyciskach touchpada xD")
+        # self.label.cget("font").configure(size=10)
+        # self.label.pack(expand=True)
 
         self.bind("<Key>", self.key_callback)
         self.bind("<Button>", self.button_callback)

@@ -70,7 +70,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.51311"
+        self.VERSION = "v3.1.61311"
         # self.VERSION = "23w38a"
 
         self.title("Vedion Hardware Tester 3.1")
