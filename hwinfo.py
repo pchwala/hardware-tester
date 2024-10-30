@@ -125,7 +125,8 @@ class HwInfo:
                     self.CPU_model = re.search(r"i\d.*", temp).group(0)
 
                 except AttributeError:
-                    self.CPU_model = temp
+                    if temp != "":
+                        self.CPU_model = temp
 
             if "display" in line:
                 temp = re.sub(r".*display\s*", "", line, 1)

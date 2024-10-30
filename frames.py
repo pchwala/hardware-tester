@@ -358,13 +358,21 @@ class TestersFrame(ctk.CTkFrame):
                                        command=lambda: master.button_menu_callback(5))
         self.notebook5.grid(row=0, column=5, padx=2, sticky="e")
 
-        self.notebook6 = ctk.CTkButton(self, text='Matryca', width=70,
+        self.notebook6 = ctk.CTkButton(self, text='Touchpad', width=70,
                                        command=lambda: master.button_menu_callback(6))
         self.notebook6.grid(row=0, column=6, padx=2, sticky="e")
 
-        self.notebook7 = ctk.CTkButton(self, text='Generuj QR', width=70,
-                                       command=lambda: master.button_menu_callback(8))
+        self.notebook7 = ctk.CTkButton(self, text='Matryca', width=70,
+                                       command=lambda: master.button_menu_callback(7))
         self.notebook7.grid(row=0, column=7, padx=2, sticky="e")
+
+        self.notebook8 = ctk.CTkButton(self, text='Wady', width=70,
+                                       command=lambda: master.button_menu_callback(8))
+        self.notebook8.grid(row=0, column=8, padx=2, sticky="e")
+
+        self.notebook9 = ctk.CTkButton(self, text='Generuj QR', width=70,
+                                       command=lambda: master.button_menu_callback(9))
+        self.notebook9.grid(row=0, column=9, padx=2, sticky="e")
 
     def rescale(self, font_scale, width, height):
 

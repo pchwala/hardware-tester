@@ -33,7 +33,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.size_y = int(self.size_y * height * 1.25)
         self.size = (self.size_x, self.size_y)
 
-    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status):
+    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status, touchpad):
 
         keyboard_notes = self.output.entry_keyboard_notes.get()
         keyboard_layout = self.output.entry_keyboard.get()
@@ -58,6 +58,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         sata25_switch = ""
         wwan_switch = ""
         oryg_switch = "?"
+        polska_switch = ""
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
             sata25_switch = "tak"
@@ -92,7 +93,8 @@ class QRMainFrame(customtkinter.CTkFrame):
         if polska_segmented == "Polska":
             polska_switch = "2"
         else:
-            polska_switch = ""
+            if laptop_class == "A":
+                polska_switch = "ZAGRANICA"
 
         self.compiled_notes = ""
 
@@ -157,6 +159,11 @@ class QRMainFrame(customtkinter.CTkFrame):
             if self.compiled_notes != "":
                 self.compiled_notes += " | "
             self.compiled_notes += "badpixele"
+
+        if touchpad != "":
+            if self.compiled_notes != "":
+                self.compiled_notes += " | "
+            self.compiled_notes += touchpad
 
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\
