@@ -168,8 +168,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.output_frame.fill_hardware_info()
 
         # Extract X and Y resolution from 'NUMBERxNUMBER' format
-        (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
-        (self.resx, self.resy) = (int(self.resx), int(self.resy))
+        try:
+            (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
+            (self.resx, self.resy) = (int(self.resx), int(self.resy))
+
+        except ValueError:
+            (self.resx, self.resy) = (1920, 1080)
         self.set_scaling()
 
         # which tester to show at any given time

@@ -201,5 +201,5 @@ class HwInfo:
 
 hwinfo = HwInfo()
 
-hwinfo.read_hardware_info()
-hwinfo.save_to_file()
+# hwinfo.read_hardware_info()
+# hwinfo.save_to_file()
