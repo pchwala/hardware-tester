@@ -173,7 +173,9 @@ class GUI(customtkinter.CTk, threading.Thread):
             (self.resx, self.resy) = (int(self.resx), int(self.resy))
 
         except ValueError:
+            print("Error scaling: cannot read screen resolution")
             (self.resx, self.resy) = (1920, 1080)
+
         self.set_scaling()
 
         # which tester to show at any given time

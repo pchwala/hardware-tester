@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from GUI import *
 
 from ListRemovable import *
@@ -183,6 +181,6 @@ class App:
 
 
 # Subprocess reading all the hardware info
-# result = subprocess.run("./python-sudo.sh hwinfo.py", shell=True)
+result = subprocess.run("./venv/bin/python hwinfo.py", shell=True)
 
 App = App()

@@ -1,71 +1,10 @@
 import subprocess
 import re
 
-# I didn't have time to properly comment out the code for these functions
-# but basically what all of these do is they take output of certain linux commands that return hardware info,
-# and format it in a way that is user-friendly and easy to work with and manipulate
 
 
 def exec_and_output(command):
     return subprocess.check_output(command, shell=True).decode().strip()
-
-
-def get_disk_info(device):
-
-    # Fix for Mac, nonexistent disk is sometimes listed by 'smartctl' and running 'smartctl -i'
-    # by 'get_disk_info' returns non-zero exit status 2: "Cant read hardware info"
-    command = "sudo smartctl -i " + device
-    try:
-        all_info = subprocess.check_output(command, shell=True).decode().strip()
-    except subprocess.CalledProcessError:
-        return ""
-
-    disk = ""
-    model = ""
-
-    if "nvm" in device:
-        for line in all_info.split("\n"):
-            if "Size/Capacity" in line or "Total" in line:
-                temp = re.sub(r".*\[", "", line, 1)
-                # search for number in format 'DIGIT,DIGIT GB'
-                disk += re.search(r"\d+[^\]]*", temp).group(0)
-                disk += " | NVMe"
-                break
-
-            if "Model" in line:
-                model += re.sub(r"Model Number:\s*", "", line, 1)
-
-        if model != "":
-            disk += " | "
-            disk += model
-
-    else:
-        for line in all_info.split("\n"):
-            if "Capacity" in line:
-                temp = re.sub(r".*\[", "", line, 1)
-                disk += re.search(r"\d+[^\]]*", temp).group(0)
-                disk += " | "
-
-            if "Rotation Rate" in line:
-                match = re.search(r"\d", line)
-                if match:
-                    disk += "HDD"
-                else:
-                    disk += "SSD"
-
-            if "Form Factor" in line:
-                disk += " | "
-                disk += re.sub(r".*Form Factor:\s*", "", line, 1)
-
-            if "Device Model" in line:
-                model += re.sub(r".*Device Model:\s*", "", line, 1)
-
-        if model != "":
-            disk += " | "
-            disk += model
-
-    print(disk)
-    return disk
 
 
 class HwInfo:
@@ -87,97 +26,67 @@ class HwInfo:
         self.license = ""
 
     def read_hardware_info(self):
-        all_info = exec_and_output('sudo dmidecode | grep -A 9 "System Information"')
-        for line in all_info.split("\n"):
-            if "Manufacturer" in line:
-                self.manufacturer = re.sub(".*Manufacturer.*: ", "", line, 1)
+        """Gets hardware information from the system."""
 
-            elif "Product Name" in line:
-                self.model += re.sub(".*Product Name.*: ", "", line, 1)
+        output = subprocess.check_output(['system_profiler', 'SPHardwareDataType'])
+        output = output.decode().split('\n')
+        for line in output:
+            if "Serial Number" in line:
+                self.serial = line.split(':')[1].strip()
 
-            elif "Version" in line:
-                self.model += " (" + re.sub(".*Version.*: ", "", line, 1) + ")"
+            elif "Model Identifier" in line:
+                self.model = line.split(':')[1].strip()
+                if "MacBook" in self.model:
+                    self.manufacturer = "Apple"
 
-            elif "Serial Number" in line:
-                self.serial = re.sub(".*Serial Number.*: ", "", line, 1)
+            elif "Processor Name" in line:
+                self.CPU_model = line.split(':')[1].strip()
 
-        disk_devices = []
-        all_info = exec_and_output("sudo smartctl --scan")
-        for line in all_info.split("\n"):
-            temp = re.split(r'\s', line, 1)
-            if '/dev' in temp[0]:
-                disk_devices.append(temp[0])
+            elif "Processor Speed" in line:
+                self.CPU_model += " " + line.split(':')[1].strip()
 
-        if len(disk_devices) > 0:
-            self.HDD1_value = get_disk_info(disk_devices[0])
-        if len(disk_devices) > 1:
-            self.HDD2_value = get_disk_info(disk_devices[1])
+            elif "Memory" in line:
+                self.RAM_value = line.split(':')[1].strip()
 
-        all_info = exec_and_output("sudo lshw -short")
-        for line in all_info.split("\n"):
-            if "System Memory" in line:
-                self.RAM_value = re.search(r'\d*G', line).group(0) + "B"
-                self.RAM_value = re.sub(r'GB', " GB", self.RAM_value, 1)
 
-            if "processor" in line:
-                temp = re.sub(r".*processor\s*", "", line, 1)
-                try:
-                    self.CPU_model = re.search(r"i\d.*", temp).group(0)
+        HDDs = []
+        output = subprocess.check_output(['system_profiler', 'SPStorageDataType'])
+        output = output.decode().split('\n\n')
+        for section in output:
+            output_section = section.split('\n')
+            temp_name = ""
+            temp_value = ""
+            temp_type = ""
+            for line in output_section:
+                if "Capacity" in line:
+                    temp_value = re.search(r"\d+.\d+ GB", line).group(0)
 
-                except AttributeError:
-                    if temp != "":
-                        self.CPU_model = temp
+                elif "Device Name" in line:
+                    temp_name = line.split(':')[1].strip()
 
-            if "display" in line:
-                temp = re.sub(r".*display\s*", "", line, 1)
-                # FORMATTING ERRORS CHECK FOR AMD GPUs
-                temp = re.sub(r".*\[", "", temp, 1)
-                temp = re.sub(r"]", "", temp, 1)
+                elif "Medium Type" in line:
+                    temp_type = line.split(':')[1].strip()
 
-                if self.GPU_model == "":
-                    self.GPU_model += temp
-                else:
-                    self.GPU_model += " || " + temp
+                elif "Internal: Yes" in line:
+                    hdd_value = temp_value + ' | ' + temp_type + ' | ' + temp_name
+                    HDDs.append(hdd_value)
 
-        all_info = exec_and_output("xdpyinfo | grep dimensions")
-        self.resolution = re.search(r"\d+x\d+", all_info).group(0)
-        if "1920x1080" in self.resolution:
-            self.monitor_size = "FHD"
-        elif "1366x768" in self.resolution:
-            self.monitor_size = "HD"
-        elif "2560x1440" in self.resolution:
-            self.monitor_size = "QHD"
-
-        command = "sudo hexdump -s 56 -e '" + '/29 "%s\n"' + "' /sys/firmware/acpi/tables/MSDM"
+        HDDs = list(set(HDDs))
         try:
-            all_info = exec_and_output(command)
-            self.license = all_info
-        except Exception:
-            self.license = "brak licencji"
+            self.HDD1_value = HDDs[0]
+            self.HDD2_value = HDDs[1]
+        except IndexError:
+            print("There is none or only one HDD")
 
-        all_info = exec_and_output('acpi -bi')
-        for line in all_info.split("\n"):
-            if "Battery 0" in line:
-                if "capacity" in line:
-                    self.battery0 = re.search(r'\d*%', line).group(0)
-                    self.battery0 = re.search(r'\d*', self.battery0).group(0)
 
-            if "Battery 1" in line:
-                if "capacity" in line:
-                    try:
-                        self.battery1 = re.search(r'\d*%', line).group(0)
-                        self.battery1 = re.search(r'\d*', self.battery1).group(0)
-                    except Exception:
-                        self.battery1 = "XD"
+        output = subprocess.check_output(['system_profiler', 'SPDisplaysDataType'])
+        output = output.decode().split('\n')
+        for line in output:
+            if "Chipset Model" in line:
+                self.GPU_model = line.split(':')[1].strip()
 
-        if (self.battery0 != "") and (self.battery1 != ""):
-            self.battery_health = self.battery0 + "/" + self.battery1
-
-        elif (self.battery0 != "") or (self.battery1 != ""):
-            self.battery_health = self.battery0 + self.battery1
-
-        else:
-            self.battery_health = "brak"
+            elif "Resolution" in line:
+                self.resolution = re.search(r"\d+ x \d+", line).group(0)
 
     def save_to_file(self):
 
@@ -201,5 +110,5 @@ class HwInfo:
 
 hwinfo = HwInfo()
 
-# hwinfo.read_hardware_info()
-# hwinfo.save_to_file()
+hwinfo.read_hardware_info()
+hwinfo.save_to_file()
