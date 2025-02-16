@@ -419,24 +419,35 @@ class GUI(customtkinter.CTk, threading.Thread):
     def set_scaling(self):
 
         # For testing purposes
-        #self.resx = 1920
-        #self.resy = 1080
-
-        scale = (self.resx * self.resy) / (1920 * 1080)
-        self.camera_scale = 1.0
-
-        if scale < 1:
-            scale = scale * 1.5
-        elif scale > 1:
-            scale = scale / 2
+        #self.resx = 1366
+        #self.resy = 768
 
         geometry = str(self.resx) + "x" + str(self.resy)
         self.geometry(geometry)
 
-        self.font_scale = 10 + int(4 * scale / 2)
-        self.width_scale = 1 * scale
-        self.height_scale = 1 * scale
-        self.camera_scale = 1 * scale
+        if geometry == '1366x768':
+            self.font_scale = 11
+            self.width_scale = 0.73
+            self.height_scale = 0.73
+            self.camera_scale = 0.73
+        elif geometry == '3840x2160':
+            self.font_scale = 14
+            self.width_scale = 2
+            self.height_scale = 2
+            self.camera_scale = 2
+        else:
+            scale = (self.resx * self.resy) / (1920 * 1080)
+            self.camera_scale = 1.0
+
+            if scale < 1:
+                scale = scale * 1.5
+            elif scale > 1:
+                scale = scale / 2
+
+            self.font_scale = 10 + int(4 * scale / 2)
+            self.width_scale = 1 * scale
+            self.height_scale = 1 * scale
+            self.camera_scale = 1 * scale
 
         self.output_frame.rescale(self.font_scale, self.width_scale, self.height_scale)
         self.testers_frame.rescale(self.font_scale, self.width_scale, self.height_scale)
@@ -504,8 +515,10 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.fill_all_entries()
                 camera = self.camera_main_frame.check_box_state
                 sound = self.sound_main_frame.check_box_state
-                keyboard = self.keyboard_main_frame.check_box.get()
+                keyboard = self.monitor_main_frame.backlight_segmented.get()
                 touchpad = self.touchpad_main_frame.entry_touchpad.get()
+                if keyboard == 'Podswietlenie':
+                    keyboard = True
 
                 self.qr_main_frame.make_qr(camera, sound, keyboard, self.wlan_status, touchpad)
 

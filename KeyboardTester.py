@@ -330,10 +330,6 @@ class KeyboardMainFrame(ctk.CTkFrame):
 
         self.entry_state = 0
 
-        self.check_box = ctk.CTkCheckBox(self, text="Podświetlenie?", onvalue=True, offvalue=False)
-        self.check_box.grid(row=3, column=1, pady=(0, 20))
-        self.check_box.select()
-
         self.entry_layout = ctk.CTkEntry(self, width=200)
         self.entry_layout.grid(row=4, column=1, pady=(0, 20), sticky='ns')
         self.entry_layout.configure(self, state='normal', placeholder_text="Układ klawiatury")

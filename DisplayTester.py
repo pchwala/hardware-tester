@@ -7,68 +7,76 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         super().__init__(master)
 
         # Configure grid like this:
-        #    0 1 2
-        # 0 |_|_|_|
-        # 1 |_|_|_|
-        # 2 |_|_|_|
+        #    0 1 2 3 4
+        # 0 |_|_|_|_|_|
+        # 1 |_|_|_|_|_|
+        # 2 |_|_|_|_|_|
         #    .....
-        # where all columns have equal weights and row 1 have highest row-weight
 
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
         self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(4, weight=1)
 
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=0)
 
-        self.label1 = customtkinter.CTkLabel(self, text="Częste wady:")
+        self.label1 = customtkinter.CTkLabel(self, text="Statusy:")
         self.label1.cget("font").configure(size=20)
-        self.label1.grid(row=2, column=1, pady=(0, 20))
+        self.label1.grid(row=2, column=2, pady=(0, 20))
 
-        self.check_box1 = customtkinter.CTkCheckBox(self, text="Klapa porysowana", onvalue=True, offvalue=False)
-        self.check_box1.grid(row=8, column=0, pady=(0, 20))
-        self.check_box2 = customtkinter.CTkCheckBox(self, text="Klapa wytarta", onvalue=True, offvalue=False)
-        self.check_box2.grid(row=8, column=1, pady=(0, 20))
-        self.check_box3 = customtkinter.CTkCheckBox(self, text="Lakier odchodzi", onvalue=True, offvalue=False)
-        self.check_box3.grid(row=8, column=2, pady=(0, 20))
+        self.label_wwan1 = customtkinter.CTkLabel(self, text="WWAN:")
+        self.label_wwan1.cget("font").configure(size=14)
+        self.label_wwan1.grid(row=9, column=1, pady=(0, 20), sticky="e")
+        self.label_wwan2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_wwan2.cget("font").configure(size=14)
+        self.label_wwan2.grid(row=9, column=2, pady=(0, 20))
 
-        self.check_box4 = customtkinter.CTkCheckBox(self, text="Klawiatura wytarta", onvalue=True, offvalue=False)
-        self.check_box4.grid(row=9, column=0, pady=(0, 20))
-        self.check_box5 = customtkinter.CTkCheckBox(self, text="Touchpad wytarty", onvalue=True, offvalue=False)
-        self.check_box5.grid(row=9, column=1, pady=(0, 20))
-        self.check_box6 = customtkinter.CTkCheckBox(self, text="Palmrest wytarty", onvalue=True, offvalue=False)
-        self.check_box6.grid(row=9, column=2, pady=(0, 20))
+        self.label_backlight1 = customtkinter.CTkLabel(self, text="Podswietlenie:")
+        self.label_backlight1.cget("font").configure(size=14)
+        self.label_backlight1.grid(row=10, column=1, pady=(0, 20), sticky="e")
+        self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_backlight2.cget("font").configure(size=14)
+        self.label_backlight2.grid(row=10, column=2, pady=(0, 20))
 
-        self.check_box7 = customtkinter.CTkCheckBox(self, text="Wyraźny Hotspot", onvalue=True, offvalue=False)
-        self.check_box7.grid(row=10, column=0, pady=(0, 20))
-        self.check_box8 = customtkinter.CTkCheckBox(self, text="Wyraźna Rysa", onvalue=True, offvalue=False)
-        self.check_box8.grid(row=10, column=1, pady=(0, 20))
-        self.check_box9 = customtkinter.CTkCheckBox(self, text="Badpixele", onvalue=True, offvalue=False)
-        self.check_box9.grid(row=10, column=2, pady=(0, 20))
+        self.label_touchscreen1 = customtkinter.CTkLabel(self, text="Dotyk:")
+        self.label_touchscreen1.cget("font").configure(size=14)
+        self.label_touchscreen1.grid(row=11, column=1, pady=(0, 60), sticky="e")
+        self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_touchscreen2.cget("font").configure(size=14)
+        self.label_touchscreen2.grid(row=11, column=2, pady=(0, 60))
+
+        self.wwan_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['WWAN', 'Brak WWAN'])
+        self.wwan_segmented.set('Brak WWAN')
+        self.wwan_segmented.grid(row=9, column=3, pady=(0, 20), sticky="w")
+
+        self.backlight_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['Podswietlenie', 'Brak podswietlenia'])
+        self.backlight_segmented.set('Brak podswietlenia')
+        self.backlight_segmented.grid(row=10, column=3, pady=(0, 20), sticky="w")
 
         self.touchscreen_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Dotyk', 'Brak dotyku'])
         self.touchscreen_segmented.set('Brak dotyku')
-        self.touchscreen_segmented.grid(row=11, column=1, pady=(0, 60))
+        self.touchscreen_segmented.grid(row=11, column=3, pady=(0, 60), sticky="w")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'])
         self.class_segmented.set(' ')
-        self.class_segmented.grid(row=12, column=1, pady=(0, 20))
+        self.class_segmented.grid(row=12, column=2, pady=(0, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['Zagranica', 'Polska'])
+            self, values=['Zagranica', '2'])
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=13, column=1, pady=(0, 20))
+        self.polska_segmented.grid(row=13, column=2, pady=(0, 20))
 
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
-        self.entry_display.grid(row=14, column=1, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=14, column=2, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
-        self.entry_frame.grid(row=15, column=1, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=15, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 

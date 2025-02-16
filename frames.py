@@ -396,3 +396,9 @@ class TestersFrame(ctk.CTkFrame):
 
         self.notebook7.configure(height=int(30 * height), width=int(70 * width))
         self.notebook7.cget("font").configure(size=font_scale)
+
+        self.notebook8.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook8.cget("font").configure(size=font_scale)
+
+        self.notebook9.configure(height=int(30 * height), width=int(70 * width))
+        self.notebook9.cget("font").configure(size=font_scale)

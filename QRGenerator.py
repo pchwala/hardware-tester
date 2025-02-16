@@ -115,51 +115,6 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         self.compiled_notes += notes
 
-        if self.monitor.check_box1.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "klapa porysowana"
-
-        if self.monitor.check_box2.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "klapa wytarta"
-
-        if self.monitor.check_box3.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "lakier odchodzi"
-
-        if self.monitor.check_box4.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "klawiatura wytarta"
-
-        if self.monitor.check_box5.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "touchpad wytarty"
-
-        if self.monitor.check_box6.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "palmrest wytarty"
-
-        if self.monitor.check_box7.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "wyrazny hotspot"
-
-        if self.monitor.check_box8.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "wyrazna rysa"
-
-        if self.monitor.check_box9.get() == 1:
-            if self.compiled_notes != "":
-                self.compiled_notes += " | "
-            self.compiled_notes += "badpixele"
-
         if touchpad != "":
             if self.compiled_notes != "":
                 self.compiled_notes += " | "
