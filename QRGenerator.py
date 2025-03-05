@@ -33,7 +33,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.size_y = int(self.size_y * height * 1.25)
         self.size = (self.size_x, self.size_y)
 
-    def make_qr(self, camera_checkbox, sound_checkbox, keyboard_checkbox, wlan_status, touchpad):
+    def make_qr(self, camera_checkbox, sound_checkbox, wlan_status, touchpad):
 
         keyboard_notes = self.output.entry_keyboard_notes.get()
         keyboard_layout = self.output.entry_keyboard.get()
@@ -43,7 +43,9 @@ class QRMainFrame(customtkinter.CTkFrame):
         monitor = self.output.entry_monitor.get()
         notes = self.output.entry_notes.get()
 
+        backlight_segmented = self.monitor.backlight_segmented.get()
         touchscreen_segmented = self.monitor.touchscreen_segmented.get()
+        wwan_segmented = self.monitor.wwan_segmented.get()
         laptop_class = self.monitor.class_segmented.get()
         polska_segmented = self.monitor.polska_segmented.get()
 
@@ -70,10 +72,21 @@ class QRMainFrame(customtkinter.CTkFrame):
             if sata25_switch == "":
                 m2_switch = "tak"
 
-        if touchscreen_segmented == "Brak dotyku":
-            touchscreen = ""
-        else:
+        if touchscreen_segmented == "Dotyk":
             touchscreen = " Dotyk"
+        else:
+            touchscreen = ""
+
+        if backlight_segmented == "Podswietlenie":
+            pods_switch = "pods"
+        else:
+            pods_switch = ""
+
+        if wwan_segmented == "WWAN":
+            wwan_switch = "wwan"
+        else:
+            wwan_switch = ""
+
 
         if camera_checkbox is False:
             camera_switch = "uszk"
@@ -85,12 +98,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         else:
             sound_switch = "ok"
 
-        if keyboard_checkbox is True:
-            pods_switch = "pods"
-        else:
-            pods_switch = "brak"
-
-        if polska_segmented == "Polska":
+        if polska_segmented == "2":
             polska_switch = "2"
         else:
             if laptop_class == "A":

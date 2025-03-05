@@ -86,6 +86,10 @@ class HwInfo:
         self.resolution = ""
         self.license = ""
 
+        self.kbd_backlight = "False"
+        self.touchscreen = "False"
+        self.WWAN = "False"
+
     def read_hardware_info(self):
         all_info = exec_and_output('sudo dmidecode | grep -A 9 "System Information"')
         for line in all_info.split("\n"):
@@ -179,6 +183,11 @@ class HwInfo:
         else:
             self.battery_health = "brak"
 
+        all_info = exec_and_output('ls /sys/class/leds')
+        if "kbd_backlight" in all_info:
+            self.kbd_backlight = "True"
+
+
     def save_to_file(self):
 
         with open("hwinfo.dat", 'w') as file:
@@ -195,6 +204,9 @@ class HwInfo:
             file.write(self.resolution + '\n')
             file.write(self.monitor_size + '\n')
             file.write(self.license + '\n')
+            file.write(self.kbd_backlight + '\n')
+            file.write(self.touchscreen + '\n')
+            file.write(self.WWAN + '\n')
 
         result = subprocess.run("chmod 666 hwinfo.dat", shell=True)
 

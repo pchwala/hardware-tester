@@ -70,8 +70,8 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_keyboard = 5
         self.e_layout = 6
 
-        self.VERSION = "v3.1.61311"
-        # self.VERSION = "23w38a"
+        #self.VERSION = "v3.1.60503"
+        self.VERSION = "snap25w10a"
 
         self.title("Vedion Hardware Tester 3.1")
         # self.geometry('1300x970+1500+0')
@@ -126,7 +126,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.microphone_main_frame = MicrophoneMainFrame(self)
         self.keyboard_main_frame = KeyboardMainFrame(self)
         self.touchpad_main_frame = TouchpadMainFrame(self)
-        self.monitor_main_frame = MonitorMainFrame(self)
+        self.monitor_main_frame = MonitorMainFrame(self, self.output_frame)
         self.qr_main_frame = QRMainFrame(self, self.output_frame, self.monitor_main_frame)
 
         # Bind all mouse buttons to main frames so that focus is removed from currently focused entry
@@ -166,6 +166,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Read all hardware info and then put it in the output frame for display
         self.output_frame.read_hardware_info()
         self.output_frame.fill_hardware_info()
+        self.monitor_main_frame.set_segmented()
 
         # Extract X and Y resolution from 'NUMBERxNUMBER' format
         (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
@@ -419,8 +420,8 @@ class GUI(customtkinter.CTk, threading.Thread):
     def set_scaling(self):
 
         # For testing purposes
-        #self.resx = 1366
-        #self.resy = 768
+        self.resx = 1366
+        self.resy = 768
 
         geometry = str(self.resx) + "x" + str(self.resy)
         self.geometry(geometry)
@@ -515,12 +516,9 @@ class GUI(customtkinter.CTk, threading.Thread):
                 self.fill_all_entries()
                 camera = self.camera_main_frame.check_box_state
                 sound = self.sound_main_frame.check_box_state
-                keyboard = self.monitor_main_frame.backlight_segmented.get()
                 touchpad = self.touchpad_main_frame.entry_touchpad.get()
-                if keyboard == 'Podswietlenie':
-                    keyboard = True
 
-                self.qr_main_frame.make_qr(camera, sound, keyboard, self.wlan_status, touchpad)
+                self.qr_main_frame.make_qr(camera, sound, self.wlan_status, touchpad)
 
                 self.display_tester_state = False
 
@@ -547,7 +545,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         class_str = self.monitor_main_frame.class_segmented.get()
         class_substr = self.monitor_main_frame.polska_segmented.get()
 
-        if class_substr == "Polska":
+        if class_substr == "2":
             class_str = class_str + " 2"
 
         self.output_frame.entry_class.delete(0, tkinter.END)

@@ -3,7 +3,7 @@ import tkinter
 
 
 class MonitorMainFrame(customtkinter.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, output):
         super().__init__(master)
 
         # Configure grid like this:
@@ -12,6 +12,8 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         # 1 |_|_|_|_|_|
         # 2 |_|_|_|_|_|
         #    .....
+
+        self.output = output
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(4, weight=1)
@@ -27,21 +29,21 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.label_wwan1 = customtkinter.CTkLabel(self, text="WWAN:")
         self.label_wwan1.cget("font").configure(size=14)
         self.label_wwan1.grid(row=9, column=1, pady=(0, 20), sticky="e")
-        self.label_wwan2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_wwan2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
         self.label_wwan2.cget("font").configure(size=14)
         self.label_wwan2.grid(row=9, column=2, pady=(0, 20))
 
         self.label_backlight1 = customtkinter.CTkLabel(self, text="Podswietlenie:")
         self.label_backlight1.cget("font").configure(size=14)
         self.label_backlight1.grid(row=10, column=1, pady=(0, 20), sticky="e")
-        self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
         self.label_backlight2.cget("font").configure(size=14)
         self.label_backlight2.grid(row=10, column=2, pady=(0, 20))
 
         self.label_touchscreen1 = customtkinter.CTkLabel(self, text="Dotyk:")
         self.label_touchscreen1.cget("font").configure(size=14)
         self.label_touchscreen1.grid(row=11, column=1, pady=(0, 60), sticky="e")
-        self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto")
+        self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
         self.label_touchscreen2.cget("font").configure(size=14)
         self.label_touchscreen2.grid(row=11, column=2, pady=(0, 60))
 
@@ -79,6 +81,26 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.entry_frame.grid(row=15, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
+
+
+    def set_segmented(self):
+        # Checking if backlight, touchscreen and wwan were detected
+        # And if so, configuring corresponding labels and switches
+        if self.output.kbd_backlight is True:
+            self.label_backlight2.configure(text="Wykryto")
+            self.label_backlight2.configure(text_color="green")
+            self.backlight_segmented.set('Podswietlenie')
+
+        if self.output.touchscreen is True:
+            self.label_touchscreen2.configure(text="Wykryto")
+            self.label_touchscreen2.configure(text_color="green")
+            self.touchscreen_segmented.set('Dotyk')
+
+        if self.output.WWAN is True:
+            self.label_wwan2.configure(text="Wykryto")
+            self.label_wwan2.configure(text_color="green")
+            self.wwan_segmented.set('WWAN')
+
 
     def show_fullscreen(self):
         self.fullscreen = Fullscreen(self)

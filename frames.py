@@ -26,6 +26,10 @@ class OutputFrame(ctk.CTkFrame):
         self.battery0 = ""
         self.battery1 = ""
 
+        self.kbd_backlight = False
+        self.touchscreen = False
+        self.WWAN = False
+
         self.label_sn = ctk.CTkLabel(self, text="Serial Number: ")
         self.label_sn.grid(row=0, column=0, padx=10, pady=2, sticky="ns")
 
@@ -295,11 +299,20 @@ class OutputFrame(ctk.CTkFrame):
                 self.monitor_size = data[10]
                 self.license = data[11]
 
+
+                if data[12] == "True":
+                    self.kbd_backlight = True
+                    print("kbd_true")
+                if data[13] == "True":
+                    self.touchscreen = True
+                if data[14] == "True":
+                    self.WWAN = True
+
             except IndexError:
                 print("Cant read hardware info")
 
         # erase(truncate) file just in case
-        open("hwinfo.dat", 'w').close()
+        #open("hwinfo.dat", 'w').close()
 
     def fill_hardware_info(self):
 

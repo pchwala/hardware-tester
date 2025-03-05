@@ -1,6 +1,6 @@
 cd /home/serwis/hardware-tester
 git status
-git switch portable
+git switch feature
 git pull
 cp displays.xml /home/serwis/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
 ./hardware-tester.sh
