@@ -531,6 +531,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.frame_references[previous].grid_forget()
         self.frame_references[self.tab_number].grid(row=1, column=2, columnspan=5, padx=40, pady=40, sticky="ewns")
 
+        # Color active notebook button
+        self.highlight_notebook(self.tab_number)
+
     def fill_all_entries(self):
 
         self.fill_entry(self.ports_main_frame.entry_ports_test, self.output_frame.entry_ports, self.e_ports)
@@ -574,6 +577,16 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         self.testers_previous[entry_number] = tester_data
         self.output_previous[entry_number] = output_data
+
+    def highlight_notebook(self, tab_number):
+        """Function changes color of currently active notebook button at the top of main frame"""
+        # Set default colors for all
+        for notebook_element in self.testers_frame.notebook_references:
+            notebook_element.configure(fg_color="#1F6AA5")
+
+        print("colors: ", tab_number)
+        # Chnage color of active tab_number button
+        self.testers_frame.notebook_references[tab_number-1].configure(fg_color="green")
 
     def on_closing(self):
         self.output_queue.put('terminate_all')

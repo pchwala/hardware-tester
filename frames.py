@@ -387,6 +387,11 @@ class TestersFrame(ctk.CTkFrame):
                                        command=lambda: master.button_menu_callback(9))
         self.notebook9.grid(row=0, column=9, padx=2, sticky="e")
 
+        # List of references to notebook elements for the function coloring current active element
+        self.notebook_references = [self.notebook1, self.notebook2, self.notebook3, self.notebook4,
+                                    self.notebook5, self.notebook6 ,self.notebook7, self.notebook8,
+                                    self.notebook9]
+
     def rescale(self, font_scale, width, height):
 
         self.notebook1.configure(height=int(30 * height), width=int(70 * width))
