@@ -22,7 +22,7 @@ class App:
          - App ---> GUI        - Start GUI execution
          - GUI ---> App        - What to ask from Threads
          - App ---> Threads    - Ask Threads
-         - App <--- Threads    - Get answerP
+         - App <--- Threads    - Get answer
          - App ---> GUI        - Pass that answer
 
     """

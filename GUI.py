@@ -71,7 +71,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_layout = 6
 
         #self.VERSION = "v3.1.60503"
-        self.VERSION = "snap25w10a"
+        self.VERSION = "snap25w10b"
 
         self.title("Vedion Hardware Tester 3.1")
         # self.geometry('1300x970+1500+0')
@@ -420,8 +420,8 @@ class GUI(customtkinter.CTk, threading.Thread):
     def set_scaling(self):
 
         # For testing purposes
-        self.resx = 1366
-        self.resy = 768
+        #self.resx = 1366
+        #self.resy = 768
 
         geometry = str(self.resx) + "x" + str(self.resy)
         self.geometry(geometry)
