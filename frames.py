@@ -331,7 +331,7 @@ class OutputFrame(ctk.CTkFrame):
 
         self.entry_sn.configure(state="disabled")
         self.entry_manufacturer.configure(state="disabled")
-        self.entry_model.configure(state="disabled")
+        #self.entry_model.configure(state="disabled")
         self.entry_cpu.configure(state="disabled")
         self.entry_hdd1.configure(state="disabled")
         self.entry_hdd2.configure(state="disabled")

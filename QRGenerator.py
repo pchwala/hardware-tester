@@ -42,6 +42,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         sound = self.output.entry_sound.get()
         monitor = self.output.entry_monitor.get()
         notes = self.output.entry_notes.get()
+        model = self.output.entry_model.get()
 
         backlight_segmented = self.monitor.backlight_segmented.get()
         touchscreen_segmented = self.monitor.touchscreen_segmented.get()
@@ -131,7 +132,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.input_data = "\t\t"\
                         + self.output.serial + "\t"\
                         + self.output.manufacturer + "\t"\
-                        + self.output.model + "\t"\
+                        + model + "\t"\
                         + self.output.CPU_model + "\t"\
                         + self.output.RAM_value + "\t"\
                         + self.output.HDD1_value + "\t"\
