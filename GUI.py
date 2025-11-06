@@ -71,11 +71,12 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_layout = 6
 
         #self.VERSION = "v3.1.60503"
-        self.VERSION = "snap25w10b"
+        self.VERSION = "snap25w45a"
 
         self.title("Vedion Hardware Tester 3.1")
-        self.geometry('1920x1080+1500+0') 
-        
+        # self.geometry('1300x970+1500+0')draw_rounded_scrollbar(
+
+        # Fix for KDE Plasma bug with weird widget shapes
         customtkinter.DrawEngine.preferred_drawing_method="polygon_shapes"
 
         # Configure middle row as the one taking all available space
@@ -93,6 +94,13 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Control-c>", self.shortcut_start_stop)
         self.bind("<Control-C>", self.shortcut_start_stop)
         self.bind("<Shift-Return>", self.shortcut_return)
+
+        # Bind keyboard shortcuts for toggling checkboxes
+        self.bind("<Shift-H>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Shift-B>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(4))
 
         # Overwrite default behaviour of TAB button
         self.bind("<Tab>", self.tab_callback)
@@ -371,6 +379,17 @@ class GUI(customtkinter.CTk, threading.Thread):
                 else:
                     current_frame.check_box.select()
                     current_frame.check_box_callback()
+
+    def toggle_checkbox(self, checkbox, event=None):
+        """Toggle the state of a checkbox"""
+        current_frame = self.frame_references[self.tab_number]
+        checkboxes = [current_frame.checkbox_klapa_gorna, current_frame.checkbox_klapa_dolna,
+                      current_frame.checkbox_matryca, current_frame.checkbox_ramka,
+                      current_frame.checkbox_palmrest]
+        if checkboxes[checkbox].get() == 1:
+            checkboxes[checkbox].deselect()
+        else:
+            checkboxes[checkbox].select()
 
     def process_queue(self, data_type):
         """

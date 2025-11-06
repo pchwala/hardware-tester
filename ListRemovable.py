@@ -42,13 +42,11 @@ class ListRemovable(threading.Thread):
                     command = "lsblk | grep disk"
                     all_info = self.exec_and_output(command)
 
-                    disks = re.findall(r'\d+,', all_info)
+                    # Extract disk names and sizes (e.g., "sda 28.7G", "nvme0n1 465.8G")
+                    disks = re.findall(r'(\S+)\s+\d+:\d+\s+\d+\s+(\d+(?:\.\d+)?[KMGT])', all_info)
                     output_info = "Devices:\n\n"
-                    x = 0
-                    for disk in disks:
-                        disks[x] = "-  " + re.sub(r',', " GB Volume", disk) + "\n"
-                        output_info += disks[x] + "\n"
-                        x += 1
+                    for disk_name, disk_size in disks:
+                        output_info += f"-  {disk_name}: {disk_size}B Volume\n\n"
 
                     self.output_queue.put(output_info)
                     time.sleep(0.5)

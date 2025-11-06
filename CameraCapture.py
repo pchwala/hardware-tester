@@ -94,6 +94,10 @@ class CameraCapture(threading.Thread):
                 self.input_queue.put('start')
 
             if 'set_scale' in val:
-                temp = re.findall(r'\d+.\d+', val)
-                self.camera_width_scale = float(temp[0])
-                self.camera_height_scale = float(temp[1])
+                temp = re.findall(r'\d+\.\d+', val)
+                if len(temp) >= 2:
+                    self.camera_width_scale = float(temp[0])
+                    self.camera_height_scale = float(temp[1])
+                else:
+                    print(f"Error: Could not parse scale values from '{val}'")
+                    print(f"Found matches: {temp}")

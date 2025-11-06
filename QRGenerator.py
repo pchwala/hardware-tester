@@ -49,6 +49,12 @@ class QRMainFrame(customtkinter.CTkFrame):
         laptop_class = self.monitor.class_segmented.get()
         polska_segmented = self.monitor.polska_segmented.get()
 
+        klapa_gorna = "tak" if self.monitor.checkbox_klapa_gorna.get() == 1 else "nie"
+        klapa_dolna = "tak" if self.monitor.checkbox_klapa_dolna.get() == 1 else "nie"
+        matryca = "tak" if self.monitor.checkbox_matryca.get() == 1 else "nie"
+        ramka = "tak" if self.monitor.checkbox_ramka.get() == 1 else "nie"
+        palmrest = "tak" if self.monitor.checkbox_palmrest.get() == 1 else "nie"
+
         LAN_switch = "ok"
         if wlan_status is True:
             WLAN_switch = "ok"
@@ -149,6 +155,11 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + sata25_switch + "\t"\
                         + wwan_switch + "\t"\
                         + oryg_switch + "\t"\
+                        + klapa_gorna + "\t"\
+                        + klapa_dolna + "\t"\
+                        + matryca + "\t"\
+                        + ramka + "\t"\
+                        + palmrest + "\t"
 
         qr = qrcode.QRCode(
                 version=1,

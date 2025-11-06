@@ -52,19 +52,19 @@ class MonitorMainFrame(customtkinter.CTkFrame):
 
         # Checkboxes for hardware components
         self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
-        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(0, 10), sticky="w")
+        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(0, 10), sticky="e")
 
         self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna")
-        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 10), sticky="w")
+        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 10), sticky="e")
 
         self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca")
-        self.checkbox_matryca.grid(row=5, column=2, pady=(0, 10), sticky="e")
+        self.checkbox_matryca.grid(row=5, column=2, pady=(0, 20), sticky="e")
 
         self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka")
-        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 10), sticky="e")
+        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 20), sticky="e")
 
         self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest")
-        self.checkbox_palmrest.grid(row=5, column=3, pady=(0, 10), sticky="w")
+        self.checkbox_palmrest.grid(row=5, column=3, pady=(0, 10), sticky="e")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'])
@@ -85,7 +85,6 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.entry_frame.grid(row=10, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
-
 
     def set_segmented(self):
         # Checking if backlight, touchscreen and wwan were detected
