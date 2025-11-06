@@ -26,59 +26,63 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.label1.cget("font").configure(size=20)
         self.label1.grid(row=2, column=2, pady=(0, 20))
 
-        self.label_wwan1 = customtkinter.CTkLabel(self, text="WWAN:")
-        self.label_wwan1.cget("font").configure(size=14)
-        self.label_wwan1.grid(row=9, column=1, pady=(0, 20), sticky="e")
-        self.label_wwan2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
-        self.label_wwan2.cget("font").configure(size=14)
-        self.label_wwan2.grid(row=9, column=2, pady=(0, 20))
-
         self.label_backlight1 = customtkinter.CTkLabel(self, text="Podswietlenie:")
         self.label_backlight1.cget("font").configure(size=14)
-        self.label_backlight1.grid(row=10, column=1, pady=(0, 20), sticky="e")
+        self.label_backlight1.grid(row=3, column=1, pady=(0, 20), sticky="e")
         self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
         self.label_backlight2.cget("font").configure(size=14)
-        self.label_backlight2.grid(row=10, column=2, pady=(0, 20))
+        self.label_backlight2.grid(row=3, column=2, pady=(0, 20))
 
         self.label_touchscreen1 = customtkinter.CTkLabel(self, text="Dotyk:")
         self.label_touchscreen1.cget("font").configure(size=14)
-        self.label_touchscreen1.grid(row=11, column=1, pady=(0, 60), sticky="e")
+        self.label_touchscreen1.grid(row=4, column=1, pady=(0, 60), sticky="e")
         self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
         self.label_touchscreen2.cget("font").configure(size=14)
-        self.label_touchscreen2.grid(row=11, column=2, pady=(0, 60))
-
-        self.wwan_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['WWAN', 'Brak WWAN'])
-        self.wwan_segmented.set('Brak WWAN')
-        self.wwan_segmented.grid(row=9, column=3, pady=(0, 20), sticky="w")
-
+        self.label_touchscreen2.grid(row=4, column=2, pady=(0, 60))
+        
         self.backlight_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['Podswietlenie', 'Brak podswietlenia'])
+        self, values=['Podswietlenie', 'Brak podswietlenia'])
         self.backlight_segmented.set('Brak podswietlenia')
-        self.backlight_segmented.grid(row=10, column=3, pady=(0, 20), sticky="w")
+        self.backlight_segmented.grid(row=3, column=3, pady=(0, 20), sticky="w")
 
         self.touchscreen_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Dotyk', 'Brak dotyku'])
         self.touchscreen_segmented.set('Brak dotyku')
-        self.touchscreen_segmented.grid(row=11, column=3, pady=(0, 60), sticky="w")
+        self.touchscreen_segmented.grid(row=4, column=3, pady=(0, 60), sticky="w")
+
+        # Checkboxes for hardware components
+        self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
+        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(0, 10), sticky="w")
+
+        self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna")
+        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 10), sticky="w")
+
+        self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca")
+        self.checkbox_matryca.grid(row=5, column=2, pady=(0, 10), sticky="e")
+
+        self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka")
+        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 10), sticky="e")
+
+        self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest")
+        self.checkbox_palmrest.grid(row=5, column=3, pady=(0, 10), sticky="w")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'])
         self.class_segmented.set(' ')
-        self.class_segmented.grid(row=12, column=2, pady=(0, 20))
+        self.class_segmented.grid(row=7, column=2, pady=(0, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Zagranica', '2'])
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=13, column=2, pady=(0, 20))
+        self.polska_segmented.grid(row=8, column=2, pady=(0, 20))
 
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
-        self.entry_display.grid(row=14, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=9, column=2, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
-        self.entry_frame.grid(row=15, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=10, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 

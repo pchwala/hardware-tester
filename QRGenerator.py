@@ -46,7 +46,6 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         backlight_segmented = self.monitor.backlight_segmented.get()
         touchscreen_segmented = self.monitor.touchscreen_segmented.get()
-        wwan_segmented = self.monitor.wwan_segmented.get()
         laptop_class = self.monitor.class_segmented.get()
         polska_segmented = self.monitor.polska_segmented.get()
 
@@ -82,12 +81,6 @@ class QRMainFrame(customtkinter.CTkFrame):
             pods_switch = "pods"
         else:
             pods_switch = ""
-
-        if wwan_segmented == "WWAN":
-            wwan_switch = "wwan"
-        else:
-            wwan_switch = ""
-
 
         if camera_checkbox is False:
             camera_switch = "uszk"

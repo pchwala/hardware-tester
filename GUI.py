@@ -74,7 +74,9 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.VERSION = "snap25w10b"
 
         self.title("Vedion Hardware Tester 3.1")
-        # self.geometry('1300x970+1500+0')
+        self.geometry('1920x1080+1500+0') 
+        
+        customtkinter.DrawEngine.preferred_drawing_method="polygon_shapes"
 
         # Configure middle row as the one taking all available space
         # This is the row where main_frame is
