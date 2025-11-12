@@ -23,86 +23,122 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.grid_rowconfigure(2, weight=0)
 
         self.label1 = customtkinter.CTkLabel(self, text="Statusy:")
-        self.label1.cget("font").configure(size=20)
+        self.label1.cget("font").configure(size=40)
         self.label1.grid(row=2, column=2, pady=(0, 20))
 
         self.label_backlight1 = customtkinter.CTkLabel(self, text="Podswietlenie:")
-        self.label_backlight1.cget("font").configure(size=14)
+        self.label_backlight1.cget("font").configure(size=28)
         self.label_backlight1.grid(row=3, column=1, pady=(0, 20), sticky="e")
         self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
-        self.label_backlight2.cget("font").configure(size=14)
+        self.label_backlight2.cget("font").configure(size=28)
         self.label_backlight2.grid(row=3, column=2, pady=(0, 20))
 
         self.label_touchscreen1 = customtkinter.CTkLabel(self, text="Dotyk:")
-        self.label_touchscreen1.cget("font").configure(size=14)
+        self.label_touchscreen1.cget("font").configure(size=28)
         self.label_touchscreen1.grid(row=4, column=1, pady=(0, 60), sticky="e")
         self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
-        self.label_touchscreen2.cget("font").configure(size=14)
+        self.label_touchscreen2.cget("font").configure(size=28)
         self.label_touchscreen2.grid(row=4, column=2, pady=(0, 60))
         
-        self.backlight_segmented = customtkinter.CTkSegmentedButton(
-        self, values=['Podswietlenie', 'Brak podswietlenia'])
-        self.backlight_segmented.set('Brak podswietlenia')
-        self.backlight_segmented.grid(row=3, column=3, pady=(0, 20), sticky="w")
+        # Button states
+        self.backlight_state = False
+        self.touchscreen_state = False
+        
+        # Replace segmented buttons with toggle buttons
+        self.backlight_button = customtkinter.CTkButton(
+            self, text='Brak podswietlenia', 
+            command=self.toggle_backlight,
+            width=600,
+            font=("", 28))
+        self.backlight_button.grid(row=3, column=3, pady=(0, 20), sticky="w")
 
-        self.touchscreen_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['Dotyk', 'Brak dotyku'])
-        self.touchscreen_segmented.set('Brak dotyku')
-        self.touchscreen_segmented.grid(row=4, column=3, pady=(0, 60), sticky="w")
+        self.touchscreen_button = customtkinter.CTkButton(
+            self, text='Brak dotyku',
+            command=self.toggle_touchscreen,
+            width=600,
+            font=("", 28))
+        self.touchscreen_button.grid(row=4, column=3, pady=(0, 60), sticky="w")
 
         # Checkboxes for hardware components
-        self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
-        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(0, 10), sticky="e")
+        self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna", font=("", 28), checkbox_width=60, checkbox_height=60)
+        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(60, 30), sticky="e")
 
-        self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna")
-        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 10), sticky="e")
+        self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna", font=("", 28), checkbox_width=60, checkbox_height=60)
+        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 30), sticky="e")
 
-        self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca")
-        self.checkbox_matryca.grid(row=5, column=2, pady=(0, 20), sticky="e")
+        self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca", font=("", 28), checkbox_width=60, checkbox_height=60)
+        self.checkbox_matryca.grid(row=5, column=2, pady=(60, 30), sticky="e")
 
-        self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka")
-        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 20), sticky="e")
+        self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka", font=("", 28), checkbox_width=60, checkbox_height=60)
+        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 30), sticky="e")
 
-        self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest")
-        self.checkbox_palmrest.grid(row=5, column=3, pady=(0, 10), sticky="e")
+        self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest", font=("", 28), checkbox_width=60, checkbox_height=60)
+        self.checkbox_palmrest.grid(row=5, column=3, pady=(60, 30), sticky="e")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
-            self, values=[' ', 'A', 'A-', 'B', 'C'])
+            self, values=[' ', 'A', 'A-', 'B', 'C'],
+            font=("", 28),
+            height=60,
+            border_width=20)
         self.class_segmented.set(' ')
-        self.class_segmented.grid(row=7, column=2, pady=(0, 20))
+        self.class_segmented.grid(row=7, column=2, pady=(40, 40))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['Zagranica', '2'])
+            self, values=['Zagranica', '2'],
+            font=("", 28),
+            height=60,
+            border_width=20)
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=8, column=2, pady=(0, 20))
+        self.polska_segmented.grid(row=8, column=2, pady=(0, 40))
+
+        self.magazyn_segmented = customtkinter.CTkSegmentedButton(
+            self, values=['M2', 'M5', 'M15', 'M47', 'M18'],
+            font=("", 28),
+            height=60,
+            border_width=20)
+        self.magazyn_segmented.set('M2')
+        self.magazyn_segmented.grid(row=9, column=2, pady=(0, 40))
 
         self.entry_state = 0
 
-        self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=300)
-        self.entry_display.grid(row=9, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=600, font=("", 28))
+        self.entry_display.grid(row=10, column=2, pady=(100, 20), sticky='ns')
 
-        self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=300)
-        self.entry_frame.grid(row=10, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=600, font=("", 28))
+        self.entry_frame.grid(row=11, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 
+    def toggle_backlight(self):
+        """Toggle backlight button state"""
+        self.backlight_state = not self.backlight_state
+        if self.backlight_state:
+            self.backlight_button.configure(text='Podswietlenie', fg_color='green')
+        else:
+            self.backlight_button.configure(text='Brak podswietlenia', fg_color=['#3B8ED0', '#1F6AA5'])
+    
+    def toggle_touchscreen(self):
+        """Toggle touchscreen button state"""
+        self.touchscreen_state = not self.touchscreen_state
+        if self.touchscreen_state:
+            self.touchscreen_button.configure(text='Dotyk', fg_color='green')
+        else:
+            self.touchscreen_button.configure(text='Brak dotyku', fg_color=['#3B8ED0', '#1F6AA5'])
+
     def set_segmented(self):
         # Checking if backlight, touchscreen and wwan were detected
-        # And if so, configuring corresponding labels and switches
+        # And if so, configuring corresponding labels and buttons
         if self.output.kbd_backlight is True:
             self.label_backlight2.configure(text="Wykryto")
             self.label_backlight2.configure(text_color="green")
-            self.backlight_segmented.set('Podswietlenie')
+            self.backlight_state = True
+            self.backlight_button.configure(text='Podswietlenie', fg_color='green')
 
         if self.output.touchscreen is True:
             self.label_touchscreen2.configure(text="Wykryto")
             self.label_touchscreen2.configure(text_color="green")
-            self.touchscreen_segmented.set('Dotyk')
-
-        if self.output.WWAN is True:
-            self.label_wwan2.configure(text="Wykryto")
-            self.label_wwan2.configure(text_color="green")
-            self.wwan_segmented.set('WWAN')
+            self.touchscreen_state = True
+            self.touchscreen_button.configure(text='Dotyk', fg_color='green')
 
 
     def show_fullscreen(self):

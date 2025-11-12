@@ -71,7 +71,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.e_layout = 6
 
         #self.VERSION = "v3.1.60503"
-        self.VERSION = "snap25w45a"
+        self.VERSION = "snap25w45b"
 
         self.title("Vedion Hardware Tester 3.1")
         # self.geometry('1300x970+1500+0')draw_rounded_scrollbar(
@@ -96,11 +96,16 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-Return>", self.shortcut_return)
 
         # Bind keyboard shortcuts for toggling checkboxes
-        self.bind("<Shift-H>", lambda e: self.toggle_checkbox(0))
-        self.bind("<Shift-B>", lambda e: self.toggle_checkbox(1))
-        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(2))
-        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(3))
-        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Shift-j>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Shift-n>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Shift-k>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Shift-M>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Shift-m>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Shift-L>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Shift-l>", lambda e: self.toggle_checkbox(4))
 
         # Overwrite default behaviour of TAB button
         self.bind("<Tab>", self.tab_callback)
@@ -574,6 +579,11 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         self.output_frame.entry_class.delete(0, tkinter.END)
         self.output_frame.entry_class.insert(0, class_str)
+
+        # Fill magazyn entry from magazyn_segmented
+        magazyn_str = self.monitor_main_frame.magazyn_segmented.get()
+        self.output_frame.entry_magazyn.delete(0, tkinter.END)
+        self.output_frame.entry_magazyn.insert(0, magazyn_str)
 
     def fill_entry(self, tester_entry, output_entry, entry_number):
         tester_data = tester_entry.get()

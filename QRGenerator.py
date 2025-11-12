@@ -43,18 +43,21 @@ class QRMainFrame(customtkinter.CTkFrame):
         monitor = self.output.entry_monitor.get()
         notes = self.output.entry_notes.get()
         model = self.output.entry_model.get()
+        magazyn = self.output.entry_magazyn.get()
+        nrzwrotu = self.output.entry_nrzwrotu.get()
 
-        backlight_segmented = self.monitor.backlight_segmented.get()
-        touchscreen_segmented = self.monitor.touchscreen_segmented.get()
+        # Get button states instead of segmented button values
+        backlight_state = self.monitor.backlight_state
+        touchscreen_state = self.monitor.touchscreen_state
         laptop_class = self.monitor.class_segmented.get()
+        if laptop_class == ' ': laptop_class = 'A-'
         polska_segmented = self.monitor.polska_segmented.get()
 
-        klapa_gorna = "tak" if self.monitor.checkbox_klapa_gorna.get() == 1 else "nie"
-        klapa_dolna = "tak" if self.monitor.checkbox_klapa_dolna.get() == 1 else "nie"
-        matryca = "tak" if self.monitor.checkbox_matryca.get() == 1 else "nie"
-        ramka = "tak" if self.monitor.checkbox_ramka.get() == 1 else "nie"
-        palmrest = "tak" if self.monitor.checkbox_palmrest.get() == 1 else "nie"
-
+        klapa_gorna = "x" if self.monitor.checkbox_klapa_gorna.get() == 1 else ""
+        klapa_dolna = "x" if self.monitor.checkbox_klapa_dolna.get() == 1 else ""
+        matryca = "x" if self.monitor.checkbox_matryca.get() == 1 else ""
+        ramka = "x" if self.monitor.checkbox_ramka.get() == 1 else ""
+        palmrest = "x" if self.monitor.checkbox_palmrest.get() == 1 else ""
         LAN_switch = "ok"
         if wlan_status is True:
             WLAN_switch = "ok"
@@ -65,7 +68,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         m2_switch = ""
         sata25_switch = ""
         wwan_switch = ""
-        oryg_switch = "?"
+        oryg_switch = ""
         polska_switch = ""
 
         if re.search(r'2\.5', self.output.HDD1_value) is not None:
@@ -78,12 +81,12 @@ class QRMainFrame(customtkinter.CTkFrame):
             if sata25_switch == "":
                 m2_switch = "tak"
 
-        if touchscreen_segmented == "Dotyk":
+        if touchscreen_state:
             touchscreen = " Dotyk"
         else:
             touchscreen = ""
 
-        if backlight_segmented == "Podswietlenie":
+        if backlight_state:
             pods_switch = "pods"
         else:
             pods_switch = ""
@@ -102,7 +105,7 @@ class QRMainFrame(customtkinter.CTkFrame):
             polska_switch = "2"
         else:
             if laptop_class == "A":
-                polska_switch = "ZAGRANICA"
+                polska_switch = "ZAG"
 
         self.compiled_notes = ""
 
@@ -148,7 +151,9 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + polska_switch + "\t"\
                         + self.output.license + "\t"\
                         + laptop_class + "\t"\
-                        + self.compiled_notes + "\t\t\t\t\t\t\t\t\t"\
+                        + self.compiled_notes + "\t"\
+                        + nrzwrotu + "\t\t"\
+                        + magazyn + "\t\t\t\t\t\t\t"\
                         + ant_switch + "\t"\
                         + pods_switch + "\t"\
                         + m2_switch + "\t"\
