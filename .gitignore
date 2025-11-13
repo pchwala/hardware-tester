@@ -7,8 +7,7 @@
 qrcode.png
 test-mic.wav
 
-# Ignore all .txt and data files
-*.txt
+# Ignore all data files
 *.dat
 
 # Ignore all script-files
