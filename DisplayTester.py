@@ -23,22 +23,8 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.grid_rowconfigure(2, weight=0)
 
         self.label1 = customtkinter.CTkLabel(self, text="Statusy:")
-        self.label1.cget("font").configure(size=40)
+        self.label1.cget("font").configure(size=20)
         self.label1.grid(row=2, column=2, pady=(0, 20))
-
-        self.label_backlight1 = customtkinter.CTkLabel(self, text="Podswietlenie:")
-        self.label_backlight1.cget("font").configure(size=28)
-        self.label_backlight1.grid(row=3, column=1, pady=(0, 20), sticky="e")
-        self.label_backlight2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
-        self.label_backlight2.cget("font").configure(size=28)
-        self.label_backlight2.grid(row=3, column=2, pady=(0, 20))
-
-        self.label_touchscreen1 = customtkinter.CTkLabel(self, text="Dotyk:")
-        self.label_touchscreen1.cget("font").configure(size=28)
-        self.label_touchscreen1.grid(row=4, column=1, pady=(0, 60), sticky="e")
-        self.label_touchscreen2 = customtkinter.CTkLabel(self, text="Nie wykryto", text_color="red")
-        self.label_touchscreen2.cget("font").configure(size=28)
-        self.label_touchscreen2.grid(row=4, column=2, pady=(0, 60))
         
         # Button states
         self.backlight_state = False
@@ -48,64 +34,56 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.backlight_button = customtkinter.CTkButton(
             self, text='Brak podswietlenia', 
             command=self.toggle_backlight,
-            width=600,
-            font=("", 28))
-        self.backlight_button.grid(row=3, column=3, pady=(0, 20), sticky="w")
+            height=60)
+        self.backlight_button.grid(row=3, column=1, pady=(0, 20), sticky="w")
 
         self.touchscreen_button = customtkinter.CTkButton(
             self, text='Brak dotyku',
             command=self.toggle_touchscreen,
-            width=600,
-            font=("", 28))
-        self.touchscreen_button.grid(row=4, column=3, pady=(0, 60), sticky="w")
+            height=60)
+        self.touchscreen_button.grid(row=3, column=3, pady=(0, 20), sticky="e")
 
         # Checkboxes for hardware components
-        self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna", font=("", 28), checkbox_width=60, checkbox_height=60)
-        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(60, 30), sticky="e")
+        self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
+        self.checkbox_klapa_gorna.grid(row=4, column=1, pady=(60, 30), sticky="e")
 
-        self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna", font=("", 28), checkbox_width=60, checkbox_height=60)
-        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 30), sticky="e")
+        self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna")
+        self.checkbox_klapa_dolna.grid(row=5, column=1, pady=(0, 30), sticky="e")
 
-        self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca", font=("", 28), checkbox_width=60, checkbox_height=60)
-        self.checkbox_matryca.grid(row=5, column=2, pady=(60, 30), sticky="e")
+        self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca")
+        self.checkbox_matryca.grid(row=4, column=2, pady=(60, 30), sticky="e")
 
-        self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka", font=("", 28), checkbox_width=60, checkbox_height=60)
-        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 30), sticky="e")
+        self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka")
+        self.checkbox_ramka.grid(row=5, column=2, pady=(0, 30), sticky="e")
 
-        self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest", font=("", 28), checkbox_width=60, checkbox_height=60)
-        self.checkbox_palmrest.grid(row=5, column=3, pady=(60, 30), sticky="e")
+        self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest", )
+        self.checkbox_palmrest.grid(row=4, column=3, pady=(60, 30), sticky="e")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'],
-            font=("", 28),
-            height=60,
-            border_width=20)
+            border_width=6)
         self.class_segmented.set(' ')
-        self.class_segmented.grid(row=7, column=2, pady=(40, 40))
+        self.class_segmented.grid(row=6, column=2, pady=(40, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Zagranica', '2'],
-            font=("", 28),
-            height=60,
-            border_width=20)
+            border_width=6)
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=8, column=2, pady=(0, 40))
+        self.polska_segmented.grid(row=7, column=2, pady=(0, 20))
 
         self.magazyn_segmented = customtkinter.CTkSegmentedButton(
             self, values=['M2', 'M5', 'M15', 'M47', 'M18'],
-            font=("", 28),
-            height=60,
-            border_width=20)
+            border_width=6)
         self.magazyn_segmented.set('M2')
-        self.magazyn_segmented.grid(row=9, column=2, pady=(0, 40))
+        self.magazyn_segmented.grid(row=8, column=2, pady=(0, 20))
 
         self.entry_state = 0
 
-        self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy", width=600, font=("", 28))
-        self.entry_display.grid(row=10, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy")
+        self.entry_display.grid(row=9, column=2, pady=(100, 20), sticky='ns')
 
-        self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady", width=600, font=("", 28))
-        self.entry_frame.grid(row=11, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady")
+        self.entry_frame.grid(row=10, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 
