@@ -150,6 +150,10 @@ class Fullscreen(customtkinter.CTkToplevel):
         self.title('Toplevel Window')
         self.attributes('-fullscreen', True)
 
+        # Create canvas for drawing touch lines
+        self.canvas = tkinter.Canvas(self, highlightthickness=0)
+        self.canvas.pack(fill='both', expand=True)
+
         # Specially for Martin
         # self.label = customtkinter.CTkLabel(self, text="Pamiętaj o przyciskach touchpada xD")
         # self.label.cget("font").configure(size=10)
@@ -157,15 +161,82 @@ class Fullscreen(customtkinter.CTkToplevel):
 
         self.bind("<Key>", self.key_callback)
         self.bind("<Button>", self.button_callback)
+        
+        # Bind touch/mouse motion events for drawing
+        self.canvas.bind("<B1-Motion>", self.draw_line)
+        self.canvas.bind("<ButtonPress-1>", self.start_draw)
 
         self.colors = ['#fff', '#000', '#f00', '#0f0', '#00f']
         self.current_color = 0
+        
+        # Track drawing state
+        self.last_x = None
+        self.last_y = None
+        self.line_items = []  # Store (canvas_id, timestamp) tuples
 
         self.change_color(self.colors[self.current_color])
+        
+        # Start fade-out timer
+        self.fade_lines()
 
 
     def change_color(self, color):
-        self.configure(fg_color=color)
+        self.canvas.configure(bg=color)
+
+    def start_draw(self, event):
+        """Initialize drawing position"""
+        self.last_x = event.x
+        self.last_y = event.y
+
+    def draw_line(self, event):
+        """Draw line from last position to current position"""
+        if self.last_x is not None and self.last_y is not None:
+            # Determine line color based on background
+            # Use inverted color for visibility
+            if self.current_color == 0:  # white background
+                line_color = '#000'
+            elif self.current_color == 1:  # black background
+                line_color = '#fff'
+            else:  # colored backgrounds
+                line_color = '#fff'
+            
+            # Draw line
+            line_id = self.canvas.create_line(
+                self.last_x, self.last_y, event.x, event.y,
+                fill=line_color, width=3, capstyle=tkinter.ROUND, smooth=True
+            )
+            
+            # Store line with current time
+            import time
+            self.line_items.append((line_id, time.time()))
+        
+        self.last_x = event.x
+        self.last_y = event.y
+
+    def fade_lines(self):
+        """Remove lines older than 1 second"""
+        import time
+        current_time = time.time()
+        
+        # Remove old lines
+        self.line_items = [(line_id, timestamp) 
+                          for line_id, timestamp in self.line_items
+                          if current_time - timestamp <= 1.0]
+        
+        # Delete lines from canvas that are no longer tracked
+        all_canvas_items = set(self.canvas.find_all())
+        tracked_items = {line_id for line_id, _ in self.line_items}
+        
+        for item in all_canvas_items:
+            if item not in tracked_items:
+                try:
+                    self.canvas.delete(item)
+                except:
+                    pass
+        
+        # Schedule next check
+        self.after(100, self.fade_lines)
+
 
     def key_callback(self, event):
         print("FULLSCREEN key pressed: ", event.keysym)
