@@ -179,8 +179,4 @@ class App:
                 pass
 # # # MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END   MAIN LOOP END
 
-
-# Subprocess reading all the hardware info
-result = subprocess.run("./python-sudo.sh hwinfo.py", shell=True)
-
 App = App()
