@@ -104,17 +104,13 @@ class MonitorMainFrame(customtkinter.CTkFrame):
             self.touchscreen_button.configure(text='Brak dotyku', fg_color=['#3B8ED0', '#1F6AA5'])
 
     def set_segmented(self):
-        # Checking if backlight, touchscreen and wwan were detected
-        # And if so, configuring corresponding labels and buttons
+        # Checking if backlight and touchscreen were detected
+        # And if so, configuring corresponding buttons
         if self.output.kbd_backlight is True:
-            self.label_backlight2.configure(text="Wykryto")
-            self.label_backlight2.configure(text_color="green")
             self.backlight_state = True
             self.backlight_button.configure(text='Podswietlenie', fg_color='green')
 
         if self.output.touchscreen is True:
-            self.label_touchscreen2.configure(text="Wykryto")
-            self.label_touchscreen2.configure(text_color="green")
             self.touchscreen_state = True
             self.touchscreen_button.configure(text='Dotyk', fg_color='green')
 
