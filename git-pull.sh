@@ -1,7 +1,4 @@
-cd /home/serwis/hardware-tester
-git status
-git switch feature
+#!/bin/bash
+git checkout feature
 git pull
-cp displays.xml /home/serwis/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
-sudo ./hardware-tester.sh
-read -n1 -r -p "Press any key..."
+sudo /home/vedion/hardware-tester/hardware-tester.sh
