@@ -96,16 +96,18 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-Return>", self.shortcut_return)
 
         # Bind keyboard shortcuts for toggling checkboxes
-        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(0))
-        self.bind("<Shift-j>", lambda e: self.toggle_checkbox(0))
-        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(1))
-        self.bind("<Shift-n>", lambda e: self.toggle_checkbox(1))
-        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(2))
-        self.bind("<Shift-k>", lambda e: self.toggle_checkbox(2))
-        self.bind("<Shift-M>", lambda e: self.toggle_checkbox(3))
-        self.bind("<Shift-m>", lambda e: self.toggle_checkbox(3))
-        self.bind("<Shift-L>", lambda e: self.toggle_checkbox(4))
-        self.bind("<Shift-l>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Shift-H>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Shift-h>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Shift-B>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Shift-b>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Shift-j>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Shift-n>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Shift-k>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Shift-M>", lambda e: self.toggle_checkbox(5))
+        self.bind("<Shift-m>", lambda e: self.toggle_checkbox(5))
 
         # Overwrite default behaviour of TAB button
         self.bind("<Tab>", self.tab_callback)
@@ -390,7 +392,7 @@ class GUI(customtkinter.CTk, threading.Thread):
         current_frame = self.frame_references[self.tab_number]
         checkboxes = [current_frame.checkbox_klapa_gorna, current_frame.checkbox_klapa_dolna,
                       current_frame.checkbox_matryca, current_frame.checkbox_ramka,
-                      current_frame.checkbox_palmrest]
+                      current_frame.checkbox_palmrest, current_frame.checkbox_touchpad]
         if checkboxes[checkbox].get() == 1:
             checkboxes[checkbox].deselect()
         else:

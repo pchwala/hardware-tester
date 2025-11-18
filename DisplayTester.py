@@ -59,6 +59,9 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest", )
         self.checkbox_palmrest.grid(row=4, column=3, pady=(60, 30), sticky="e")
 
+        self.checkbox_touchpad = customtkinter.CTkCheckBox(self, text="Touchpad", )
+        self.checkbox_touchpad.grid(row=5, column=3, pady=(0, 30), sticky="e")
+
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'],
             border_width=6)

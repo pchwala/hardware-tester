@@ -53,11 +53,12 @@ class QRMainFrame(customtkinter.CTkFrame):
         if laptop_class == ' ': laptop_class = 'A-'
         polska_segmented = self.monitor.polska_segmented.get()
 
-        klapa_gorna = "x" if self.monitor.checkbox_klapa_gorna.get() == 1 else ""
-        klapa_dolna = "x" if self.monitor.checkbox_klapa_dolna.get() == 1 else ""
-        matryca = "x" if self.monitor.checkbox_matryca.get() == 1 else ""
-        ramka = "x" if self.monitor.checkbox_ramka.get() == 1 else ""
-        palmrest = "x" if self.monitor.checkbox_palmrest.get() == 1 else ""
+        klapa_gorna = "X" if self.monitor.checkbox_klapa_gorna.get() == 1 else ""
+        klapa_dolna = "X" if self.monitor.checkbox_klapa_dolna.get() == 1 else ""
+        matryca = "X" if self.monitor.checkbox_matryca.get() == 1 else ""
+        ramka = "X" if self.monitor.checkbox_ramka.get() == 1 else ""
+        palmrest = "X" if self.monitor.checkbox_palmrest.get() == 1 else ""
+        touchpad_odnowienie = "X" if self.monitor.checkbox_touchpad.get() == 1 else ""
         LAN_switch = "ok"
         if wlan_status is True:
             WLAN_switch = "ok"
@@ -161,10 +162,11 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + wwan_switch + "\t"\
                         + oryg_switch + "\t"\
                         + klapa_gorna + "\t"\
+                        + palmrest + "\t"\
                         + klapa_dolna + "\t"\
-                        + matryca + "\t"\
                         + ramka + "\t"\
-                        + palmrest + "\t"
+                        + touchpad_odnowienie + "\t\t"\
+                        + matryca
 
         qr = qrcode.QRCode(
                 version=1,
