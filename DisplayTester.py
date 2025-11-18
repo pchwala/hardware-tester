@@ -72,7 +72,7 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.polska_segmented.grid(row=7, column=2, pady=(0, 20))
 
         self.magazyn_segmented = customtkinter.CTkSegmentedButton(
-            self, values=['M2', 'M5', 'M15', 'M47', 'M18'],
+            self, values=['M2', 'M9', 'M5', 'M15', 'M47', 'M18'],
             border_width=6)
         self.magazyn_segmented.set('M2')
         self.magazyn_segmented.grid(row=8, column=2, pady=(0, 20))
