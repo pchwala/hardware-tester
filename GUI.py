@@ -183,7 +183,6 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Read all hardware info and then put it in the output frame for display
         self.output_frame.read_hardware_info()
         self.output_frame.fill_hardware_info()
-        self.monitor_main_frame.set_segmented()
 
         # Extract X and Y resolution from 'NUMBERxNUMBER' format
         (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
