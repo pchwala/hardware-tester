@@ -29,19 +29,12 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         # Button states
         self.backlight_state = False
         self.touchscreen_state = False
-        
-        # Replace segmented buttons with toggle buttons
-        self.backlight_button = customtkinter.CTkButton(
-            self, text='Brak podswietlenia', 
-            command=self.toggle_backlight,
-            height=60)
-        self.backlight_button.grid(row=3, column=1, pady=(0, 20), sticky="w")
 
         self.touchscreen_button = customtkinter.CTkButton(
             self, text='Brak dotyku',
             command=self.toggle_touchscreen,
-            height=60)
-        self.touchscreen_button.grid(row=3, column=3, pady=(0, 20), sticky="e")
+            height=100)
+        self.touchscreen_button.grid(row=3, column=1, columnspan=2, pady=(0, 20), sticky="e")
 
         # Checkboxes for hardware components
         self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
@@ -102,18 +95,6 @@ class MonitorMainFrame(customtkinter.CTkFrame):
             self.touchscreen_button.configure(text='Dotyk', fg_color='green')
         else:
             self.touchscreen_button.configure(text='Brak dotyku', fg_color=['#3B8ED0', '#1F6AA5'])
-
-    def set_segmented(self):
-        # Checking if backlight and touchscreen were detected
-        # And if so, configuring corresponding buttons
-        if self.output.kbd_backlight is True:
-            self.backlight_state = True
-            self.backlight_button.configure(text='Podswietlenie', fg_color='green')
-
-        if self.output.touchscreen is True:
-            self.touchscreen_state = True
-            self.touchscreen_button.configure(text='Dotyk', fg_color='green')
-
 
     def show_fullscreen(self):
         self.fullscreen = Fullscreen(self)
