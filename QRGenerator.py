@@ -154,12 +154,7 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + self.compiled_notes + "\t"\
                         + nrzwrotu + "\t\t"\
                         + magazyn + "\t\t\t\t\t\t"\
-                        + ant_switch + "\t"\
-                        + pods_switch + "\t"\
-                        + m2_switch + "\t"\
-                        + sata25_switch + "\t"\
-                        + wwan_switch + "\t"\
-                        + oryg_switch + "\t"\
+                        + ant_switch + "\t\t\t\t\t\t"\
                         + klapa_gorna + "\t"\
                         + klapa_dolna + "\t"\
                         + matryca + "\t"\

@@ -33,8 +33,10 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.touchscreen_button = customtkinter.CTkButton(
             self, text='Brak dotyku',
             command=self.toggle_touchscreen,
-            height=100)
-        self.touchscreen_button.grid(row=3, column=1, columnspan=2, pady=(0, 20), sticky="e")
+            height=100,
+            hover=False,
+            font=("", 28))
+        self.touchscreen_button.grid(row=3, column=1, columnspan=3, pady=(0, 20), sticky="ew")
 
         # Checkboxes for hardware components
         self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
