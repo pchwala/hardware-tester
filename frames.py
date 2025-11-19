@@ -86,15 +86,18 @@ class OutputFrame(ctk.CTkFrame):
 
         self.label_nrzwrotu = ctk.CTkLabel(self, text="Nr zwrotu: ")
         self.label_nrzwrotu.grid(row=18, column=0, padx=10, pady=2, sticky="ns")
+        
+        self.label_id = ctk.CTkLabel(self, text="Numer ID: ")
+        self.label_id.grid(row=19, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_magazyn = ctk.CTkLabel(self, text="Magazyn: ")
-        self.label_magazyn.grid(row=19, column=0, padx=10, pady=2, sticky="ns")
+        self.label_magazyn.grid(row=20, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_class = ctk.CTkLabel(self, text="Klasa: ")
-        self.label_class.grid(row=20, column=0, padx=10, pady=2, sticky="ns")
+        self.label_class.grid(row=21, column=0, padx=10, pady=2, sticky="ns")
 
         self.label_notes = ctk.CTkLabel(self, text="Uwagi: ")
-        self.label_notes.grid(row=21, column=0, padx=10, pady=2, sticky="ns")
+        self.label_notes.grid(row=22, column=0, padx=10, pady=2, sticky="ns")
         
         
         self.entry_sn = ctk.CTkEntry(self, width=400)
@@ -154,14 +157,17 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_nrzwrotu = ctk.CTkEntry(self, width=400)
         self.entry_nrzwrotu.grid(row=18, column=1, padx=(0, 10))
 
+        self.entry_id = ctk.CTkEntry(self, width=400)
+        self.entry_id.grid(row=19, column=1, padx=(0, 10))
+
         self.entry_magazyn = ctk.CTkEntry(self, width=400)
-        self.entry_magazyn.grid(row=19, column=1, padx=(0, 10))
+        self.entry_magazyn.grid(row=20, column=1, padx=(0, 10))
 
         self.entry_class = ctk.CTkEntry(self, width=400)
-        self.entry_class.grid(row=20, column=1, padx=(0, 10))
+        self.entry_class.grid(row=21, column=1, padx=(0, 10))
 
         self.entry_notes = ctk.CTkEntry(self, width=400)
-        self.entry_notes.grid(row=21, column=1, padx=(0, 10))
+        self.entry_notes.grid(row=22, column=1, padx=(0, 10))
 
     def rescale(self, font_scale, width, height):
 
@@ -231,6 +237,9 @@ class OutputFrame(ctk.CTkFrame):
         self.label_nrzwrotu.configure(height=int(30*height))
         self.label_nrzwrotu.cget("font").configure(size=font_scale)
 
+        self.label_id.configure(height=int(30*height))
+        self.label_id.cget("font").configure(size=font_scale)
+
         self.entry_sn.configure(height=int(30*height), width=int(400*width))
         self.entry_sn.cget("font").configure(size=font_scale)
 
@@ -296,6 +305,9 @@ class OutputFrame(ctk.CTkFrame):
 
         self.entry_nrzwrotu.configure(height=int(30*height), width=int(400*width))
         self.entry_nrzwrotu.cget("font").configure(size=font_scale)
+
+        self.entry_id.configure(height=int(30*height), width=int(400*width))
+        self.entry_id.cget("font").configure(size=font_scale)
 
     def read_hardware_info(self):
         """
