@@ -45,6 +45,7 @@ class QRMainFrame(customtkinter.CTkFrame):
         model = self.output.entry_model.get()
         magazyn = self.output.entry_magazyn.get()
         nrzwrotu = self.output.entry_nrzwrotu.get()
+        nrid = self.output.entry_id.get()
 
         # Get button states instead of segmented button values
         backlight_state = self.monitor.backlight_state
@@ -154,13 +155,9 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + laptop_class + "\t"\
                         + self.compiled_notes + "\t"\
                         + nrzwrotu + "\t\t"\
-                        + magazyn + "\t\t\t\t\t\t"\
-                        + ant_switch + "\t"\
-                        + pods_switch + "\t"\
-                        + m2_switch + "\t"\
-                        + sata25_switch + "\t"\
-                        + wwan_switch + "\t"\
-                        + oryg_switch + "\t"\
+                        + magazyn + "\t"\
+                        + nrid + "\t\t\t\t\t"\
+                        + ant_switch + "\t\t\t\t\t\t"\
                         + klapa_gorna + "\t"\
                         + palmrest + "\t"\
                         + klapa_dolna + "\t"\

@@ -96,18 +96,18 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.bind("<Shift-Return>", self.shortcut_return)
 
         # Bind keyboard shortcuts for toggling checkboxes
-        self.bind("<Shift-H>", lambda e: self.toggle_checkbox(0))
-        self.bind("<Shift-h>", lambda e: self.toggle_checkbox(0))
-        self.bind("<Shift-B>", lambda e: self.toggle_checkbox(1))
-        self.bind("<Shift-b>", lambda e: self.toggle_checkbox(1))
-        self.bind("<Shift-J>", lambda e: self.toggle_checkbox(2))
-        self.bind("<Shift-j>", lambda e: self.toggle_checkbox(2))
-        self.bind("<Shift-N>", lambda e: self.toggle_checkbox(3))
-        self.bind("<Shift-n>", lambda e: self.toggle_checkbox(3))
-        self.bind("<Shift-K>", lambda e: self.toggle_checkbox(4))
-        self.bind("<Shift-k>", lambda e: self.toggle_checkbox(4))
-        self.bind("<Shift-M>", lambda e: self.toggle_checkbox(5))
-        self.bind("<Shift-m>", lambda e: self.toggle_checkbox(5))
+        self.bind("<Control-H>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Control-h>", lambda e: self.toggle_checkbox(0))
+        self.bind("<Control-B>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Control-b>", lambda e: self.toggle_checkbox(1))
+        self.bind("<Control-J>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Control-j>", lambda e: self.toggle_checkbox(2))
+        self.bind("<Control-N>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Control-n>", lambda e: self.toggle_checkbox(3))
+        self.bind("<Control-K>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Control-k>", lambda e: self.toggle_checkbox(4))
+        self.bind("<Control-M>", lambda e: self.toggle_checkbox(5))
+        self.bind("<Control-m>", lambda e: self.toggle_checkbox(5))
 
         # Overwrite default behaviour of TAB button
         self.bind("<Tab>", self.tab_callback)
@@ -183,7 +183,6 @@ class GUI(customtkinter.CTk, threading.Thread):
         # Read all hardware info and then put it in the output frame for display
         self.output_frame.read_hardware_info()
         self.output_frame.fill_hardware_info()
-        self.monitor_main_frame.set_segmented()
 
         # Extract X and Y resolution from 'NUMBERxNUMBER' format
         (self.resx, self.resy) = re.findall(r'\d+', self.output_frame.resolution)
