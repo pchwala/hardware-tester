@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import subprocess
 
 
 #   LEFT SIDE frame containing all the data gathered during tests
@@ -29,6 +30,13 @@ class OutputFrame(ctk.CTkFrame):
         self.kbd_backlight = False
         self.touchscreen = False
         self.WWAN = False
+
+        # Stress test state
+        self.stress_test_active = False
+        self.stress_process = None
+        
+        # Sensor update job ID
+        self.sensor_update_job = None
 
         self.label_sn = ctk.CTkLabel(self, text="Serial Number: ")
         self.label_sn.grid(row=0, column=0, padx=10, pady=2, sticky="ns")
@@ -168,6 +176,20 @@ class OutputFrame(ctk.CTkFrame):
 
         self.entry_notes = ctk.CTkEntry(self, width=400)
         self.entry_notes.grid(row=22, column=1, padx=(0, 10))
+
+        # Stress test button (column 0)
+        self.button_stress_test = ctk.CTkButton(self, text="Stress", 
+                                                command=self.toggle_stress_test,
+                                                width=20)
+        self.button_stress_test.grid(row=23, column=0, padx=10, pady=20, sticky="ew")
+        
+        # Sensor info display (column 1)
+        self.label_sensors = ctk.CTkLabel(self, text="CPU Temp: --°C\nCPU Fan: -- RPM",
+                                         justify="left", anchor="w")
+        self.label_sensors.grid(row=23, column=1, padx=(0, 10), pady=20, sticky="ew")
+        
+        # Start sensor updates
+        self.update_sensors()
 
     def rescale(self, font_scale, width, height):
 
@@ -309,6 +331,12 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_id.configure(height=int(30*height), width=int(400*width))
         self.entry_id.cget("font").configure(size=font_scale)
 
+        self.button_stress_test.configure(height=int(40*height))
+        self.button_stress_test.cget("font").configure(size=font_scale)
+        
+        self.label_sensors.configure(height=int(40*height))
+        self.label_sensors.cget("font").configure(size=font_scale)
+
     def read_hardware_info(self):
         """
         Reads hardware info previously written into 'hwinfo.dat' file by 'hwinfo.py' subprocess
@@ -378,6 +406,180 @@ class OutputFrame(ctk.CTkFrame):
         self.entry_resolution.configure(state="disabled")
         self.entry_display.configure(state="disabled")
         self.entry_license.configure(state="disabled")
+
+    def toggle_stress_test(self):
+        """
+        Toggles stress test on/off using stress-ng command-line tool
+        """
+        if self.stress_test_active:
+            # Stop stress test
+            self.stop_stress_test()
+        else:
+            # Start stress test
+            self.start_stress_test()
+
+    def start_stress_test(self):
+        """
+        Start non-blocking stress test using stress-ng or stress command
+        """
+        try:
+            # Try stress-ng first (more advanced)
+            # --cpu 0 means use all CPU cores
+            # --timeout 0 means run indefinitely until stopped
+            self.stress_process = subprocess.Popen(
+                ['stress-ng', '--cpu', '0', '--timeout', '0'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            self.stress_test_active = True
+            self.button_stress_test.configure(text="Stress", 
+                                             fg_color="green")  # secondary color
+            print("Stress test started with stress-ng")
+        except FileNotFoundError:
+            try:
+                # Fallback to stress command
+                # -c means CPU workers
+                self.stress_process = subprocess.Popen(
+                    ['stress', '-c', '$(nproc)'],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    shell=True
+                )
+                self.stress_test_active = True
+                self.button_stress_test.configure(text="Stress",
+                                                 fg_color="green")  # secondary color
+                print("Stress test started with stress")
+            except Exception as e:
+                print(f"Error starting stress test: {e}")
+                # Fallback to Python-based stress test
+                self.start_python_stress_test()
+
+    def start_python_stress_test(self):
+        """
+        Fallback Python-based stress test using multiprocessing
+        """
+        import multiprocessing
+        import os
+        
+        def cpu_stress():
+            """CPU intensive task"""
+            while True:
+                _ = sum([i**2 for i in range(10000)])
+        
+        try:
+            # Start one process per CPU core
+            num_cores = os.cpu_count() or 4
+            processes = []
+            for _ in range(num_cores):
+                p = multiprocessing.Process(target=cpu_stress)
+                p.start()
+                processes.append(p)
+            
+            # Store processes for later cleanup
+            self.stress_process = processes
+            self.stress_test_active = True
+            self.button_stress_test.configure(text="Stress",
+                                             fg_color="green")  # secondary color
+            print(f"Python stress test started with {num_cores} processes")
+        except Exception as e:
+            print(f"Error starting Python stress test: {e}")
+
+    def stop_stress_test(self):
+        """
+        Stop the running stress test
+        """
+        if self.stress_process:
+            try:
+                if isinstance(self.stress_process, subprocess.Popen):
+                    # Terminate subprocess
+                    self.stress_process.terminate()
+                    self.stress_process.wait(timeout=2)
+                else:
+                    # Terminate multiprocessing processes
+                    for p in self.stress_process:
+                        p.terminate()
+                        p.join(timeout=1)
+                        if p.is_alive():
+                            p.kill()
+                print("Stress test stopped")
+            except Exception as e:
+                print(f"Error stopping stress test: {e}")
+            finally:
+                self.stress_process = None
+                self.stress_test_active = False
+                self.button_stress_test.configure(text="Stress",
+                                                 fg_color=['#3B8ED0', '#1F6AA5'])  # primary color
+        else:
+            self.stress_test_active = False
+            self.button_stress_test.configure(text="Stress",
+                                             fg_color=("#3B8ED0", "#1F6AA5"))  # primary color
+    
+    def update_sensors(self):
+        """
+        Update sensor information from lm_sensors (refresh 2 times per second)
+        """
+        cpu_temp = "--"
+        fan_rpm = "--"
+        
+        try:
+            # Run sensors command
+            result = subprocess.run(['sensors'], 
+                                  capture_output=True, 
+                                  text=True, 
+                                  timeout=1)
+            
+            if result.returncode == 0:
+                output = result.stdout
+                
+                # Parse CPU temperature (look for common patterns)
+                for line in output.split('\n'):
+                    # Common patterns: "Core 0:", "Package id 0:"
+                    if any(keyword in line for keyword in ['Core 0:', 'Package id 0:']):
+                        if '°C' in line or 'C' in line:
+                            # Extract temperature value
+                            temp_match = line.split('+')[1].split('°')[0].strip() if '+' in line else None
+                            if temp_match:
+                                cpu_temp = temp_match
+                                break
+                
+                # Parse fan RPM
+                for line in output.split('\n'):
+                    if 'fan' in line.lower() and 'RPM' in line:
+                        # Extract RPM value
+                        parts = line.split(':')
+                        if len(parts) > 1:
+                            rpm_str = parts[1].strip().split()[0]
+                            if rpm_str.isdigit():
+                                fan_rpm = rpm_str
+                                break
+        
+        except (subprocess.TimeoutExpired, FileNotFoundError, Exception) as e:
+            # If sensors command fails, try alternative methods
+            try:
+                # Try reading from /sys/class/thermal
+                with open('/sys/class/thermal/thermal_zone0/temp', 'r') as f:
+                    temp_milli = int(f.read().strip())
+                    cpu_temp = f"{temp_milli / 1000:.1f}"
+            except:
+                pass
+            
+            try:
+                # Try reading fan from /sys/class/hwmon
+                import os
+                for hwmon in os.listdir('/sys/class/hwmon/'):
+                    fan_input = f'/sys/class/hwmon/{hwmon}/fan1_input'
+                    if os.path.exists(fan_input):
+                        with open(fan_input, 'r') as f:
+                            fan_rpm = f.read().strip()
+                            break
+            except:
+                pass
+        
+        # Update label
+        self.label_sensors.configure(text=f"CPU Temp: {cpu_temp}°C\nCPU Fan: {fan_rpm} RPM")
+        
+        # Schedule next update (500ms = 2 times per second)
+        self.sensor_update_job = self.after(500, self.update_sensors)
 
 
 class TestersFrame(ctk.CTkFrame):

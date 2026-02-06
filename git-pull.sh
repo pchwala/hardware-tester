@@ -1,6 +1,6 @@
 #!/bin/bash
 source .venv/bin/activate
-git checkout feature
+git checkout stress
 git pull
 
 # Set executable permissions for shell scripts

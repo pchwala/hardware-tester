@@ -75,13 +75,16 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.magazyn_segmented.set('M2')
         self.magazyn_segmented.grid(row=8, column=2, pady=(0, 20))
 
+        self.checkbox_2in1 = customtkinter.CTkCheckBox(self, text="Laptop 2in1", command=self.toggle_2in1)
+        self.checkbox_2in1.grid(row=9, column=2, pady=(0, 20))
+
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy")
-        self.entry_display.grid(row=9, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=10, column=2, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady")
-        self.entry_frame.grid(row=10, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=11, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 
@@ -100,6 +103,24 @@ class MonitorMainFrame(customtkinter.CTkFrame):
             self.touchscreen_button.configure(text='Dotyk', fg_color='green')
         else:
             self.touchscreen_button.configure(text='Brak dotyku', fg_color=['#3B8ED0', '#1F6AA5'])
+
+    def toggle_2in1(self):
+        """Toggle 2in1 - adds/removes '2in1' from model entry"""
+        current_model = self.output.entry_model.get()
+        
+        if self.checkbox_2in1.get() == 1:
+            # Add 2in1 if not already present
+            if "2in1" not in current_model:
+                new_model = current_model + " 2in1" if current_model else "2in1"
+                self.output.entry_model.configure(state='normal')
+                self.output.entry_model.delete(0, 'end')
+                self.output.entry_model.insert(0, new_model)
+        else:
+            # Remove 2in1
+            new_model = current_model.replace(" 2in1", "").replace("2in1", "").strip()
+            self.output.entry_model.configure(state='normal')
+            self.output.entry_model.delete(0, 'end')
+            self.output.entry_model.insert(0, new_model)
 
     def show_fullscreen(self):
         self.fullscreen = Fullscreen(self)
