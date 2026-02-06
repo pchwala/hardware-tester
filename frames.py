@@ -456,33 +456,24 @@ class OutputFrame(ctk.CTkFrame):
 
     def start_python_stress_test(self):
         """
-        Fallback Python-based stress test using multiprocessing
+        Fallback stress test using stress-ng via subprocess
         """
-        import multiprocessing
         import os
         
-        def cpu_stress():
-            """CPU intensive task"""
-            while True:
-                _ = sum([i**2 for i in range(10000)])
-        
         try:
-            # Start one process per CPU core
-            num_cores = os.cpu_count() or 4
-            processes = []
-            for _ in range(num_cores):
-                p = multiprocessing.Process(target=cpu_stress)
-                p.start()
-                processes.append(p)
-            
-            # Store processes for later cleanup
-            self.stress_process = processes
+            # Run stress-ng with explicit CPU count
+            self.stress_process = subprocess.Popen(
+                ['stress-ng', '--cpu', '0', '--cpu-method', 'all', '--verify', '--metrics-brief'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
             self.stress_test_active = True
             self.button_stress_test.configure(text="Stress",
                                              fg_color="green")  # secondary color
-            print(f"Python stress test started with {num_cores} processes")
+            print("Fallback stress test started with stress-ng")
         except Exception as e:
-            print(f"Error starting Python stress test: {e}")
+            print(f"Error starting fallback stress test: {e}")
+            print("Please install stress-ng: sudo apt-get install stress-ng")
 
     def stop_stress_test(self):
         """
