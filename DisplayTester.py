@@ -78,13 +78,16 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.checkbox_2in1 = customtkinter.CTkCheckBox(self, text="Laptop 2in1", command=self.toggle_2in1)
         self.checkbox_2in1.grid(row=9, column=2, pady=(0, 20))
 
+        self.checkbox_silver = customtkinter.CTkCheckBox(self, text="SILVER", command=self.toggle_silver)
+        self.checkbox_silver.grid(row=10, column=2, pady=(0, 20))
+
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy")
-        self.entry_display.grid(row=10, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=11, column=2, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady")
-        self.entry_frame.grid(row=11, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=12, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 
@@ -118,6 +121,24 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         else:
             # Remove 2in1
             new_model = current_model.replace(" 2in1", "").replace("2in1", "").strip()
+            self.output.entry_model.configure(state='normal')
+            self.output.entry_model.delete(0, 'end')
+            self.output.entry_model.insert(0, new_model)
+
+    def toggle_silver(self):
+        """Toggle SILVER - adds/removes 'SILVER' from model entry"""
+        current_model = self.output.entry_model.get()
+        
+        if self.checkbox_silver.get() == 1:
+            # Add SILVER if not already present
+            if "SILVER" not in current_model:
+                new_model = current_model + " SILVER" if current_model else "SILVER"
+                self.output.entry_model.configure(state='normal')
+                self.output.entry_model.delete(0, 'end')
+                self.output.entry_model.insert(0, new_model)
+        else:
+            # Remove SILVER
+            new_model = current_model.replace(" SILVER", "").replace("SILVER", "").strip()
             self.output.entry_model.configure(state='normal')
             self.output.entry_model.delete(0, 'end')
             self.output.entry_model.insert(0, new_model)
