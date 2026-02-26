@@ -498,6 +498,11 @@ class GUI(customtkinter.CTk, threading.Thread):
 
         # Stop all testers
         self.output_queue.put('stop_all')
+        
+        # Stop Game of Life if leaving QR tab
+        if previous == 9:
+            self.qr_main_frame.stop_game_of_life()
+        
         # remove focus from widget by focusing main Window
         self.focus()
 
@@ -621,5 +626,6 @@ class GUI(customtkinter.CTk, threading.Thread):
         self.testers_frame.notebook_references[tab_number-1].configure(fg_color="green")
 
     def on_closing(self):
+        self.qr_main_frame.stop_game_of_life()
         self.output_queue.put('terminate_all')
         GUI.destroy(self)

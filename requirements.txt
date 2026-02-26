@@ -3,3 +3,4 @@ qrcode
 Pillow
 opencv-python
 pyaudio
+numpy

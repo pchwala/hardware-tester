@@ -1,6 +1,8 @@
 import customtkinter
 import qrcode
 import re
+import numpy as np
+from PIL import Image
 
 
 class QRMainFrame(customtkinter.CTkFrame):
@@ -27,6 +29,11 @@ class QRMainFrame(customtkinter.CTkFrame):
         self.size_x = 512
         self.size_y = 512
         self.size = (self.size_x, self.size_y)
+        
+        # Game of Life attributes
+        self.game_grid = None
+        self.game_running = False
+        self.update_job = None
 
     def rescale(self, width, height):
         self.size_x = int(self.size_x * width * 1.25)
@@ -175,6 +182,85 @@ class QRMainFrame(customtkinter.CTkFrame):
 
         img = qr.make_image(fill='black', back_color='white')
         img.save('qrcode.png')
-        output_image = customtkinter.CTkImage(None, dark_image=img.get_image(), size=self.size)
+        
+        # Convert QR code to numpy array for Game of Life
+        pil_img = img.get_image()
+        pil_img = pil_img.resize((200, 200))  # Resize for better performance
+        img_array = np.array(pil_img.convert('L'))
+        # Create binary grid: 1 for black (alive), 0 for white (dead)
+        self.game_grid = (img_array < 128).astype(int)
+        
+        output_image = customtkinter.CTkImage(None, dark_image=pil_img, size=self.size)
         self.label1 = customtkinter.CTkLabel(self, image=output_image, text='')
         self.label1.grid(row=1, column=1)
+        
+        # Start Game of Life simulation
+        self.game_running = True
+        self.update_game_of_life()
+    
+    def count_neighbors(self, grid, row, col):
+        """Count alive neighbors for a cell"""
+        rows, cols = grid.shape
+        count = 0
+        
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if i == 0 and j == 0:
+                    continue
+                    
+                # Wrap around edges (toroidal topology)
+                neighbor_row = (row + i) % rows
+                neighbor_col = (col + j) % cols
+                count += grid[neighbor_row, neighbor_col]
+        
+        return count
+    
+    def next_generation(self):
+        """Compute next generation according to Conway's Game of Life rules"""
+        if self.game_grid is None:
+            return
+        
+        rows, cols = self.game_grid.shape
+        new_grid = np.zeros_like(self.game_grid)
+        
+        for i in range(rows):
+            for j in range(cols):
+                neighbors = self.count_neighbors(self.game_grid, i, j)
+                
+                # Conway's Game of Life rules:
+                if self.game_grid[i, j] == 1:  # Cell is alive
+                    if neighbors in [2, 3]:
+                        new_grid[i, j] = 1  # Survives
+                else:  # Cell is dead
+                    if neighbors == 3:
+                        new_grid[i, j] = 1  # Becomes alive
+        
+        self.game_grid = new_grid
+    
+    def update_game_of_life(self):
+        """Update Game of Life display (refresh every 1 second)"""
+        if not self.game_running or self.game_grid is None:
+            return
+        
+        # Compute next generation
+        self.next_generation()
+        
+        # Convert grid to image
+        img_array = (self.game_grid * 255).astype(np.uint8)
+        img_array = 255 - img_array  # Invert: 0=white, 255=black
+        pil_img = Image.fromarray(img_array, mode='L')
+        
+        # Update display
+        output_image = customtkinter.CTkImage(None, dark_image=pil_img, size=self.size)
+        self.label1.configure(image=output_image)
+        self.label1.image = output_image  # Keep a reference
+        
+        # Schedule next update (1000ms = 1 second)
+        self.update_job = self.after(1000, self.update_game_of_life)
+    
+    def stop_game_of_life(self):
+        """Stop the Game of Life simulation"""
+        self.game_running = False
+        if self.update_job is not None:
+            self.after_cancel(self.update_job)
+            self.update_job = None
