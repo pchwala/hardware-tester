@@ -89,7 +89,7 @@ class QRMainFrame(customtkinter.CTkFrame):
             touchscreen = ""
 
         if backlight_state:
-            pods_switch = "pods"
+            pods_switch = "BL"
         else:
             pods_switch = ""
 
@@ -157,7 +157,8 @@ class QRMainFrame(customtkinter.CTkFrame):
                         + nrzwrotu + "\t\t"\
                         + magazyn + "\t"\
                         + nrid + "\t\t\t\t\t"\
-                        + ant_switch + "\t\t\t\t\t\t"\
+                        + ant_switch + "\t"\
+                        + pods_switch + "\t\t\t\t\t"\
                         + klapa_gorna + "\t"\
                         + palmrest + "\t"\
                         + klapa_dolna + "\t"\
