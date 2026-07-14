@@ -30,64 +30,72 @@ class MonitorMainFrame(customtkinter.CTkFrame):
         self.backlight_state = False
         self.touchscreen_state = False
 
+        self.backlight_button = customtkinter.CTkButton(
+            self, text='Brak podswietlenia',
+            command=self.toggle_backlight,
+            height=100,
+            hover=False,
+            font=("", 28))
+        self.backlight_button.grid(row=3, column=1, columnspan=3, pady=(0, 20), sticky="ew")
+
         self.touchscreen_button = customtkinter.CTkButton(
             self, text='Brak dotyku',
             command=self.toggle_touchscreen,
             height=100,
             hover=False,
             font=("", 28))
-        self.touchscreen_button.grid(row=3, column=1, columnspan=3, pady=(0, 20), sticky="ew")
+        self.touchscreen_button.grid(row=4, column=1, columnspan=3, pady=(0, 20), sticky="ew")
 
         # Checkboxes for hardware components
         self.checkbox_klapa_gorna = customtkinter.CTkCheckBox(self, text="Klapa górna")
-        self.checkbox_klapa_gorna.grid(row=4, column=1, pady=(60, 30), sticky="e")
+        self.checkbox_klapa_gorna.grid(row=5, column=1, pady=(60, 30), sticky="e")
 
         self.checkbox_klapa_dolna = customtkinter.CTkCheckBox(self, text="Klapa dolna")
-        self.checkbox_klapa_dolna.grid(row=5, column=1, pady=(0, 30), sticky="e")
+        self.checkbox_klapa_dolna.grid(row=6, column=1, pady=(0, 30), sticky="e")
 
         self.checkbox_matryca = customtkinter.CTkCheckBox(self, text="Matryca")
-        self.checkbox_matryca.grid(row=4, column=2, pady=(60, 30), sticky="e")
+        self.checkbox_matryca.grid(row=5, column=2, pady=(60, 30), sticky="e")
 
         self.checkbox_ramka = customtkinter.CTkCheckBox(self, text="Ramka")
-        self.checkbox_ramka.grid(row=5, column=2, pady=(0, 30), sticky="e")
+        self.checkbox_ramka.grid(row=6, column=2, pady=(0, 30), sticky="e")
 
         self.checkbox_palmrest = customtkinter.CTkCheckBox(self, text="Palmrest", )
-        self.checkbox_palmrest.grid(row=4, column=3, pady=(60, 30), sticky="e")
+        self.checkbox_palmrest.grid(row=5, column=3, pady=(60, 30), sticky="e")
 
         self.checkbox_touchpad = customtkinter.CTkCheckBox(self, text="Touchpad", )
-        self.checkbox_touchpad.grid(row=5, column=3, pady=(0, 30), sticky="e")
+        self.checkbox_touchpad.grid(row=6, column=3, pady=(0, 30), sticky="e")
 
         self.class_segmented = customtkinter.CTkSegmentedButton(
             self, values=[' ', 'A', 'A-', 'B', 'C'],
             border_width=6)
         self.class_segmented.set(' ')
-        self.class_segmented.grid(row=6, column=2, pady=(40, 20))
+        self.class_segmented.grid(row=7, column=2, pady=(40, 20))
 
         self.polska_segmented = customtkinter.CTkSegmentedButton(
             self, values=['Zagranica', '2'],
             border_width=6)
         self.polska_segmented.set('Zagranica')
-        self.polska_segmented.grid(row=7, column=2, pady=(0, 20))
+        self.polska_segmented.grid(row=8, column=2, pady=(0, 20))
 
         self.magazyn_segmented = customtkinter.CTkSegmentedButton(
             self, values=['M2', 'M9', 'M5', 'M15', 'M47', 'M18'],
             border_width=6)
         self.magazyn_segmented.set('M2')
-        self.magazyn_segmented.grid(row=8, column=2, pady=(0, 20))
+        self.magazyn_segmented.grid(row=9, column=2, pady=(0, 20))
 
         self.checkbox_2in1 = customtkinter.CTkCheckBox(self, text="Laptop 2in1", command=self.toggle_2in1)
-        self.checkbox_2in1.grid(row=9, column=2, pady=(0, 20))
+        self.checkbox_2in1.grid(row=10, column=2, pady=(0, 20))
 
         self.checkbox_silver = customtkinter.CTkCheckBox(self, text="SILVER", command=self.toggle_silver)
-        self.checkbox_silver.grid(row=10, column=2, pady=(0, 20))
+        self.checkbox_silver.grid(row=11, column=2, pady=(0, 20))
 
         self.entry_state = 0
 
         self.entry_display = customtkinter.CTkEntry(self, state='normal', placeholder_text="Wady matrycy")
-        self.entry_display.grid(row=11, column=2, pady=(100, 20), sticky='ns')
+        self.entry_display.grid(row=12, column=2, pady=(100, 20), sticky='ns')
 
         self.entry_frame = customtkinter.CTkEntry(self, state='normal', placeholder_text="Pozostałe wady")
-        self.entry_frame.grid(row=12, column=2, pady=(0, 20), sticky='ns')
+        self.entry_frame.grid(row=13, column=2, pady=(0, 20), sticky='ns')
 
         self.fullscreen = None
 
@@ -106,6 +114,11 @@ class MonitorMainFrame(customtkinter.CTkFrame):
             self.touchscreen_button.configure(text='Dotyk', fg_color='green')
         else:
             self.touchscreen_button.configure(text='Brak dotyku', fg_color=['#3B8ED0', '#1F6AA5'])
+
+    def apply_kbd_backlight(self):
+        """Pre-set backlight button state based on auto-detected hardware info"""
+        if self.output.kbd_backlight:
+            self.toggle_backlight()
 
     def toggle_2in1(self):
         """Toggle 2in1 - adds/removes '2in1' from model entry"""
